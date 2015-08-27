@@ -1,0 +1,44 @@
+@(users: List[models.user.User], adminSearchForm: Form[String])
+(
+  implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+)@layout.bootstrap("Register") {
+    <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <a class="navbar-brand">ADMIN</a>
+
+        <ul class="nav navbar-nav">
+            <li><a href='@routes.AdminController.adminIndex'>Back To Admin</a></li>
+            <li><a href='@routes.HomeController.index'>Back To Home</a></li>
+            <li><li><a href='@routes.AuthenticationController.signOut'><i class="fa fa-power-off fa-6"></i>SignOut</a></li>
+        </ul>
+    </nav>
+  <div class="container">
+    
+<div>
+        <h1>Search for users</h1>
+        <p>
+            <form action="@routes.AdminController.adminSearch" method="GET">
+                <input name="filter" type="text"/>
+                <input type="submit" value="Search"/>
+            </form>
+        </p>
+</div>
+
+
+<div class="user col-md-6 col-md-offset-3">
+<h1>List of Users</h1>
+
+@users.map { user =>
+
+<div class="row data">
+    <div class="col-md-12">
+        <span class="name">@user.fullName.getOrElse("None")</span> @user.username.getOrElse("None") 
+        <span class="name">@user.email.getOrElse("None")</span> @user.phone.getOrElse("None")
+        <li><a href='@routes.AdminController.adminUserShow(user.id)'>See User Details</a></li>
+        <li><a href='@routes.AdminController.adminUserUpdateForm(user.id)'>Edit User</a></li>
+    </div>
+        }
+</div>
+</div>
+</div>
+}
+

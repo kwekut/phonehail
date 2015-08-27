@@ -1,0 +1,27 @@
+@layout.bootstrap("Play Silhouette Postgres Async Seed") {
+    <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <a class="navbar-brand">Welcome To GetDriver</a>
+
+        <ul class="nav navbar-nav">
+            <li><a href='@routes.ProfileController.userprofile'>Your Profile</a></li>
+            <li><li><a href='@routes.AuthenticationController.signOut'><i class="fa fa-power-off fa-6"></i>SignOut</a></li>
+        </ul>
+    </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <p>Welcome to GetDriver!</p>
+        <p>If you've made it this far, everything is set up and ready to go.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <ul>
+          <li><a href="@routes.AuthenticationController.signInForm">Sign In</a></li>
+          <li><a href="@routes.RegistrationController.registrationForm">Sign Up</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+}

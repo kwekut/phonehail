@@ -1,0 +1,24 @@
+@(user: models.user.User)(
+  implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+)@layout.bootstrap("Profile") {
+  <div class="profile">
+    @if(!user.email.isDefined) {
+      <p>
+        Sign In with admin credentials:
+        <a href="@controllers.routes.RegistrationController.registrationForm()">Sign Up</a> or
+        <a href="@controllers.routes.AuthenticationController.signInForm()">Sign In</a>
+        ?
+      </p>
+    } else {
+      @user.username.map { un =>
+        <div class="username">@un</div>
+      }.getOrElse {
+        <div class="username">Guest</div>
+      }
+      <li><a href='@routes.AdminController.adminUserList("")'>List Users</a></li>
+      <div class="logout">
+        <a class="sign-out-link" href="@controllers.routes.AuthenticationController.signOut">Sign Out</a>
+      </div>
+    }
+  </div>
+}

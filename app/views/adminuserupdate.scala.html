@@ -1,0 +1,76 @@
+@(user: models.user.User, filledForm: Form[models.user.AdminUserUpdateData])(
+  implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+)@layout.bootstrap("Register") {
+    @flash.get("error").map { e =>
+      <div class="error">@e</div>
+    }
+    <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <a class="navbar-brand">@user.username.getOrElse("None")</a>
+
+        <ul class="nav navbar-nav">
+            <li><a href='@routes.ProfileController.userprofile'>Your Profile</a></li>
+
+            <li><a href='@routes.AdminController.adminIndex'>Back To AdminHome</a></li>
+            <li><li><a href='@routes.AuthenticationController.signOut'><i class="fa fa-power-off fa-6"></i>SignOut</a></li>
+        </ul>
+    </nav>
+  <div class="container">
+          <div class="row">
+            <hr class="col-md-12" />
+            <h4 class="col-md-8">Please Update Your Profile</h4>
+            <hr class="col-md-12" />
+        </div>
+
+  @helper.form(action = routes.UserUpdateController.updateuser()) {
+
+
+<dl class="error" id="username_field">
+    <dt><label for="username"><label>Username:</label></dt>
+    <dd><input type="text" name="username" id="username" value= "@filledForm.get.username"></dd>
+    <dd class="error">This field is required!</dd>
+</dl>
+
+<dl class="error" id="roles_field">
+    <dt><label for="roles"><label>User Roles:</label></dt>
+    <dd><input type="text" name="roles" id="roles" value= "@filledForm.get.roles"></dd>
+    <dd class="error">This field is required!</dd>
+</dl>
+
+<dl class="error" id="phone_field">
+    <dt><label for="phone"><label>Phone Number:</label></dt>
+    <dd><input type="text" name="phone" id="phone" value= "@filledForm.get.phone"></dd>
+    <dd class="error">This field is required!</dd>
+</dl>
+
+<dl class="error" id="address_field">
+    <dt><label for="address"><label>Address:</label></dt>
+    <dd><input type="text" name="address" id="address" value= "@filledForm.get.address"></dd>
+    <dd class="error">This field is required!</dd>
+</dl>
+
+<dl class="error" id="fullName_field">
+    <dt><label for="fullName"><label>Full Name:</label></dt>
+    <dd><input type="text" name="fullName" id="fullName" value= "@filledForm.get.fullName"></dd>
+    <dd class="error">This field is required!</dd>
+</dl>
+
+<dl class="error" id="hasstripe_field">
+    <dt><label for="hasstripe"><label>Stripe Token:</label></dt>
+    <dd><input type="text" name="hasstripe" id="hasstripe" value= "@filledForm.get.hasstripe"></dd>
+    <dd class="error">Dont Edit!</dd>
+</dl>
+
+<dl class="error" id="preferences_field">
+    <dt><label for="preferences"><label>User Preferences:</label></dt>
+    <dd><input type="text" name="preferences" id="preferences" value= "@filledForm.get.preferences"></dd>
+    <dd class="error">Optional field!</dd>
+</dl>
+
+  <div class="form-group">
+      <br/>
+      <input type="submit" class="submit" value="Update Profile" />
+  </div>
+</div>
+}
+
+}
