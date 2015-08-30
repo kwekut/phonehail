@@ -51,14 +51,14 @@ object WebSocketActor {
 
 class WebSocketActor(user: UUID, twilioActor: ActorRef, commActor: ActorRef, accActor: ActorRef, stripeActor: ActorRef, out: ActorRef) extends Actor {
 
-	import WebSocketActor._
+  import WebSocketActor._
 
-	override def preStart() {
-		commActor ! Join(user, out)
-	}
-	override def postStop() {
-		commActor ! UnJoin(user, out)
-	}
+  override def preStart() {
+    commActor ! Join(user, out)
+  }
+  override def postStop() {
+    commActor ! UnJoin(user, out)
+  }
 
   def receive = LoggingReceive {
 
@@ -112,43 +112,3 @@ class WebSocketActor(user: UUID, twilioActor: ActorRef, commActor: ActorRef, acc
 
   }
 }
-//case class InsOuts(id: Int, from: String, typ: String, date: String, msg: String, name: String, driverphone: String, isDone: Boolean)
-
-
-      //(tables turned)from is the customer recieving- I want to have single object type in ember collection
-  //   case msg: JsValue =>
-  //     (msg \ "typ").asOpt[String] match {
-  //       case Some("REPLY") => 
-  //         msg.validate[InsOuts] match{
-  //           case ins: JsSuccess[InsOuts] => val fin: InsOuts = ins.get
-  //           twilioActor ! SendSMS(fin.from, fin.msg, fin.driverphone) 
-  //                         //out ! msg  //commActor !  msg Outs(fin.from, 'REPLY', fin.date, fin.msg, fin.name, fin.driverphone)
-  //           case e: JsError => Logger.info(s"invalid format for message ${JsError.toJson(e).toString()}")
-  //         }  
-  //       case Some("MARKATTENDED") => 
-  //         msg.validate[InsOuts] match{
-  //           case cc: JsSuccess[InsOuts] => commActor ! (cc.get.from) Outs(from, typ, date, msg, name)
-  //           case e: JsError => Logger.info(s"invalid format for message ${JsError.toJson(e).toString()}")
-  //         }    
-  //       case Some("MARKTAKEN") => 
-  //         msg.validate[InsOuts] match{
-  //           case cc: JsSuccess[InsOuts] => commActor ! (cc.get.from) Outs(from, typ, date, msg, name)
-  //           case e: JsError => Logger.info(s"invalid format for message ${JsError.toJson(e).toString()}")
-  //         }     
-  //       case Some("GETMESSAGES") => 
-  //         msg.validate[InsOuts] match{
-  //           case gms: JsSuccess[InsOuts] => //commActor ! (gms.get.msg) Outs(from, typ, date, msg, name)
-  //           case e: JsError => Logger.info(s"invalid format for message ${JsError.toJson(e).toString()}")
-  //         }    
-  //       case Some("BILLCUSTOMER") => 
-  //         msg.validate[InsOuts] match{
-  //           case cc: JsSuccess[InsOuts] => val amt = java.lang.Integer.parseInt(cc.get.amt)
-  //           stripeActor ! ChargeCustomer(cc.get.from, cc.get.msg) 
-  //           case e: JsError => Logger.info(s"invalid format for message ${JsError.toJson(e).toString()}")
-  //         }    
-  //       case None => Logger.info("you must send a typ with your json object")
-  //       case t => Logger.info(s"unknown message type ${t.get}")
-  //     }      
-  //   case _ => Logger.info("unknown message format")
-
-  // } 

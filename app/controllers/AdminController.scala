@@ -18,51 +18,51 @@ import scala.concurrent.Future
 class AdminController @javax.inject.Inject() (val messagesApi: MessagesApi, val env: AuthenticationEnvironment) extends Silhouette[User, CookieAuthenticator] {
   
 
-	def adminIndex = SecuredAction.async { implicit request =>
-	    env.identityService.retrieve(request.identity.id).flatMap {
-	      case Some(admin) => if (admin.roles.contains(Role.Admin)) {
-	      	Future.successful(Ok(views.html.adminindex(request.identity)))
-	      	} else {Future.successful(Redirect(controllers.routes.HomeController.index()))}
-	      case None =>
-	        Future.successful(Redirect(controllers.routes.HomeController.index()))
-	    }    
-	}
+  def adminIndex = SecuredAction.async { implicit request =>
+      env.identityService.retrieve(request.identity.id).flatMap {
+        case Some(admin) => if (admin.roles.contains(Role.Admin)) {
+          Future.successful(Ok(views.html.adminindex(request.identity)))
+          } else {Future.successful(Redirect(controllers.routes.HomeController.index()))}
+        case None =>
+          Future.successful(Redirect(controllers.routes.HomeController.index()))
+      }    
+  }
 
-	def adminSearch = SecuredAction { implicit req =>
-		UserForms.adminSearchForm.bindFromRequest.fold(
-		  form => Redirect(routes.AdminController.adminUserList("")),
-		  filter => Redirect(routes.AdminController.adminUserList(filter))
-		)
-	}
+  def adminSearch = SecuredAction { implicit req =>
+    UserForms.adminSearchForm.bindFromRequest.fold(
+      form => Redirect(routes.AdminController.adminUserList("")),
+      filter => Redirect(routes.AdminController.adminUserList(filter))
+    )
+  }
 
-	def adminUserList(filter:String="")  = SecuredAction.async {
-		env.identityService.search(filter).flatMap {
-		 users => Future.successful {Ok(views.html.adminuserlist(users, UserForms.adminSearchForm))}
-		}
-	}
+  def adminUserList(filter:String="")  = SecuredAction.async {
+    env.identityService.search(filter).flatMap {
+     users => Future.successful {Ok(views.html.adminuserlist(users, UserForms.adminSearchForm))}
+    }
+  }
 
-	def adminUserShow(userId: UUID) = SecuredAction.async { implicit request =>
-	    env.identityService.retrieve(request.identity.id).flatMap {
-	      case Some(admin) => if (admin.roles.contains(Role.Admin)) {
-	      		env.identityService.retrieve(userId).flatMap {
-	      			case Some(user) => Future.successful(Ok(views.html.adminusershow(user))) 
-	        		case None => Future.successful(Redirect(controllers.routes.AdminController.adminUserList(""))) 
-	        }} else {Future.successful(Redirect(controllers.routes.HomeController.index()))}
-	      
-	      case None => Future.successful(Redirect(controllers.routes.HomeController.index()))
-	    }
+  def adminUserShow(userId: UUID) = SecuredAction.async { implicit request =>
+      env.identityService.retrieve(request.identity.id).flatMap {
+        case Some(admin) => if (admin.roles.contains(Role.Admin)) {
+            env.identityService.retrieve(userId).flatMap {
+              case Some(user) => Future.successful(Ok(views.html.adminusershow(user))) 
+              case None => Future.successful(Redirect(controllers.routes.AdminController.adminUserList(""))) 
+          }} else {Future.successful(Redirect(controllers.routes.HomeController.index()))}
+        
+        case None => Future.successful(Redirect(controllers.routes.HomeController.index()))
+      }
   }
 
 
   def adminUserUpdateForm(userId: UUID) = SecuredAction.async { implicit request =>
     env.identityService.retrieve(request.identity.id).flatMap {
       case Some(admin) => if (admin.roles.contains(Role.Admin)) {
-      		env.identityService.retrieve(userId).flatMap {
-      			case Some(user) => 
+          env.identityService.retrieve(userId).flatMap {
+            case Some(user) => 
         val info = AdminUserUpdateData(user.username.getOrElse("Enter UserName"), user.roles.mkString, user.email.getOrElse("Enter Email"), user.phone.getOrElse("Enter Phone Number"), user.address.getOrElse("Enter Address"), user.fullName.getOrElse("Enter FullName"), user.hasstripe.getOrElse("Enter Stripe Token"), user.preferences.getOrElse("Enter Preferences"))
         val filledForm = UserForms.adminUserUpdateForm.fill(info)
         Future.successful(Ok(views.html.adminuserupdate(request.identity, filledForm))) 
-        		case None =>
+            case None =>
         Future.successful{Redirect(controllers.routes.AdminController.adminUserList(""))} 
         }} else {Future.successful(Redirect(controllers.routes.HomeController.index()))}
       case None =>
@@ -76,12 +76,12 @@ class AdminController @javax.inject.Inject() (val messagesApi: MessagesApi, val 
       data => {
         env.identityService.retrieve(request.identity.id).flatMap {
           case Some(admin) => if (admin.roles.contains(Role.Admin)) {
-      		env.identityService.retrieve(userId).flatMap {
-      			case Some(user) =>  updateUser(data, user)
+          env.identityService.retrieve(userId).flatMap {
+            case Some(user) =>  updateUser(data, user)
 
-        		case None =>
-        			Future.successful{Redirect(controllers.routes.AdminController.adminUserList(""))}
-        	}} else {Future.successful(Redirect(controllers.routes.HomeController.index()))}
+            case None =>
+              Future.successful{Redirect(controllers.routes.AdminController.adminUserList(""))}
+          }} else {Future.successful(Redirect(controllers.routes.HomeController.index()))}
           case None =>  Future.successful {  Ok(views.html.index())  }
         }
       }

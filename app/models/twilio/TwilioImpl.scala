@@ -30,6 +30,7 @@ class TwilioImpl @Inject() (val env: AuthenticationEnvironment) extends TwilioSe
 
 	val client = new TwilioRestClient(sid, token)
 	val messageFactory: MessageFactory = client.getAccount.getMessageFactory
+	val defaultPic = "http://res.cloudinary.com/demo/image/facebook/c_thumb,g_face,h_90,w_120/billclinton.jpg"
 
 
 	def sendSMS(to: String, msg: String, driverphone: String = "none") = Try {
@@ -38,10 +39,10 @@ class TwilioImpl @Inject() (val env: AuthenticationEnvironment) extends TwilioSe
 	    val driverimage: Future[String] = 
 	    	if (driverphone != "none") {
 	    env.identityService.retrievebyphone(driverphone) flatMap {
-	    	case Some(driver) => Future.successful { driver.image.getOrElse("http://www.example.com/hearts.png") }
-	    	case None => Future.successful { "http://www.example.com/hearts.png" }
+	    	case Some(driver) => Future.successful { driver.image.getOrElse(defaultPic) }
+	    	case None => Future.successful { defaultPic }
 	    }
-			} else {Future.successful ("http://www.example.com/hearts.png") }
+			} else {Future.successful (defaultPic) }
 
 	driverimage.onComplete {
 		case Success(driver) =>

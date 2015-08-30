@@ -16,12 +16,4 @@ class HomeController @javax.inject.Inject() (val messagesApi: MessagesApi, val e
   def index = Action.async { s =>
     Future.successful(Ok(views.html.index()))
   }
-
-  // def adminTest = SecuredAction.async { s =>
-  //   Future.successful(Ok(views.html.index(s.identity)))
-  // }
-
-  def adminTest = Action.async { s =>
-    Future.successful(Ok(views.html.index()))
-  }
 }

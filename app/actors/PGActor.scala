@@ -36,23 +36,15 @@ object PGActor {
 	case class HelpError(from: String, date: String, msg: String, fullname: String, email: String, phone: String, address: String,  hasstripe: String, preferences: String) extends UserParent
 	case class OutOfOffice(from: String, date: String, msg: String, fullname: String, email: String, phone: String, address: String,  hasstripe: String, preferences: String) extends UserParent
 
-	// val end = new LocalTime(19, 0, 0, 0)
-	// val start = new LocalTime(9, 0, 0, 0)
-	// val interval = new Interval(start, end)
-	// val open = interval.contains(LocalTime.now())
-	// val nowHere = DateTime.now();
-	// val nowZur = nowHere.withZone(DateTimeZone.forID("Europe/Zurich"));
-	// val interv = new Interval(nowHere, nowZur);
-	//DateTimeFormatter simpleTimeFormatter = DateTimeFormat.forPattern("HHmm");
-    //LocalTime t1 = LocalTime.parse("0000", simpleTimeFormatter);
- //    LocalTime t2 = LocalTime.MIDNIGHT;
- //    DateTime ny = new DateTime(2011, 2, 2, 7, 0, 0, 0, DateTimeZone.forID("America/New_York"));
-	// DateTime la = new DateTime(2011, 2, 3, 10, 15, 0, 0, DateTimeZone.forID("America/Los_Angeles"));
-	// Duration duration = new Interval(ny, la).toDuration();
-	
-	// LocalTime.MIDNIGHT 
-	// LocalTime.minusHours(int hours)
-	// LocalTime.plusHours(int hours) 
+
+	val nowLA = DateTime.now(DateTimeZone.forID("America/Los_Angeles")) 
+	 val midnightHere = DateTime.now().withTimeAtStartOfDay
+	 val midnightLA = midnightHere.withZone(DateTimeZone.forID("America/Los_Angeles"))
+	val startLA = midnightLA.minusHours(5)
+	val endLA = midnightLA.plusHours(7)
+	val interval = new Interval(startLA, endLA)
+	// val open = interval.contains(nowLA) 
+
 }
 
 class PGActor @Inject() (val env: AuthenticationEnvironment,
@@ -74,8 +66,8 @@ class PGActor @Inject() (val env: AuthenticationEnvironment,
 			case Failure(ex) => inboundActor ! StartError(from, date, "start", "no-fullname", "no-email", "no-phone", "no-address",  "Empty", "no-preferences")
 		}
 		
-		// case Message(mid, from, to, date, msg) if (interval.contains(LocalTime.now())) => 
-  // 						inboundActor ! OutOfOffice(from, date, msg, "no-fullname", "no-email", "no-phone", "no-address",  "Empty", "no-preferences")
+		case Message(mid, from, to, date, msg) if (!interval.contains(nowLA)) => 
+  						inboundActor ! OutOfOffice(from, date, msg, "no-fullname", "no-email", "no-phone", "no-address",  "Empty", "no-preferences")
 
 
 

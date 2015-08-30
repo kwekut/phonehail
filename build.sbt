@@ -12,6 +12,8 @@ resolvers += "sonatype snapshots" at "https://oss.sonatype.org/content/repositor
 
 libraryDependencies ++= Seq(
   cache,
+  ws,
+  filters,
   "com.mohiva" %% "play-silhouette" % "3.0.0-RC2",
   "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
   "com.kyleu" %% "jdub-async" % "1.0",

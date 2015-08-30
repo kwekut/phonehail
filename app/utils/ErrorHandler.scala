@@ -10,6 +10,9 @@ import play.api.mvc.Results._
 import play.api.mvc.{ Result, RequestHeader }
 import play.api.routing.Router
 import play.api.{ OptionalSourceMapper, Configuration }
+import play.api._
+import play.api.mvc._
+import scala.concurrent._
 
 import scala.concurrent.Future
 
@@ -49,4 +52,17 @@ class ErrorHandler @Inject() (
   override def onNotAuthorized(request: RequestHeader, messages: Messages): Option[Future[Result]] = {
     Some(Future.successful(Redirect(routes.HomeController.index()).flashing("error" -> Messages("access.denied")(messages))))
   }
+
+  override def onProdServerError(request: RequestHeader, exception: UsefulException) = {
+    Future.successful(
+      InternalServerError("A server error occurred: " + exception.getMessage)
+    )
+  }
+
+  override def onForbidden(request: RequestHeader, message: String) = {
+    Future.successful(
+      Forbidden("You're not allowed to access this resource.")
+    )
+  }
+
 }

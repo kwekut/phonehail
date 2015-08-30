@@ -1,5 +1,5 @@
+# Index
 GET         /                     controllers.HomeController.index
-
 
 # Authentication
 GET         /signup               controllers.RegistrationController.registrationForm
@@ -29,7 +29,7 @@ POST        /updateuser          controllers.UserUpdateController.updateuser
 #GET		    /uploadimage		controllers.ImageController.imageForm
 #POST		/uploadimage        controllers.ImageController.upload
 
-# Stripe
+# Stripe Registration
 GET         /createstripe		controllers.StripeController.stripeForm
 POST        /createstripe       controllers.StripeController.createcustomer
 

@@ -35,10 +35,10 @@ object AccountActor {
 
 	case object Recall
 
-	case class InsOuts(id: UUID, from: String, typ: String, date: String, msg: String, name: String, driverphone: String, isDone: Boolean)
-	object InsOuts{
-	  implicit val insReads: Reads[InsOuts] = (
-	  	(JsPath \ "id").read[UUID] and
+	case class Outs(id: String, from: String, typ: String, date: String, msg: String, name: String, driverphone: String, isDone: Boolean)
+	object Outs{
+	  implicit val insReads: Reads[Outs] = (
+	  	(JsPath \ "id").read[String] and
 	    (JsPath \ "from").read[String] and
 	    (JsPath \ "typ").read[String] and
 	    (JsPath \ "date").read[String] and
@@ -46,10 +46,10 @@ object AccountActor {
 	    (JsPath \ "name").read[String] and
 	    (JsPath \ "driverphone").read[String] and
 	    (JsPath \ "isDone").read[Boolean]
-	  )(InsOuts.apply _)
+	  )(Outs.apply _)
 
-	  implicit val insWrites: Writes[InsOuts] = (
-	  	(JsPath \ "id").write[UUID] and
+	  implicit val insWrites: Writes[Outs] = (
+	  	(JsPath \ "id").write[String] and
 	    (JsPath \ "from").write[String] and
 	    (JsPath \ "typ").write[String] and
 	    (JsPath \ "date").write[String] and
@@ -57,7 +57,7 @@ object AccountActor {
 	    (JsPath \ "name").write[String] and
 	    (JsPath \ "driverphone").write[String] and
 	    (JsPath \ "isDone").write[Boolean]
-	  )(unlift(InsOuts.unapply))
+	  )(unlift(Outs.unapply))
 	}
 
 }
@@ -65,9 +65,9 @@ object AccountActor {
 class AccountActor @Inject() ( @Named("communicate-actor") commActor: ActorRef)  extends Actor {
 
 	import AccountActor._
-	val msgHold = new ListBuffer[InsOuts]()
-	val notHold = new ListBuffer[InsOuts]()
-	var accHold = new ListBuffer[InsOuts]()
+	val msgHold = new ListBuffer[Outs]()
+	val notHold = new ListBuffer[Outs]()
+	var accHold = new ListBuffer[Outs]()
 
   def receive = LoggingReceive {
 
@@ -75,60 +75,61 @@ class AccountActor @Inject() ( @Named("communicate-actor") commActor: ActorRef) 
 
 	case Refresh => refresh
 
-	case party: MarkTaken => Logger.info("MarkTaken called")
+	case MarkTaken(from, typ, date, msg, name, driverphone, isDone) => Logger.info("MarkTaken called")
 		val time = new LocalDateTime()
 		val created = time.toString()
 
-		accHold.find(_.from == party.from) match {
+		accHold.find(_.from == from) match {
 			case Some(obj) => Logger.info(accHold.indexWhere(_.from == obj.from).toString)
-			accHold.update(accHold.indexWhere(_.from == obj.from), (InsOuts(obj.id, obj.from, obj.typ, created, obj.msg, obj.name, obj.driverphone, true)))
+			accHold.update(accHold.indexOf(obj), (Outs(obj.id, obj.from, obj.typ, created, obj.msg, obj.name, obj.driverphone, true)))
 			recall
 			case None =>
 		}
 		recall
 
-	case party: MarkCompleted => Logger.info("MarkCompleted Called")
-		val group = msgHold.filter(_.from == party.from)
-		group.foreach{obj => Logger.info(accHold.indexWhere(_.from == obj.from).toString)
-		msgHold.update(accHold.indexWhere(_.from == obj.from), (InsOuts(obj.id, obj.from, obj.typ, obj.date, obj.msg, obj.name, obj.driverphone, true)))
+	case MarkCompleted(from, typ, date, msg, name, driverphone, isDone) => Logger.info("MarkCompleted Called")
+		val group = msgHold.filter(_.from == from)
+		group.foreach{obj => 
+			Logger.info(msgHold.indexWhere(_.id == obj.id).toString)
+			Logger.info(msgHold.indexOf(obj).toString)
+		msgHold.update(msgHold.indexOf(obj), (Outs(obj.id, obj.from, obj.typ, obj.date, obj.msg, obj.name, obj.driverphone, true)))
 		}
 		recall
 
 
 	case Accounter(from, typ, date, msg, name, driverphone, isDone) => 
-											val id = UUID.randomUUID()
-											val obj = InsOuts(id, from, typ, date, msg, name, driverphone, isDone)
+											val id = UUID.randomUUID.toString()
+											val obj = Outs(id, from, typ, date, msg, name, driverphone, isDone)
 											msgPush(obj)	
 
 
 	case Notifier(from, typ, date, msg, name, driverphone, isDone) => 
-											val id = UUID.randomUUID()
-											val obj = InsOuts(id, from, typ, date, msg, name, driverphone, isDone)
+											val id = UUID.randomUUID.toString()
+											val obj = Outs(id, from, typ, date, msg, name, driverphone, isDone)
 											notPush(obj)	
 
 	case NoBuffer(from, typ, date, msg, name, driverphone, isDone) => 
-											val id = UUID.randomUUID()
-											val obj = InsOuts(id, from, typ, date, msg, name, driverphone, isDone)
+											val id = UUID.randomUUID.toString()
+											val obj = Outs(id, from, typ, date, msg, name, driverphone, isDone)
 											commActor ! BroadCast(Json.toJson(obj))	
 
 
 
 	}
 
-	  def msgPush(obj: InsOuts) = {
+	  def msgPush(obj: Outs) = {
 	    msgHold += obj
 	    recall
 	  }
 
-	  def notPush(obj: InsOuts) = {
+	  def notPush(obj: Outs) = {
 	    notHold += obj
 	    recall
 	  }
 
 	  def recall = {
 	  	Logger.info("Recall called")
-	    accHold.clear
-	    accRecalculate
+	  	accRecal
 	    for (obj <- notHold) commActor ! BroadCast(Json.toJson(obj))
 	    for (obj <- accHold) commActor ! BroadCast(Json.toJson(obj))
 	    for (obj <- msgHold) commActor ! BroadCast(Json.toJson(obj))
@@ -141,28 +142,27 @@ class AccountActor @Inject() ( @Named("communicate-actor") commActor: ActorRef) 
 	    notHold.clear
 	  } 
 
-	  def accRecalculate = {
+	  def accRecal = {
 	  	Logger.info("Recalculate called")
 		msgHold.foreach(item => 
 			if (!accHold.exists(_.from == item.from)) {
 				val grp = msgHold.filter(_.from == item.from)
 				val msg = grp.filter(_.isDone == false).length
 
-				val id = UUID.randomUUID()
 				val time = new LocalDateTime()
 				val created = time.toString()
 				Logger.info("new ac created")
-			accHold += InsOuts(id, item.from, "ACCOUNTS", created, msg.toString, item.name, "driverphone", false)
+			accHold += Outs(item.from, item.from, "ACCOUNTS", created, msg.toString, item.name, "driverphone", false)
 
 			}else{
 				val grp = msgHold.filter(_.from == item.from)
 				val msg = grp.filter(_.isDone == false).length
 				val time = new LocalDateTime()
 				val created = time.toString()
-				Logger.info("update existing ac")
+
 				accHold.find(_.from == item.from) match {
 					case Some(obj) =>	Logger.info(accHold.indexWhere(_.from == obj.from).toString)
-					accHold.update(accHold.indexWhere(_.from == obj.from), (InsOuts(item.id, item.from, item.typ, created, msg.toString, item.name, item.driverphone, item.isDone)))
+					accHold.update(accHold.indexOf(obj), (Outs(obj.id, obj.from, obj.typ, created, msg.toString, obj.name, obj.driverphone, obj.isDone)))
 					case None =>	Logger.info("Cliams no ac obj found")
 				}
 			}

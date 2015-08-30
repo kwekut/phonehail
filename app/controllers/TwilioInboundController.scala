@@ -23,6 +23,9 @@ class TwilioInboundController @Inject() (@Named("postgresql-actor") pgActor: Act
 
 // Recieves http request(messages) from twilio. Throwsaways messages with no content and forwards the rest 
 // to the incomming messages actor.
+
+//case class Message(mid: String, from: String, to: String, date: String, msg: String)	
+
   def messages = Action(parse.urlFormEncoded) { implicit request =>
 	  val mid = request.body("MessageSid").head//.toString
 	  val from = request.body("From").head//.toString
@@ -38,5 +41,5 @@ class TwilioInboundController @Inject() (@Named("postgresql-actor") pgActor: Act
 	Ok
   }
 
-    //case class Message(mid: String, from: String, to: String, date: String, msg: String)	
+
 }

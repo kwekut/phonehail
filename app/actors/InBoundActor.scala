@@ -35,6 +35,7 @@ class InBoundActor @Inject() ( @Named("twilio-actor") twilioActor: ActorRef,
 
 	case StartError(from, date, msg, fullname, email, phone, address,  hasstripe, preferences) =>
 	 accActor ! Notifier(from, "NOTIFICATION", date, "initiated start request", "NoName", "driverphone", true)
+	 twilioActor ! SendSMS(from, "please register for our service @ www.getdrivernow.com", "none")
 
 	case GenUser(from, date, msg, fullname, email, phone, address,  hasstripe, preferences) => 
 										accActor ! Accounter(from, "INCOMMING", date, msg, fullname, "driverphone", false)
