@@ -8,6 +8,7 @@ scalaVersion := "2.11.7"
 
 resolvers += Resolver.jcenterRepo
 resolvers += "sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 
 
 libraryDependencies ++= Seq(
