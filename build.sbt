@@ -1,4 +1,4 @@
-name := """play-silhouette-postgres-async-seed"""
+name := """blooming-sea-8888"""
 
 version := "1.0"
 
