@@ -1,6 +1,7 @@
 package utils
 
 import java.util.TimeZone
+import java.net.URI
 
 import jdub.async.Database
 import org.joda.time.DateTimeZone
@@ -13,11 +14,20 @@ object PlayGlobalSettings extends GlobalSettings {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
 
     val cnf = play.api.Play.current.configuration
-    val host = cnf.getString("db.host").getOrElse("localhost")
-    val port = 5432
-    val database = cnf.getString("db.database")
-    val username = cnf.getString("db.username").getOrElse("silhouette")
-    val password = cnf.getString("db.password")
+
+
+    val dbUri = new URI(cnf.get("db.default.url"))
+    val host = dbUri.getHost()
+    val port = dbUri.getPort()
+    val database = dbUri.getPath()
+    val username = dbUri.getUserInfo().split(":")[0];
+    val password = dbUri.getUserInfo().split(":")[1];
+
+    // val host = cnf.getString("db.host").getOrElse("localhost")
+    // val port = 5432
+    // val database = cnf.getString("db.database")
+    // val username = cnf.getString("db.username").getOrElse("silhouette")
+    // val password = cnf.getString("db.password")
 
     Database.open(username, host, port, password, database)
     Schema.update()
@@ -30,3 +40,9 @@ object PlayGlobalSettings extends GlobalSettings {
     super.onStop(app)
   }
 }
+
+
+
+
+
+
