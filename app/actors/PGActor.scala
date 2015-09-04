@@ -66,8 +66,8 @@ class PGActor @Inject() (val env: AuthenticationEnvironment,
 			case Failure(ex) => inboundActor ! StartError(from, date, "start", "no-fullname", "no-email", "no-phone", "no-address",  "Empty", "no-preferences")
 		}
 		
-		case Message(mid, from, to, date, msg) if (!interval.contains(nowLA)) => 
-  						inboundActor ! OutOfOffice(from, date, msg, "no-fullname", "no-email", "no-phone", "no-address",  "Empty", "no-preferences")
+		// case Message(mid, from, to, date, msg) if (!interval.contains(nowLA)) => 
+  // 						inboundActor ! OutOfOffice(from, date, msg, "no-fullname", "no-email", "no-phone", "no-address",  "Empty", "no-preferences")
 
 
 
