@@ -5,36 +5,62 @@
     @if(flash.get("error").isDefined) {
       <div class="flash-error">@flash("error")</div>
     }
-    <h4>Sign In</h4>
-    <form method="post" action="@controllers.routes.AuthenticationController.authenticateCredentials()">
-      <input type="text" class="form-control" name="email" value="@form("email").value" placeholder="Email" />
+<div class="middlePage">
+<div class="page-header">
+  <h1 class="logo">GetGatsby <small>Welcome!</small></h1>
+</div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title">Please Sign In</h3>
+  </div>
+  <div class="panel">
+  
+  <div class="row">
+  
+<div class="col-md-5" >
+    @defining(services.user.SocialAuthProviders.providers) { providers =>
+      @if(providers.nonEmpty) {
+          @for(p <- providers if p._1 != "credentials") {
+            <a href="@controllers.routes.AuthenticationController.authenticateSocial(p._1)" class="provider @p._1">
+              <img src="@routes.Assets.versioned(s"images/providers/${p._1}.png")">
+            </a>
+          }
+      }
+    }
+</div>
+
+<div class="col-md-7" style="border-left:1px solid #ccc;height:160px">
+
+    <form class="form-horizontal" method="post" action="@controllers.routes.AuthenticationController.authenticateCredentials()">
+    <fieldset>
+      <input type="email" class="form-control input-md" name="email" value="@form("email").value" placeholder="Email" />
       @if(form.error("email").isDefined) {
         <em>@Messages(form.error("email").get.message)</em>
       }
-      <input type="password" class="form-control" name="password" placeholder="Password" />
+      <input type="password" class="form-control input-md" name="password" value="" placeholder="Password" />
       @if(form.error("password").isDefined) {
         <em>@Messages(form.error("password").get.message)</em>
       }
-      <input type="submit" class="submit" value="Sign in" />
+      <br/>
+      <input type="submit" class="btn btn-info btn-sm pull-right" value="Sign in" />
+    </fieldset>
     </form>
 
     <div>
       <p>Not a member? <a href="@controllers.routes.RegistrationController.registrationForm()">Sign up now</a></p>
     </div>
 
-    @defining(services.user.SocialAuthProviders.providers) { providers =>
-      @if(providers.nonEmpty) {
-        <div>
-          <p>Or sign in using these providers</p>
-          <div>
-          @for(p <- providers if p._1 != "credentials") {
-            <a title="Sign in with @p._2" href="@controllers.routes.AuthenticationController.authenticateSocial(p._1)" class="provider @p._1">
-              <img src="@routes.Assets.versioned("images/providers/" + p._1 + ".png")">
-            </a>
-          }
-          </div>
-        </div>
-      }
-    }
-  </div>
+</div>
+    
+</div>
+    
+</div>
+</div>
+
+
+</div>
+
+
+
 }

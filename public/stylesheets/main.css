@@ -450,3 +450,49 @@ img::-moz-selection {
 body {
     webkit-tap-highlight-color: rgba(255,255,255,.2);
 }
+
+
+
+
+/***
+SignInTemplate
+***/
+
+
+p {
+  color:#CCC;
+}
+
+.spacing {
+  padding-top:7px;
+  padding-bottom:7px;
+}
+.middlePage {
+  width: 680px;
+    height: 500px;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.logo {
+  color:#CCC;
+}
+
+
+
+
+/***
+NavBarsTemplate
+***/
+
+
+
+.navbar, .dropdown-menu{
+background:rgba(255,255,255,0.25);
+border: none;
+
+}
