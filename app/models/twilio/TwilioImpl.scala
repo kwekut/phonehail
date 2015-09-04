@@ -30,8 +30,8 @@ class TwilioImpl @Inject() (val env: AuthenticationEnvironment) extends TwilioSe
 
 	val client = new TwilioRestClient(sid, token)
 	val messageFactory: MessageFactory = client.getAccount.getMessageFactory
-	//val defaultPic = "http://res.cloudinary.com/demo/image/facebook/c_thumb,g_face,h_90,w_120/billclinton.jpg"
-	val defaultPic ="@routes.Assets.versioned('images/Ggicon.png')"
+	val defaultPic = "http://res.cloudinary.com/demo/image/facebook/c_thumb,g_face,h_90,w_120/billclinton.jpg"
+	//val defaultPic ="@routes.Assets.versioned('images/Ggicon.png')"
 
 
 
