@@ -48,6 +48,12 @@
 
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
     @for(stylesheet <- stylesheets) {<link rel="stylesheet" media="screen" href="@stylesheet" />}
+
+        <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    
   </head>
   <body@bodyClass.map(c => Html(" class=\"" + c + "\""))>@content
   </body>

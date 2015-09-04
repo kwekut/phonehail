@@ -1,222 +1,106 @@
 @layout.bootstrap("GeTGatsby") {
 
-<div id="mailsub" class="notification" align="center">
+    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href='@routes.ProfileController.userprofile'>
+                    <i class="fa fa-play-circle"></i>  <span class="light">Start</span> GetGatsby
+                </a>
+            </div>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="min-width: 320px;"><tr><td align="center" bgcolor="#eff3f8">
-
-<table border="0" cellspacing="0" cellpadding="0" class="table_width_100" width="100%" style="max-width: 680px; min-width: 300px;">
-    <tr><td>
-  <!-- padding --><div style="height: 80px; line-height: 80px; font-size: 10px;"> </div>
-  </td></tr>
-  <!--header -->
-  <tr><td align="center" bgcolor="#ffffff">
-    <!-- padding --><div style="height: 30px; line-height: 30px; font-size: 10px;"> </div>
-    <table width="90%" border="0" cellspacing="0" cellpadding="0">
-      <tr><td align="left"><!-- 
-
-        Item --><div class="mob_center_bl" style="float: left; display: inline-block; width: 115px;">
-          <table class="mob_center" width="115" border="0" cellspacing="0" cellpadding="0" align="left" style="border-collapse: collapse;">
-            <tr><td align="left" valign="middle">
-              <!-- padding --><div style="height: 20px; line-height: 20px; font-size: 10px;"> </div>
-              <table width="115" border="0" cellspacing="0" cellpadding="0" >
-                <tr><td align="left" valign="top" class="mob_center">
-                  <a href="#" target="_blank" style="color: #596167; font-family: Arial, Helvetica, sans-serif; font-size: 13px;">
-                  <font face="Arial, Helvetica, sans-seri; font-size: 13px;" size="3" color="#596167">
-                  <img src="@routes.Assets.versioned("images/Ggicon.png")" width="115" height="19" alt="Metronic" border="0" style="display: block;" /></font></a>
-                </td></tr>
-              </table>            
-            </td></tr>
-          </table></div><!-- Item END--><!--[if gte mso 10]>
-          </td>
-          <td align="right">
-        <![endif]--><!-- 
-
-        Item --><div class="mob_center_bl" style="float: right; display: inline-block; width: 88px;">
-          <table width="88" border="0" cellspacing="0" cellpadding="0" align="right" style="border-collapse: collapse;">
-            <tr><td align="right" valign="middle">
-              <!-- padding --><div style="height: 20px; line-height: 20px; font-size: 10px;"> </div>
-              <table width="100%" border="0" cellspacing="0" cellpadding="0" >
-                <tr><td align="right">
-
-                </td></tr>
-              </table>
-            </td></tr>
-          </table></div><!-- Item END--></td>
-      </tr>
-    </table>
-    <!-- padding --><div style="height: 50px; line-height: 50px; font-size: 10px;"> </div>
-  </td></tr>
-  <!--header END-->
-
-  <!--content 1 -->
-  <tr><td align="center" bgcolor="#fbfcfd">
-    <table width="90%" border="0" cellspacing="0" cellpadding="0">
-      <tr><td align="center">
-        <!-- padding --><div style="height: 60px; line-height: 60px; font-size: 10px;"> </div>
-        <div style="line-height: 44px;">
-          <font face="Arial, Helvetica, sans-serif" size="5" color="#57697e" style="font-size: 34px;">
-          <span style="font-family: Arial, Helvetica, sans-serif; font-size: 34px; color: #57697e;">
-            Complete Discreet Professional
-          </span></font>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#about">About</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="@routes.AuthenticationController.signInForm">Sign In</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="@routes.RegistrationController.registrationForm">Sign Up</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href='@routes.AuthenticationController.signOut'>Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
         </div>
-        <!-- padding --><div style="height: 40px; line-height: 40px; font-size: 10px;"> </div>
-      </td></tr>
-      <tr><td align="center">
-        <div style="line-height: 24px;">
-          <font face="Arial, Helvetica, sans-serif" size="4" color="#57697e" style="font-size: 15px;">
-          <span style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #57697e;">
-            GetGatsby provides professional pickup services<br> We respect your privacy and cherish your convenience.
-          </span></font>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Intro Header -->
+    <header class="intro">
+        <div class="intro-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <h1 class="brand-heading">GetGatsby</h1>
+                        <p class="intro-text">A Complete Discreet & Professional<br>Concierge and Pick-up Service.</p>
+                        <a href="#about" class="btn btn-circle page-scroll">
+                            <i class="fa fa-angle-double-down animated"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- padding --><div style="height: 40px; line-height: 40px; font-size: 10px;"> </div>
-      </td></tr>
-      <tr><td align="center">
-        <div style="line-height: 24px;">
-          <a href='@routes.ProfileController.userprofile' style="color: #596167; font-family: Arial, Helvetica, sans-serif; font-size: 13px;">
-            <button type="button" class="btn btn-primary">START  NOW</button>
-              </a>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="container content-section text-center">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>About GetGatsby</h2>
+                <p>GetGatsby is private professional pick-up and concierge service solution. We are there for you in your time of need . We pride ourselves in providing a private, discreet and professional service. <a href="#">See our pledge page</a>.</p>
+
+                <p>To use our service, you must first create an account with us: <a href="#">Sign Up,</a> and provide payment details: <a href="#">Provide payment details</a>.</p>
+                <p>To request service, simply send your request by text to our short code</p> 
+                                        <p>(907 312 2505)</p>
+                <p>We are available between the hours of 8pm - 8am pacific time, Monday to Saturday.</p>
+            </div>
         </div>
-        <!-- padding --><div style="height: 60px; line-height: 60px; font-size: 10px;"> </div>
-      </td></tr>
-    </table>    
-  </td></tr>
-  <!--content 1 END-->
+    </section>
 
-  <!--content 2 -->
-  <tr><td align="center" bgcolor="#ffffff" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #eff2f4;">
-    <table width="94%" border="0" cellspacing="0" cellpadding="0">
-      <tr><td align="center">
-        <!-- padding --><div style="height: 40px; line-height: 40px; font-size: 10px;"> </div>
-
-        <div class="mob_100" style="float: left; display: inline-block; width: 33%;">
-          <table class="mob_100" width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="border-collapse: collapse;">
-            <tr><td align="center" style="line-height: 14px; padding: 0 27px;">
-              <!-- padding --><div style="height: 40px; line-height: 40px; font-size: 10px;"> </div>
-              <div style="line-height: 14px;">
-                <font face="Arial, Helvetica, sans-serif" size="3" color="#4db3a4" style="font-size: 14px;">
-                <strong style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #4db3a4;">
-
-              <a href="@routes.AuthenticationController.signInForm" style="color: #4db3a4; text-decoration: none;">SIGN IN</a>
-                </strong></font>
-              </div>
-              <!-- padding --><div style="height: 18px; line-height: 18px; font-size: 10px;"> </div>
-              <div style="line-height: 21px;">
-                <font face="Arial, Helvetica, sans-serif" size="3" color="#98a7b9" style="font-size: 14px;">
-                <span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #98a7b9;">
-                  If you already have an account, please sign in to review your profile. 
-                </span></font>
-              </div>
-            </td></tr>
-          </table>
+    <!-- Download Section -->
+    <section id="download" class="content-section text-center">
+        <div class="download-section">
+            <div class="container">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <h2>How To Use Our Services</h2>
+                    <p>You will have to create an account with us to begin with.</p>
+                    <p>Then you can request service via text message to our short code</p> 
+                                    <p>(907 312 2505)</p>
+                    <a href="#" class="btn btn-default btn-lg">Visit Our How To Page For More Details</a>
+                </div>
+            </div>
         </div>
-        <div class="mob_100" style="float: left; display: inline-block; width: 33%;">
-          <table class="mob_100" width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="border-collapse: collapse;">
-            <tr><td align="center" style="line-height: 14px; padding: 0 27px;">
-              <!-- padding --><div style="height: 40px; line-height: 40px; font-size: 10px;"> </div>
-              <div style="line-height: 14px;">
-                <font face="Arial, Helvetica, sans-serif" size="3" color="#4db3a4" style="font-size: 14px;">
-                <strong style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #4db3a4;">
+    </section>
 
-                  <a href="@routes.RegistrationController.registrationForm" style="color: #4db3a4; text-decoration: none;">SIGN UP</a>
-                </strong></font>
-              </div>
-              <!-- padding --><div style="height: 18px; line-height: 18px; font-size: 10px;"> </div>
-              <div style="line-height: 21px;">
-                <font face="Arial, Helvetica, sans-serif" size="3" color="#98a7b9" style="font-size: 14px;">
-                <span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #98a7b9;">
-                  Please create a new account to start using our services. 
-                </span></font>
-              </div>
-            </td></tr>
-          </table>
+    <!-- Contact Section -->
+    <section id="contact" class="container content-section text-center">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Contact GetGatsby</h2>
+                <p>Feel free to email us to provide some feedback and provide us suggestions as to how we can improve the service for you!</p>
+                <p><a href="#">Contact Us</a>
+                </p>
+
+            </div>
         </div>
-        <div class="mob_100" style="float: left; display: inline-block; width: 33%;">
-          <table class="mob_100" width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="border-collapse: collapse;">
-            <tr><td align="center" style="line-height: 14px; padding: 0 27px;">
-              <!-- padding --><div style="height: 40px; line-height: 40px; font-size: 10px;"> </div>
-              <div style="line-height: 14px;">
-                <font face="Arial, Helvetica, sans-serif" size="3" color="#4db3a4" style="font-size: 14px;">
-                <strong style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #4db3a4;">
+    </section>
 
-                  <a href='@routes.AuthenticationController.signOut' style="color: #4db3a4; text-decoration: none;">SIGN OUT</a>
-                </strong></font>
-              </div>
-              <!-- padding --><div style="height: 18px; line-height: 18px; font-size: 10px;"> </div>
-              <div style="line-height: 21px;">
-                <font face="Arial, Helvetica, sans-serif" size="3" color="#98a7b9" style="font-size: 14px;">
-                <span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #98a7b9;">
-                  Log out of your account. 
-                </span></font>
-              </div>
-            </td></tr>
-          </table>
-        </div>                
-      </td></tr>
-      <tr><td><!-- padding --><div style="height: 80px; line-height: 80px; font-size: 10px;"> </div></td></tr>
-    </table>    
-  </td></tr>
-  <!--content 2 END-->
+    <footer>
+        <div class="container text-center">
+            <p>Copyright &copy; <a href='@routes.AdminController.adminIndex'>GetGatsby 2015</a></p>
+        </div>
+    </footer>
 
-  <!--links -->
-  <tr><td align="center" bgcolor="#ffffff" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #eff2f4;">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-      <tr><td align="center">
-        <!-- padding --><div style="height: 32px; line-height: 32px; font-size: 10px;"> </div>
-        <table width="80%" align="center" cellpadding="0" cellspacing="0">
-          <tr>
-            <td align="center" valign="middle" style="font-size: 12px; line-height: 22px;">
-              <font face="Tahoma, Arial, Helvetica, sans-serif" size="2" color="#282f37" style="font-size: 12px;">
-                <span style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #5b9bd1;">
-                  <a href="#PRODUCTS" style="color: #5b9bd1; text-decoration: none;">CONTACT US</a>
-                      <img src="http://artloglab.com/metromail/images/dot.gif" alt="|" width="9" height="9" class="mob_display_none" />    
-                  <a href="#FEATURES" style="color: #5b9bd1; text-decoration: none;">ABOUT</a>
-                      <img src="http://artloglab.com/metromail/images/dot.gif" alt="|" width="9" height="9" class="mob_display_none" />    
-                  <a href="#LAYOUTS" style="color: #5b9bd1; text-decoration: none;">TERMS</a>
-                      <img src="http://artloglab.com/metromail/images/dot.gif" alt="|" width="9" height="9" class="mob_display_none" />    
-                  <a href="#SUPPORT" style="color: #5b9bd1; text-decoration: none;">SUPPORT</a>
-                      <img src="http://artloglab.com/metromail/images/dot.gif" alt="|" width="9" height="9" class="mob_display_none" />    
-                  <a href="#DISCOVER" style="color: #5b9bd1; text-decoration: none;">DISCOVER</a>
-              </span></font>
-            </td>
-          </tr>                                        
-        </table>
-      </td></tr>
-      <tr><td><!-- padding --><div style="height: 32px; line-height: 32px; font-size: 10px;"> </div></td></tr>
-    </table>    
-  </td></tr>
-  <!--links END-->
-
-  <!--footer -->
-  <tr><td class="iage_footer" align="center" bgcolor="#ffffff">
-    <!-- padding --><div style="height: 80px; line-height: 80px; font-size: 10px;"> </div>  
-    
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-      <tr><td align="center">
-        <font face="Arial, Helvetica, sans-serif" size="3" color="#96a5b5" style="font-size: 13px;">
-        <span style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #96a5b5;">
-          2015 © GetGatby. ALL Rights Reserved.
-        </span></font>        
-      </td></tr>      
-    </table>
-    
-    <!-- padding --><div style="height: 30px; line-height: 30px; font-size: 10px;"> </div>  
-  </td></tr>
-  <!--footer END-->
-  <tr><td>
-  <!-- padding --><div style="height: 80px; line-height: 80px; font-size: 10px;"> </div>
-  </td></tr>
-</table>
-
-</td></tr>
-</table>
-      
-</div> 
-
-<br>
-<br>
-<center>
-<strong>THANKS</strong>
-</center>
-<br>
-<br>
 }
