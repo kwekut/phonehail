@@ -22,7 +22,7 @@ object UserForms {
   val userUpdateForm = Form(
     mapping(
       "username" -> nonEmptyText,
-      "phone" -> nonEmptyText,
+      "phone" -> nonEmptyText(minLength = 10, maxLength = 10),
       "address" -> nonEmptyText,
       "fullName" -> nonEmptyText
     )(UserUpdateData.apply)(UserUpdateData.unapply)

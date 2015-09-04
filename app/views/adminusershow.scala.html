@@ -15,7 +15,7 @@
     <p class="col-md-6"><strong>Role:</strong></p><p class="col-md-6">@user.roles.toList</p>
 <p class="col-md-6"><strong>Has Stripe?:</strong></p><p class="col-md-6">@user.hasstripe.getOrElse("None")</p>
     <p class="col-md-6"><strong>Preferences:</strong></p><p class="col-md-6">@user.preferences.getOrElse("None")</p>
-<li><a href='@routes.AdminController.adminUserList("")'>Back To List</a></li>
+<li><a href='@routes.AdminController.adminUserList("1")'>Back To List</a></li>
 
 </div>
 </div>

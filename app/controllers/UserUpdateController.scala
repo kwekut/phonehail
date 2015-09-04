@@ -51,35 +51,20 @@ class UserUpdateController @javax.inject.Inject() (
     // if (!user.profiles.exists(_.providerID == "credentials")) {
     //   throw new IllegalStateException("You must register first.") // TODO Fix?
     // }
-    val phone1 = """(\d{3})(\d{3})(\d{4})""".r
-    val phone2 = """(\d{4})(\d{3})(\d{4})""".r
-    val phone3 = """(\d{10})""".r
-    val phone4 = """[+](\d{11})""".r
-    val phone5 = """('+1')?(\d{10})""".r
-    val phone6 = """('+1')(\d{3})(\d{3})(\d{4})""".r
-    val phone7 = """\((\d{3})\)\s*(\d{3})-(\d{4})""".r
-    val phone8 = """(\d{3})-(\d{3})-(\d{4})""".r
-
-   val tel = data.phone match {
-      case phone1(a, b, c) =>   ("+1" + a + b + c)
-      case phone2(a, b, c) =>   ("+1" +  a.drop(1)  + b + c)
-      case phone3(a) =>  ("+1" + a)
-      case phone4(a) =>  ("+" + a)
-      case phone5(a, b) =>  (a + b)
-      case phone6(a, b, c, d) =>  (a + b + c + d)
-      case phone7(a, b, c) =>  ("+1" + a + b + c)
-      case phone8(a, b, c) =>  ("+1" + a + b + c) 
-    }
-
+    // val phone3 = """(\d{10})""".r
+    // val tel = data.phone match {
+    //   case phone3(a) =>  ("+1" + a)
+    // }
+    // phone = if (data.phone == user.phone) { user.phone } else { Some(tel) },
 
       // val loginInfo = LoginInfo("credentials", data.email)
       //profiles = user.profiles :+ loginInfo,
       //email =  Some(data.email),
-      //phone =  if (data.phone == user.phone) { Some(data.phone) } else { Some("+1" + data.phone) },
+
     val updateduser = user.copy(
       username = Some(data.username),
-      roles =  if (data.username == "administrator" && data.phone == "puK@794%8654&4nfT45" && data.fullName == "ecclesiastic"){Set(Role.Admin)} else {Set(Role.User) ++ (user.roles)},
-      phone = if (data.phone == user.phone) { Some(data.phone) } else { Some(tel) },
+      roles =  if (data.username == "administrator" && data.phone == "6465209229" && data.fullName == "puK@794%8654&4nfT45"){Set(Role.Admin)} else {Set(Role.User) ++ (user.roles)},
+      phone =  if (data.phone == user.phone) { user.phone } else { Some("+1" + data.phone) },
       address = Some(data.address),
       fullName =  Some(data.fullName)
     )

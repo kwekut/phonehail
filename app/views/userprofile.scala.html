@@ -5,41 +5,69 @@
         <a class="navbar-brand">@user.username.getOrElse("None")</a>
 
         <ul class="nav navbar-nav">
-            <li><a href='@routes.UserUpdateController.userUpdateForm'>Edit Profile</a></li>
-            
-            <li><a href='@routes.StripeController.stripeForm'>Edit Payment</a></li>
             <li><a href='@routes.HomeController.index'>Back To Home</a></li>
             <li><li><a href='@routes.AuthenticationController.signOut'><i class="fa fa-power-off fa-6"></i>SignOut</a></li>
         </ul>
     </nav>
-  <div class="container">
-    <div class="user col-md-6 col-md-offset-3">
-        <div class="row">
-            <hr class="col-md-12" />
-            <h4 class="col-md-8">Welcome, you are now signed in!</h4>
-            <hr class="col-md-12" />
-        </div>
-        <div class="row data">
-            <div class="col-md-12">
-                <div class="row">
-                    <p class="col-md-6"><strong>User Name:</strong></p><p class="col-md-6">@user.username.getOrElse("None")</p>
-                </div>
-                <div class="row">
-                    <p class="col-md-6"><strong>Full name:</strong></p><p class="col-md-6">@user.fullName.getOrElse("None")</p>
-                </div>
-                <div class="row">
-                    <p class="col-md-6"><strong>Address:</strong></p><p class="col-md-6">@user.address.getOrElse("None")</p>
-                </div>
-                <div class="row">
-                    <p class="col-md-6"><strong>Email:</strong></p><p class="col-md-6">@user.email.getOrElse("None")</p>
-                </div>
-                <div class="row">
-                    <p class="col-md-6"><strong>Phone:</strong></p><p class="col-md-6">@user.phone.getOrElse("None")</p>
-                </div>
+<div class="container">
+      <div class="row">
+      <div class="col-md-5  toppad  pull-right col-md-offset-3 ">
+       <br>
+
+      </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+   
+   
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">@user.username.getOrElse("None")</h3>
             </div>
+            <div class="panel">
+              <div class="row">
+                <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="http://babyinfoforyou.com/wp-content/uploads/2014/10/avatar-300x300.png" class="img-circle img-responsive"> </div>
+                
+                <div class=" col-md-9 col-lg-9 "> 
+                  <table class="table table-user-information">
+                    <tbody>
+                      <tr>
+                        <td>User Name:</td>
+                        <td>@user.username.getOrElse("None")</td>
+                      </tr>
+                      <tr>
+                        <td>Full name:</td>
+                        <td>@user.fullName.getOrElse("None")</td>
+                      </tr>
+                      <tr>
+                        <td>Address:</td>
+                        <td>@user.address.getOrElse("None")</td>
+                      </tr>
+                   
+                         <tr>
+                             <tr>
+                        <td>Email:</td>
+                        <td>@user.email.getOrElse("None")</td>
+                      </tr>
+                        <tr>
+                        <td>Phone:</td>
+                        <td>@user.phone.getOrElse("None")</td>
+                      </tr>
+                                           
+                    </tbody>
+                  </table>
+                  
+                    <a href='@routes.UserUpdateController.userUpdateForm' class="btn btn-primary">Edit Profile</a>
+            
+                    <a href='@routes.StripeController.stripeForm' class="btn btn-primary">Edit Payment</a>
+
+                </div>
+              </div>
+            </div>            
+          </div>
         </div>
+      </div>
     </div>
-</div>
+
+
 }
 
 

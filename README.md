@@ -1,4 +1,4 @@
-Play Silhouette Postgres Async Seed
+http://GetGatsby.com/
 ===================================
 
 The Play Silhouette Postgres Async Seed project shows how [Silhouette 3.0](https://github.com/mohiva/play-silhouette) can be used

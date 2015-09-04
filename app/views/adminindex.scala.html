@@ -1,24 +1,31 @@
 @(user: models.user.User)(
   implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
 )@layout.bootstrap("Profile") {
-  <div class="profile">
+
+ <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <a class="navbar-brand">@user.username.getOrElse("None")</a>
+
+  <ul class="nav navbar-nav">
     @if(!user.email.isDefined) {
       <p>
-        Sign In with admin credentials:
-        <a href="@controllers.routes.RegistrationController.registrationForm()">Sign Up</a> or
-        <a href="@controllers.routes.AuthenticationController.signInForm()">Sign In</a>
-        ?
+        Sign In or Sign Up with admin credentials:
+        <li><a href="@controllers.routes.RegistrationController.registrationForm()">Sign Up</a></li>
+        <li><a href="@controllers.routes.AuthenticationController.signInForm()">Sign In</a></li>
       </p>
+  </ul>
     } else {
-      @user.username.map { un =>
-        <div class="username">@un</div>
-      }.getOrElse {
-        <div class="username">Guest</div>
-      }
-      <li><a href='@routes.AdminController.adminUserList("")'>List Users</a></li>
-      <div class="logout">
-        <a class="sign-out-link" href="@controllers.routes.AuthenticationController.signOut">Sign Out</a>
-      </div>
+  <ul class="nav navbar-nav">
+      <li><a href='@routes.AdminController.adminUserList("*")'>List Users</a></li>
+      <li><a class="sign-out-link" href="@controllers.routes.AuthenticationController.signOut">Sign Out</a></li>
+
     }
+    </ul>
+  </nav>
+  <div class="container">
+          <div class="row">
+            <hr class="col-md-12" />
+            <h4 class="col-md-8">Admin Home Page</h4>
+            <hr class="col-md-12" />
   </div>
+
 }

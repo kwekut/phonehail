@@ -14,44 +14,62 @@
             <li><li><a href='@routes.AuthenticationController.signOut'><i class="fa fa-power-off fa-6"></i>SignOut</a></li>
         </ul>
     </nav>
-  <div class="container">
-          <div class="row">
-            <hr class="col-md-12" />
-            <h4 class="col-md-8">Please Update Your Profile</h4>
-            <hr class="col-md-12" />
-        </div>
+<div class="container-fluid">
+    <section class="container">
+    <div class="container-page">        
+      <div class="col-md-6">
+        <h3 class="dark-grey">Please Update Your Profile</h3>
 
   @helper.form(action = routes.UserUpdateController.updateuser()) {
-
-
-<dl class="error" id="username_field">
-    <dt><label for="username"><label>Username:</label></dt>
-    <dd><input type="text" name="username" id="username" value= "@filledForm.get.username"></dd>
-    <dd class="error">This field is required!</dd>
-</dl>
-
-<dl class="error" id="phone_field">
-    <dt><label for="phone"><label>Phone Number:</label></dt>
-    <dd><input type="text" name="phone" id="phone" value= "@filledForm.get.phone"></dd>
-    <dd class="error">This field is required!</dd>
-</dl>
-
-<dl class="error" id="address_field">
-    <dt><label for="address"><label>Address:</label></dt>
-    <dd><input type="text" name="address" id="address" value= "@filledForm.get.address"></dd>
-    <dd class="error">This field is required!</dd>
-</dl>
-
-<dl class="error" id="fullName_field">
-    <dt><label for="fullName"><label>Full Name:</label></dt>
-    <dd><input type="text" name="fullName" id="fullName" value= "@filledForm.get.fullName"></dd>
-    <dd class="error">This field is required!</dd>
-</dl>
-
-  <div class="form-group">
-      <br/>
-      <input type="submit" class="submit" value="Update Profile" />
-  </div>
+        
+        <div class="form-group col-lg-12">
+          <label>Username</label>
+            <input type="text" name="username" id="username" value= "@filledForm.get.username">
+            <dd class="error">This field is required!</dd>
+        </div>
+        
+        <div class="form-group col-lg-12">
+          <label>Phone Number</label>
+            <input type="text" name="phone" id="phone" value= "@filledForm.get.phone">
+            <dd class="error">Required format : 5553331111</dd>
+        </div>
+        
+        <div class="form-group col-lg-12">
+          <label>Address</label>
+            <input type="text" name="address" id="address" value= "@filledForm.get.address">
+            <dd class="error">This field is optional!</dd>
+        </div>
+                
+        <div class="form-group col-lg-12">
+          <label>Full Name</label>
+            <input type="text" name="fullName" id="fullName" value= "@filledForm.get.fullName">
+            <dd class="error">Required format: Firstname Lastname</dd>
+        </div>  
+      
+      </div>
+    
+      <div class="col-md-6">
+        <h3 class="dark-grey">Terms and Conditions</h3>
+        <p>
+          By clicking on "Register" you agree to The Company's' Terms and Conditions
+        </p>
+        <p>
+          Please review and save your information. Complete and accurate information will help us serve you better.
+        </p>
+        <p>
+          Please click on the EDIT PAYMENT link to enter your payment information. 
+        </p>
+        <p>
+          Failure to enter your payment information will make your request for our services incomplete.
+        </p>
+        
+          <div class="form-group">
+              <br/>
+              <input type="submit" class="submit" value="Update Profile" />
+          </div>
+      </div>
+    </div>
+  </section>
 </div>
 }
 

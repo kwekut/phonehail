@@ -12,9 +12,13 @@
         </ul>
     </nav>
   <div class="container">
-    
+    <div class="row">
+      <div class="col-md-12">
+      </div>
+    </div> 
+
 <div>
-        <h1>Search for users</h1>
+        <h3>Search for user by name</h3>
         <p>
             <form action="@routes.AdminController.adminSearch" method="GET">
                 <input name="filter" type="text"/>
@@ -24,17 +28,19 @@
 </div>
 
 
-<div class="user col-md-6 col-md-offset-3">
-<h1>List of Users</h1>
+<div class="user col-md-12 col-md-offset-2">
+<h4>List of Users</h4>
 
 @users.map { user =>
 
 <div class="row data">
-    <div class="col-md-12">
-        <span class="name">@user.fullName.getOrElse("None")</span> @user.username.getOrElse("None") 
-        <span class="name">@user.email.getOrElse("None")</span> @user.phone.getOrElse("None")
-        <li><a href='@routes.AdminController.adminUserShow(user.id)'>See User Details</a></li>
-        <li><a href='@routes.AdminController.adminUserUpdateForm(user.id)'>Edit User</a></li>
+    <div class="col-md-10">
+        <span class="name"><b>Full Name</b>: <i>@user.fullName.getOrElse("None")</i></span> 
+        <span class="name"><b>UserName</b>: <i>@user.username.getOrElse("None")</i></span>
+        <span class="name"><b>Email</b>: <i>@user.email.getOrElse("None")</i></span>
+        <span class="name"><b>Phone</b>: <i>@user.phone.getOrElse("None")</i></span>
+        <a href='@routes.AdminController.adminUserShow(user.id)'><b>See Details</b></a>
+        <a href='@routes.AdminController.adminUserUpdateForm(user.id)'><b>Edit User</b></a>
     </div>
         }
 </div>

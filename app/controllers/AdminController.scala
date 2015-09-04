@@ -35,7 +35,7 @@ class AdminController @javax.inject.Inject() (val messagesApi: MessagesApi, val 
     )
   }
 
-  def adminUserList(filter:String="")  = SecuredAction.async {
+  def adminUserList(filter:String="1")  = SecuredAction.async {
     env.identityService.search(filter).flatMap {
      users => Future.successful {Ok(views.html.adminuserlist(users, UserForms.adminSearchForm))}
     }

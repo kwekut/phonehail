@@ -14,7 +14,7 @@ GET         /adminindex            controllers.AdminController.adminIndex
 GET         /adminuserupdate/:user      controllers.AdminController.adminUserUpdateForm(user: java.util.UUID)
 POST        /adminuserupdate/:user      controllers.AdminController.adminUserUpdate(user: java.util.UUID)
 GET         /adminsearch          controllers.AdminController.adminSearch
-GET         /adminuserlist/:filter       controllers.AdminController.adminUserList(filter)
+GET         /adminuserlist/:filter       controllers.AdminController.adminUserList(filter: String)
 GET         /adminusershow/:user          controllers.AdminController.adminUserShow(user: java.util.UUID)
 
 
