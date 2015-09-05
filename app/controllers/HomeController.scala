@@ -13,7 +13,10 @@ import scala.concurrent.Future
 @javax.inject.Singleton
 class HomeController @javax.inject.Inject() (val messagesApi: MessagesApi, val env: AuthenticationEnvironment) extends Silhouette[User, CookieAuthenticator] {
   
-  def index = Action.async { s =>
-    Future.successful(Ok(views.html.index()))
+  def index = UserAwareAction.async { implicit request =>
+    request.identity match {
+      case Some(user) => Future.successful(Ok(views.html.index(Some(user))))
+      case None => Future.successful(Ok(views.html.index()))
+    }
   }
 }

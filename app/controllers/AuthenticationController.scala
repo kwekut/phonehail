@@ -83,6 +83,7 @@ class AuthenticationController @javax.inject.Inject() (
     env.authenticatorService.discard(request.authenticator, result).map(x => result)
   }
 
+
   // private[this] def mergeUser(user: User, profile: CommonSocialProfile) = {
   //   user.copy(
   //     username = if (profile.firstName.isDefined && user.username.isEmpty) { profile.firstName } else { user.username }

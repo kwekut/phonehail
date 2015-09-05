@@ -22,9 +22,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbar-collapse-4">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href='@routes.HomeController.index'>Back To Home</a></li>
-            <li><a href='@routes.AuthenticationController.signOut'>Logout</a></li>
-           
+            <li><a href='@routes.HomeController.index'>Home</a></li>        
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container -->
     </nav><!-- /.navbar -->
@@ -45,7 +43,9 @@
             </div>
             <div class="panel">
               <div class="row">
-                <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="http://babyinfoforyou.com/wp-content/uploads/2014/10/avatar-300x300.png" class="img-circle img-responsive"> </div>
+                <div class="col-md-3 col-lg-3 " align="center"> 
+            <img alt="User Pic"  src="@routes.Assets.versioned("images/profile.png")" class="img-circle img-responsive">
+            </div>
                 
                 <div class=" col-md-9 col-lg-9 "> 
                   <table class="table table-user-information">
