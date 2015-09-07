@@ -73,11 +73,12 @@ class UserUpdateController @javax.inject.Inject() (
       u <- env.userService.save(updateduser, update = true)
     } yield { u
 
-          if (u.hasstripe.isDefined) {
+        if (u.hasstripe.isDefined) {
             Redirect(controllers.routes.ProfileController.userprofile)
-          } else {
+        } else {
             Redirect(controllers.routes.StripeController.stripeForm)
-          }
+        }
+
     }
   }
 }

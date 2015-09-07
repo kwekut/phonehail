@@ -34,7 +34,7 @@ class TwilioImpl @Inject() (val env: AuthenticationEnvironment) extends TwilioSe
 
 
 
-	def sendSMS(to: String, msg: String, driverphone: String = "driverphone") = Try {
+	def sendSMS(to: String, msg: String, driverphone: String) = Try {
 		 Logger.info(s"Sending SMS to $to with text $msg")
 	
 	    val driverimage: Future[String] = 
@@ -56,14 +56,7 @@ class TwilioImpl @Inject() (val env: AuthenticationEnvironment) extends TwilioSe
 	    val message: Message = messageFactory.create(params)
 	    	message.getSid
 
-	    case Failure(ex) => 
-		val params = new ArrayList[NameValuePair]
-	    	params.add(new BasicNameValuePair("Body", msg));
-	    	params.add(new BasicNameValuePair("To", to));
-	    	params.add(new BasicNameValuePair("From", from));
-
-	    val message: Message = messageFactory.create(params)
-	    	message.getSid
+	    case Failure(ex) => Logger.info("This Twilio Error will never occur")
 	    }
 	} 
 
