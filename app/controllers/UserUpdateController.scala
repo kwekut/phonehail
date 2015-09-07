@@ -14,6 +14,7 @@ import models.user.{ Role, User }
 import play.api.Logger
 import scala.util.matching.Regex
 import scala.concurrent.Future
+import scala.util.{Success, Failure}
 
 @javax.inject.Singleton
 class UserUpdateController @javax.inject.Inject() (
@@ -48,18 +49,6 @@ class UserUpdateController @javax.inject.Inject() (
   }
 
   private[this] def updateUser(data: UserUpdateData, user: User)(implicit request: SecuredRequest[AnyContent]) = {
-    // if (!user.profiles.exists(_.providerID == "credentials")) {
-    //   throw new IllegalStateException("You must register first.") // TODO Fix?
-    // }
-    // val phone3 = """(\d{10})""".r
-    // val tel = data.phone match {
-    //   case phone3(a) =>  ("+1" + a)
-    // }
-    // phone = if (data.phone == user.phone) { user.phone } else { Some(tel) },
-
-      // val loginInfo = LoginInfo("credentials", data.email)
-      //profiles = user.profiles :+ loginInfo,
-      //email =  Some(data.email),
 
     val updateduser = user.copy(
       username = Some(data.username),
@@ -69,17 +58,14 @@ class UserUpdateController @javax.inject.Inject() (
       fullName =  Some(data.fullName)
     )
 
-    for {
-      u <- env.userService.save(updateduser, update = true)
-    } yield { u
-
-        if (u.hasstripe.isDefined) {
-            Redirect(controllers.routes.ProfileController.userprofile)
-        } else {
-            Redirect(controllers.routes.StripeController.stripeForm)
-        }
-
-    }
+      env.userService.save(updateduser, update = true).flatMap {
+        usr =>
+            if (usr.hasstripe.isDefined) {
+                Future.successful {  Redirect(controllers.routes.ProfileController.userprofile) }
+            } else {
+                Future.successful {  Redirect(controllers.routes.StripeController.stripeForm) }
+            }
+      }
   }
 }
 

@@ -30,34 +30,37 @@ class TwilioImpl @Inject() (val env: AuthenticationEnvironment) extends TwilioSe
 
 	val client = new TwilioRestClient(sid, token)
 	val messageFactory: MessageFactory = client.getAccount.getMessageFactory
-	val defaultPic = "None"
+	val defaultPic = "http://res.cloudinary.com/demo/image/facebook/c_thumb,g_face,h_90,w_120/billclinton.jpg"
 
 
 
 	def sendSMS(to: String, msg: String, driverphone: String) = Try {
 		 Logger.info(s"Sending SMS to $to with text $msg")
-	
-	    val driverimage: Future[String] = 
-	    	if (driverphone != "driverphone") {
-	    env.identityService.retrievebyphone(driverphone) flatMap {
-	    	case Some(driver) => Future.successful { driver.image.getOrElse(defaultPic) }
-	    	case None => Future.successful { defaultPic }
-	    }
-			} else {Future.successful (defaultPic) }
 
-	driverimage.onComplete {
-		case Success(driver) =>
-		val params = new ArrayList[NameValuePair]
-	    	params.add(new BasicNameValuePair("Body", msg));
-	    	params.add(new BasicNameValuePair("To", to));
-	    	params.add(new BasicNameValuePair("From", from));
-	    	params.add(new BasicNameValuePair("MediaUrl", driver));
+	    if (driverphone != "driverphone") {
+			env.identityService.retrievebyphone(driverphone) flatMap {
+			    case Some(driver) => 
+					val params = new ArrayList[NameValuePair]
+				    	params.add(new BasicNameValuePair("Body", msg));
+				    	params.add(new BasicNameValuePair("To", to));
+				    	params.add(new BasicNameValuePair("From", from));
+				    	params.add(new BasicNameValuePair("MediaUrl", driver.image.getOrElse(defaultPic)));
 
-	    val message: Message = messageFactory.create(params)
-	    	message.getSid
+				    val message: Message = messageFactory.create(params)
+				    	Future.successful { message.getSid }
+			    case None => Future.successful { defaultPic }
+			}
+		
+		} else {
+					val params = new ArrayList[NameValuePair]
+				    	params.add(new BasicNameValuePair("Body", msg));
+				    	params.add(new BasicNameValuePair("To", to));
+				    	params.add(new BasicNameValuePair("From", from));
 
-	    case Failure(ex) => Logger.info("This Twilio Error will never occur")
-	    }
+				    val message: Message = messageFactory.create(params)
+				    	message.getSid
+
+		}
 	} 
 
 
