@@ -26,8 +26,8 @@ GET         /updateuser			 controllers.UserUpdateController.userUpdateForm
 POST        /updateuser          controllers.UserUpdateController.updateuser
 
 # Images
-#GET		    /uploadimage		controllers.ImageController.imageForm
-#POST		/uploadimage        controllers.ImageController.upload
+GET		    /uploadimage		controllers.ImageController.imageForm
+POST		/uploadimage        controllers.ImageController.upload
 
 # Stripe Registration
 GET         /createstripe		controllers.StripeController.stripeForm

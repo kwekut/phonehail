@@ -45,24 +45,6 @@ object UserForms {
     )(AdminUserUpdateData.apply)(AdminUserUpdateData.unapply)
   )
 
-  val stripeForm = Form(
-    mapping(
-      "cardname" -> text,
-      "address1" -> text,
-      "address2" -> text,
-      "city" -> text,
-      "state" -> text,
-      "zip" -> text,
-      "country" -> text,
-      "number" -> text,
-      "cvc" -> text,
-      "exp-month" -> text,
-      "exp-year" -> text,
-      "stripeToken" -> nonEmptyText
-    )(StripeData.apply)(StripeData.unapply)
-  )
-
-
 
   val tokenForm = Form(
     mapping(
@@ -72,7 +54,7 @@ object UserForms {
 
   val imageForm = Form(
     mapping(
-      "image" -> nonEmptyText
+      "imageUrl" -> nonEmptyText
     )(ImageData.apply)(ImageData.unapply)
   )
 }

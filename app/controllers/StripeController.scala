@@ -2,7 +2,7 @@ package controllers
 
 import com.mohiva.play.silhouette.api.{ LoginEvent, LoginInfo, SignUpEvent }
 import com.mohiva.play.silhouette.impl.providers.{ CommonSocialProfile, CredentialsProvider }
-import models.user.{ User, TokenData, UserForms, StripeData }
+import models.user.{ User, TokenData, UserForms }
 import play.api.i18n.{ Messages, MessagesApi }
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.AnyContent
@@ -31,26 +31,30 @@ class StripeController @javax.inject.Inject() (
 
   def stripeForm = SecuredAction.async { implicit request =>
     env.identityService.retrieve(request.identity.id).flatMap {
-      case Some(user) =>  Future.successful(Ok(views.html.stripe(UserForms.tokenForm)))
+      case Some(user) =>  Future.successful(Ok(views.html.stripe(user, UserForms.tokenForm)))
       case None =>  Future.successful(Redirect(controllers.routes.HomeController.index()))
     }
   }
 
   def createcustomer = SecuredAction.async { implicit request =>
     Logger.info("stripe controller started")
-    UserForms.tokenForm.bindFromRequest.fold(
-      form => Future.successful(BadRequest(views.html.stripe(form))),
-      data => Future.successful(stripeSer.createCustomer(request.identity.id, data.stripeToken)).flatMap {
-        case _ => Future.successful(Redirect(controllers.routes.ProfileController.userprofile))
-      }.recover {
-        case e: CardException =>  Ok(views.html.stripe(UserForms.tokenForm)).flashing("error" -> "Incorrect card details")
-        case e: InvalidRequestException =>  Ok(views.html.stripe(UserForms.tokenForm)).flashing("error" -> "Invalid details entered")
-        case e: AuthenticationException =>  Redirect(controllers.routes.HomeController.index())
-        //case e: APIConnectionException =>  Redirect(controllers.routes.HomeController.index())
-        //case e: StripeException =>  Redirect(controllers.routes.HomeController.index())
-        //case e: Exception =>  Redirect(controllers.routes.HomeController.index())
-      }
-    )
+    env.identityService.retrieve(request.identity.id).flatMap {
+      case Some(user) =>
+        UserForms.tokenForm.bindFromRequest.fold(
+          form => Future.successful(BadRequest(views.html.stripe(user, form))),
+          data => Future.successful(stripeSer.createCustomer(request.identity.id, data.stripeToken)).flatMap {
+            case _ => Future.successful(Redirect(controllers.routes.ProfileController.userprofile))
+          }.recover {
+            case e: CardException =>  Ok(views.html.stripe(user, UserForms.tokenForm)).flashing("error" -> "Incorrect card details")
+            case e: InvalidRequestException =>  Ok(views.html.stripe(user, UserForms.tokenForm)).flashing("error" -> "Invalid details entered")
+            case e: AuthenticationException =>  Redirect(controllers.routes.HomeController.index())
+            //case e: APIConnectionException =>  Redirect(controllers.routes.HomeController.index())
+            //case e: StripeException =>  Redirect(controllers.routes.HomeController.index())
+            //case e: Exception =>  Redirect(controllers.routes.HomeController.index())
+          }
+        )
+      case None =>  Future.successful(Redirect(controllers.routes.HomeController.index()))
+    }
   }
 
 

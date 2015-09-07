@@ -13,7 +13,12 @@
 
   <!-- The required Stripe lib -->
   <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-  
+  <script>
+    UPLOADCARE_LOCALE = "en";
+    UPLOADCARE_TABS = "file url facebook gdrive dropbox instagram evernote flickr skydrive";
+    UPLOADCARE_PUBLIC_KEY = "31c94bd4fba554d1397e";
+  </script>
+  <script charset="utf-8" src="//ucarecdn.com/widget/2.5.1/uploadcare/uploadcare.full.min.js"></script>
     @for(script <- scripts) {<script src="@script"></script>}
 
   <script type="text/javascript">
@@ -46,15 +51,46 @@
     });
   </script>
 
+
+  <script type="text/javascript">
+
+
+
+
+    jQuery(function($) {
+      $('#image-form').submit(function(e) {
+        var $form = $(this);
+        // Disable the submit button to prevent repeated clicks
+        $form.find('button').prop('disabled', true);
+
+          uploadcare.openDialog(null, {
+              crop: "disabled",
+              imagesOnly: true
+
+            }).done(function(file) {
+                file.promise().done(function(fileInfo){
+                  imageURL = fileInfo.cdnUrl;
+                $form.append($('<input type="hidden" name="imageUrl" />').val(imageURL));
+                $form.get(0).submit();
+                });
+              });
+        // Prevent the form from submitting with the default action
+        return false;
+      });
+    });
+
+  </script>
+
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
     @for(stylesheet <- stylesheets) {<link rel="stylesheet" media="screen" href="@stylesheet" />}
 
-        <!-- Custom Fonts -->
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    
+  <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+  <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+      
   </head>
-  <body@bodyClass.map(c => Html(" class=\"" + c + "\""))>@content
-  </body>
+
+
+<body @bodyClass.map(c => Html(" class=\"" + c + "\""))>@content  </body>
+
 </html>

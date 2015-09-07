@@ -30,16 +30,15 @@ class TwilioImpl @Inject() (val env: AuthenticationEnvironment) extends TwilioSe
 
 	val client = new TwilioRestClient(sid, token)
 	val messageFactory: MessageFactory = client.getAccount.getMessageFactory
-	val defaultPic = "http://res.cloudinary.com/demo/image/facebook/c_thumb,g_face,h_90,w_120/billclinton.jpg"
-	//val defaultPic ="@routes.Assets.versioned('images/Ggicon.png')"
+	val defaultPic = "None"
 
 
 
-	def sendSMS(to: String, msg: String, driverphone: String = "none") = Try {
+	def sendSMS(to: String, msg: String, driverphone: String = "driverphone") = Try {
 		 Logger.info(s"Sending SMS to $to with text $msg")
 	
 	    val driverimage: Future[String] = 
-	    	if (driverphone != "none") {
+	    	if (driverphone != "driverphone") {
 	    env.identityService.retrievebyphone(driverphone) flatMap {
 	    	case Some(driver) => Future.successful { driver.image.getOrElse(defaultPic) }
 	    	case None => Future.successful { defaultPic }
@@ -57,7 +56,14 @@ class TwilioImpl @Inject() (val env: AuthenticationEnvironment) extends TwilioSe
 	    val message: Message = messageFactory.create(params)
 	    	message.getSid
 
-	    case Failure(ex) => Logger.info("This Twilio Error will never occur")
+	    case Failure(ex) => 
+		val params = new ArrayList[NameValuePair]
+	    	params.add(new BasicNameValuePair("Body", msg));
+	    	params.add(new BasicNameValuePair("To", to));
+	    	params.add(new BasicNameValuePair("From", from));
+
+	    val message: Message = messageFactory.create(params)
+	    	message.getSid
 	    }
 	} 
 
@@ -82,3 +88,41 @@ class TwilioImpl @Inject() (val env: AuthenticationEnvironment) extends TwilioSe
 //     	Logger.info("Status is: " + e.getErrorMessage())
 //     	throw TwilioRestException
 //     }
+
+
+
+	// def sendSMS(to: String, msg: String, driverphone: String = "driverphone") = Try {
+	// 	 Logger.info(s"Sending SMS to $to with text $msg")
+	
+	//     val driverimage: Future[Option[String]] = 
+	//     	if (driverphone != "driverphone") {
+	// 		    env.identityService.retrievebyphone(driverphone) flatMap {
+	// 		    	case Some(driver) => Future.successful { driver.image }
+	// 		    	case None => Future.successful { None }
+	// 		    }
+	// 		} else {
+	// 			Future.successful (None) 
+	// 		}
+
+	// driverimage.onComplete {
+	// case Success(driver) =>
+	// 	val params = new ArrayList[NameValuePair]
+	//     	params.add(new BasicNameValuePair("Body", msg));
+	//     	params.add(new BasicNameValuePair("To", to));
+	//     	params.add(new BasicNameValuePair("From", from));
+	//     	params.add(new BasicNameValuePair("MediaUrl", driver.get));
+
+	//     val message: Message = messageFactory.create(params)
+	//     	message.getSid
+
+	// case Failure(ex) => 
+	// 	val params = new ArrayList[NameValuePair]
+	//     	params.add(new BasicNameValuePair("Body", msg));
+	//     	params.add(new BasicNameValuePair("To", to));
+	//     	params.add(new BasicNameValuePair("From", from));
+
+	//     val message: Message = messageFactory.create(params)
+	//     	message.getSid
+
+	//     }
+	// } 
