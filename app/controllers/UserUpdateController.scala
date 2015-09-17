@@ -25,11 +25,13 @@ class UserUpdateController @javax.inject.Inject() (
   def userUpdateForm = SecuredAction.async { implicit request =>
     env.identityService.retrieve(request.identity.id).flatMap {
       case Some(user) =>
-        val info = UserUpdateData(user.username.getOrElse("Enter UserName"), user.phone.getOrElse("Enter Phone Number"), user.address.getOrElse("Enter Address"), user.fullName.getOrElse("Enter FullName"))
-        val filledForm = UserForms.userUpdateForm.fill(info)
+        val filledForm = UserForms.userUpdateForm.fill( 
+          UserUpdateData(user.username.getOrElse(""), user.phone.getOrElse(""), 
+                          user.address.getOrElse(""), user.fullName.getOrElse(""))
+        )
         Future.successful(Ok(views.html.userupdate(request.identity, filledForm)))
       case None =>
-        Future.successful(Redirect(controllers.routes.HomeController.index()))
+        Future.successful(Redirect(controllers.routes.HomeController.index()).flashing("error" -> "You are not signed in"))
     }
   }
 
@@ -61,9 +63,9 @@ class UserUpdateController @javax.inject.Inject() (
       env.userService.save(updateduser, update = true).flatMap {
         usr =>
             if (usr.hasstripe.isDefined) {
-                Future.successful {  Redirect(controllers.routes.ProfileController.userprofile) }
+                Future.successful {  Redirect(controllers.routes.ProfileController.userprofile).flashing("error" -> "update successful") }
             } else {
-                Future.successful {  Redirect(controllers.routes.StripeController.stripeForm) }
+                Future.successful {  Redirect(controllers.routes.StripeController.stripeForm).flashing("error" -> "user information updated") }
             }
       }
   }

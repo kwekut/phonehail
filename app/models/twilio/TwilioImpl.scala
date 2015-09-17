@@ -37,7 +37,18 @@ class TwilioImpl @Inject() (val env: AuthenticationEnvironment) extends TwilioSe
 	def sendSMS(to: String, msg: String, driverphone: String) = Try {
 		 Logger.info(s"Sending SMS to $to with text $msg")
 
-	    if (driverphone != "driverphone") {
+	    if (driverphone == "driverphone") {
+
+					val params = new ArrayList[NameValuePair]
+				    	params.add(new BasicNameValuePair("Body", msg));
+				    	params.add(new BasicNameValuePair("To", to));
+				    	params.add(new BasicNameValuePair("From", from));
+
+				    val message: Message = messageFactory.create(params)
+				    	message.getSid
+
+		} else {
+
 			env.identityService.retrievebyphone(driverphone) flatMap {
 			    case Some(driver) => 
 					val params = new ArrayList[NameValuePair]
@@ -48,18 +59,9 @@ class TwilioImpl @Inject() (val env: AuthenticationEnvironment) extends TwilioSe
 
 				    val message: Message = messageFactory.create(params)
 				    	Future.successful { message.getSid }
+			    
 			    case None => Future.successful { defaultPic }
 			}
-		
-		} else {
-					val params = new ArrayList[NameValuePair]
-				    	params.add(new BasicNameValuePair("Body", msg));
-				    	params.add(new BasicNameValuePair("To", to));
-				    	params.add(new BasicNameValuePair("From", from));
-
-				    val message: Message = messageFactory.create(params)
-				    	message.getSid
-
 		}
 	} 
 

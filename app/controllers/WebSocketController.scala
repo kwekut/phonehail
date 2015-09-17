@@ -10,6 +10,7 @@ import play.api.Play.current
 
 import actors.WebSocketActor
 import actors.TwilioActor._
+import actors.CRMActor._
 import actors.CommunicateActor._
 import actors.AccountActor._
 import actors.StripeActor._
@@ -50,13 +51,14 @@ import actors.StripeActor._
 
 class WebSocketController @Inject() (
   @Named("twilio-actor") twilioActor: ActorRef,
+  @Named("crm-actor") crmActor: ActorRef,
   @Named("stripe-actor") stripeActor: ActorRef,
   @Named("account-actor") accActor: ActorRef,
   @Named("communicate-actor") commActor: ActorRef ) extends Controller {
 
 	def socket = WebSocket.acceptWithActor[JsValue, JsValue] { request => out =>
 		val userid = UUID.randomUUID()
-  		WebSocketActor.props(userid, twilioActor, commActor, accActor, stripeActor, out)
+  		WebSocketActor.props(userid, twilioActor, crmActor, commActor, accActor, stripeActor, out)
 	}
 
 }

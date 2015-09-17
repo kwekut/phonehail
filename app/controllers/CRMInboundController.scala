@@ -18,18 +18,21 @@ import com.google.inject.name.Named
 
 
 //@Singleton
-class TwilioInboundController @Inject() (@Named("postgresql-actor") pgActor: ActorRef)  
+class CRMInboundController @Inject() (@Named("postgresql-actor") pgActor: ActorRef)  
 																extends Controller {
+
+//https://blooming-sea-8888.herokuapp.com/crmmessages
 
 // Recieves http request(messages) from twilio. Throwsaways messages with no content and forwards the rest 
 // to the incomming messages actor.
 
-//case class Message(mid: String, from: String, date: String, msg: String)	
+//	case class Msg(custID: String, message: String, keyword: String, mobileNum: String, optInStatus: String, 
+//	timeStamp: String, subacct: String, custName: String, msgID: String, subacct_name: String, mms: String)
 
   def messages = Action(parse.urlFormEncoded) { implicit request =>
-	  val mid = request.body("MessageSid").head//.toString
-	  val from = request.body("From").head//.toString
-	  val msg = request.body("Body").head//.toString
+	  val mid = request.body("msgid").head//.toString
+	  val from = request.body("mobilenum").head//.toString
+	  val msg = request.body("message").head//.toString
 	  val time = LocalDateTime.now()
 	  val date = time.toString()
 

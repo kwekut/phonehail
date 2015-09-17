@@ -21,6 +21,8 @@ case object CreateUsersTable extends Statement {
 
     create index users_profiles_idx on users using gin (profiles);
     create unique index users_username_idx on users using btree (username collate pg_catalog."default");
+    create unique index users_full_name_idx on users using btree (username collate pg_catalog."default");
+    create unique index users_email_idx on users using btree (username collate pg_catalog."default");
     create index users_roles_idx on users using gin (roles);
   """
 }

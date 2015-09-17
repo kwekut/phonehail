@@ -36,6 +36,34 @@ POST        /createstripe       controllers.StripeController.createcustomer
 # Twilio recieve
 POST        /messages       	controllers.TwilioInboundController.messages
 
+# CRM recieve
+POST        /crmmessages       	controllers.CRMInboundController.messages
+
+# CRM Text
+GET         /crmIndex               controllers.CRMController.crmIndex 
+GET         /sendSmsMsg               controllers.CRMController.sendSmsMsgForm
+POST        /sendSmsMsg               controllers.CRMController.sendSmsMsg
+GET         /sendMmsMsg              controllers.CRMController.sendMmsMsgForm
+POST        /sendMmsMsg              controllers.CRMController.sendMmsMsg
+GET         /optInCustomer             controllers.CRMController.optInCustomerForm 
+POST        /optInCustomer               controllers.CRMController.optInCustomer
+GET         /optOutCustomer              controllers.CRMController.optOutCustomerForm 
+POST        /optOutCustomer              controllers.CRMController.optOutCustomer
+GET         /getCustMsgsByMobile               controllers.CRMController.getCustMsgsByMobileForm
+POST        /getCustMsgsByMobile               controllers.CRMController.getCustMsgsByMobile
+GET         /getInboundMsgs              controllers.CRMController.getInboundMsgsForm
+POST        /getInboundMsgs               controllers.CRMController.getInboundMsgs
+GET         /getOutboundMsgs              controllers.CRMController.getOutboundMsgsForm
+POST        /getOutboundMsgs               controllers.CRMController.getOutboundMsgs
+GET         /getCustomerInfo              controllers.CRMController.getCustomerInfoForm
+POST        /getCustomerInfo               controllers.CRMController.getCustomerInfo
+GET         /createStoreAndUser             controllers.CRMController.createStoreAndUserForm
+POST        /createStoreAndUser              controllers.CRMController.createStoreAndUser
+GET         /setCallBack               controllers.CRMController.setCallBackForm 
+POST        /setCallBack               controllers.CRMController.setCallBack 
+
+
+
 # Akka actor websocket
 GET        /socket       		controllers.WebSocketController.socket
 

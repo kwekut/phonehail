@@ -1,7 +1,9 @@
 @(user: models.user.User)(
   implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
 )@layout.bootstrap("Profile") {
-
+@if(flash.get("error").isDefined) {
+  <div class="flash-error">@flash("error")</div>
+}
 <div class="container-fluid">
     <!-- Second navbar for categories -->
 
@@ -82,6 +84,7 @@
             
                     <a href='@routes.StripeController.stripeForm' class="btn btn-primary">Edit Payment</a>
 
+                    <a href='@routes.HomeController.index' class="btn btn-primary">Cancel</a>
                 </div>
               </div>
             </div>            

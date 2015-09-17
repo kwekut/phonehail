@@ -24,7 +24,7 @@ class RegistrationController @javax.inject.Inject() (
   def registrationForm = UserAwareAction.async { implicit request =>
     request.identity match {
       case Some(user) => //Future.successful {Redirect(controllers.routes.UserUpdateController.userUpdateForm())}
-      val info = UserUpdateData(user.username.getOrElse("Enter UserName"), user.phone.getOrElse("Enter Phone Number"), user.address.getOrElse("Enter Address"), user.fullName.getOrElse("Enter FullName"))
+      val info = UserUpdateData(user.username.getOrElse(""), user.phone.getOrElse(""), user.address.getOrElse(""), user.fullName.getOrElse(""))
       Future.successful { Ok(views.html.userupdate(user, UserForms.userUpdateForm.fill(info))) }
       case None => Future.successful(Ok(views.html.register(UserForms.registrationForm)))
     }
@@ -50,7 +50,7 @@ class RegistrationController @javax.inject.Inject() (
                 loginInfo = loginInfo,
                 email = Some(data.email)
               )
-              val r = Redirect(controllers.routes.UserUpdateController.userUpdateForm())
+              val r = Redirect(controllers.routes.UserUpdateController.userUpdateForm()).flashing("error" -> "update your profile")
               for {
                 avatar <- env.avatarService.retrieveURL(data.email)
                 user <- env.userService.create(profile.copy(avatarURL = avatar.orElse(Some("default"))))

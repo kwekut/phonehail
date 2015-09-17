@@ -23,7 +23,7 @@ class ImageController @javax.inject.Inject()
   def imageForm = UserAwareAction.async { implicit request =>
     request.identity match {
       case Some(user) =>  Future.successful ( Ok(views.html.image(UserForms.imageForm)) )
-      case None => Future.successful ( Redirect(controllers.routes.HomeController.index()) )
+      case None => Future.successful ( Redirect(controllers.routes.HomeController.index()).flashing("error" -> "You are not signed in") )
     }
   }
 
@@ -37,10 +37,10 @@ class ImageController @javax.inject.Inject()
                 form => Future.successful( BadRequest(views.html.image(form)) ),
                 data =>     
           env.userService.save(currentUser.copy(image =  Some(data.imageUrl)), update = true).flatMap {
-              case user => Future.successful (  Redirect(controllers.routes.ProfileController.userprofile) )
+              case user => Future.successful (  Redirect(controllers.routes.ProfileController.userprofile).flashing("error" -> "image uploaded") )
           }
         )
-      case None => Future.successful ( Redirect(controllers.routes.HomeController.index()) )
+      case None => Future.successful ( Redirect(controllers.routes.HomeController.index()).flashing("error" -> "You are not signed in") )
     }  
   }
 

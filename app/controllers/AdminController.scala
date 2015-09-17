@@ -15,7 +15,9 @@ import play.api.libs.concurrent.Execution.Implicits._
 import scala.concurrent.Future
 
 @javax.inject.Singleton
-class AdminController @javax.inject.Inject() (val messagesApi: MessagesApi, val env: AuthenticationEnvironment) extends Silhouette[User, CookieAuthenticator] {
+class AdminController @javax.inject.Inject() (
+  val messagesApi: MessagesApi, 
+  val env: AuthenticationEnvironment) extends Silhouette[User, CookieAuthenticator] {
   
 
   def adminIndex = SecuredAction.async { implicit request =>
@@ -59,7 +61,7 @@ class AdminController @javax.inject.Inject() (val messagesApi: MessagesApi, val 
       case Some(admin) => if (admin.roles.contains(Role.Admin)) {
           env.identityService.retrieve(userId).flatMap {
             case Some(user) => 
-        val info = AdminUserUpdateData(user.username.getOrElse("Enter UserName"), user.roles.mkString, user.email.getOrElse("Enter Email"), user.phone.getOrElse("Enter Phone Number"), user.address.getOrElse("Enter Address"), user.fullName.getOrElse("Enter FullName"), user.hasstripe.getOrElse("Enter Stripe Token"), user.preferences.getOrElse("Enter Preferences"))
+        val info = AdminUserUpdateData(user.username.getOrElse(""), user.roles.mkString, user.email.getOrElse(""), user.phone.getOrElse(""), user.address.getOrElse(""), user.fullName.getOrElse(""), user.hasstripe.getOrElse(""), user.preferences.getOrElse(""))
         val filledForm = UserForms.adminUserUpdateForm.fill(info)
         Future.successful(Ok(views.html.adminuserupdate(request.identity, filledForm))) 
             case None =>

@@ -20,7 +20,7 @@ import javax.inject._
 import com.google.inject.name.Named
 
 object PGActor {
-	case class Message(mid: String, from: String, to: String, date: String, msg: String)
+	case class Message(mid: String, from: String, date: String, msg: String)
 	
 	class StorageException(msg: String) extends RuntimeException(msg)
 
@@ -54,7 +54,7 @@ class PGActor @Inject() (val env: AuthenticationEnvironment,
 
   def receive = LoggingReceive {
 
-		case Message(mid, from, to, date, "start" | " start" | "  start" | "Start" | " Start" | "  Start" | "START" | " START") => 	
+		case Message(mid, from, date, "start" | " start" | "  start" | "Start" | " Start" | "  Start" | "START" | " START") => 	
 
       	env.identityService.retrievebyphone(from) onComplete {		
         	case Success(user) =>  if(user.isDefined) {
@@ -71,7 +71,7 @@ class PGActor @Inject() (val env: AuthenticationEnvironment,
 
 
 
-		case Message(mid, from, to, date, msg) => 
+		case Message(mid, from, date, msg) => 
 
       	env.identityService.retrievebyphone(from) onComplete {		
         	case Success(user) =>  Logger.info(s"user retrieve by phone ${user}")

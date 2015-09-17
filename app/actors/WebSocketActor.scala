@@ -12,6 +12,7 @@ import play.api.libs.functional.syntax._
 import actors.PGActor._
 import actors.StripeActor._
 import actors.TwilioActor._
+import actors.CRMActor._
 import actors.AccountActor._
 import actors.CommunicateActor._
 import play.api.Logger
@@ -21,7 +22,7 @@ import akka.event.LoggingReceive
 
 object WebSocketActor {
 
-  def props(user: UUID, twilioActor: ActorRef, commActor: ActorRef, accActor: ActorRef, stripeActor: ActorRef, out: ActorRef) = Props(new WebSocketActor(user, twilioActor, commActor, accActor, stripeActor, out))
+  def props(user: UUID, twilioActor: ActorRef, crmActor: ActorRef, commActor: ActorRef, accActor: ActorRef, stripeActor: ActorRef, out: ActorRef) = Props(new WebSocketActor(user, twilioActor, crmActor, commActor, accActor, stripeActor, out))
 
 
   case class Ins(from: String, typ: String, date: String, msg: String, name: String, driverphone: String, isDone: Boolean)
@@ -49,7 +50,7 @@ object WebSocketActor {
 
 }
 
-class WebSocketActor(user: UUID, twilioActor: ActorRef, commActor: ActorRef, accActor: ActorRef, stripeActor: ActorRef, out: ActorRef) extends Actor {
+class WebSocketActor(user: UUID, twilioActor: ActorRef, crmActor: ActorRef, commActor: ActorRef, accActor: ActorRef, stripeActor: ActorRef, out: ActorRef) extends Actor {
 
   import WebSocketActor._
 
@@ -73,7 +74,8 @@ class WebSocketActor(user: UUID, twilioActor: ActorRef, commActor: ActorRef, acc
 
               val time = new LocalDateTime()
               val created = time.toString()  
-              twilioActor ! SendSMS(s.from, s.msg, s.driverphone)
+              //twilioActor ! SendSMS(s.from, s.msg, s.driverphone)
+              crmActor ! SendMMSMsg(s.from, s.msg, s.driverphone)
               accActor !  Accounter(s.from, "REPLY", created, s.msg, s.name, s.driverphone, true)
 
            } else if (s.typ == "MARKATTENDED") {
@@ -99,7 +101,8 @@ class WebSocketActor(user: UUID, twilioActor: ActorRef, commActor: ActorRef, acc
 
              } else if (s.typ == "RETRIEVE") {
 
-              twilioActor ! GetSMSList(s.msg)
+              //twilioActor ! GetSMSList(s.msg)
+              crmActor ! GetSMSList(s.msg)
 
             } else if (s.typ == "BILLCUSTOMER") {
 

@@ -58,20 +58,24 @@
 
 
     jQuery(function($) {
-      $('#image-form').submit(function(e) {
+      $('#image-form').click(function(e) {
         var $form = $(this);
         // Disable the submit button to prevent repeated clicks
+        e.preventDefault();
         $form.find('button').prop('disabled', true);
 
           uploadcare.openDialog(null, {
               crop: "disabled",
-              imagesOnly: true
+              imagesOnly: true,
+              previewStep: true
 
             }).done(function(file) {
                 file.promise().done(function(fileInfo){
                   imageURL = fileInfo.cdnUrl;
-                $form.append($('<input type="hidden" name="imageUrl" />').val(imageURL));
-                $form.get(0).submit();
+                  console.log(imageURL);
+                  $form.append($('<input type="hidden" name="imageUrl" />').val(imageURL));
+                  console.log($form);
+                  $form.get(0).submit();
                 });
               });
         // Prevent the form from submitting with the default action

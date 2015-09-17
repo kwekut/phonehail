@@ -1,12 +1,12 @@
-@(user: models.user.User, filledForm: Form[models.user.UserUpdateData])(
+@(form: Form[models.other.GetoutboundmsgsData])(
   implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
 )@layout.bootstrap("Register") {
 @if(flash.get("error").isDefined) {
   <div class="flash-error">@flash("error")</div>
 }
-@if(filledForm.hasGlobalErrors) {
+@if(form.hasGlobalErrors) {
   <ul>
-  @for(error <- filledForm.globalErrors) {
+  @for(error <- form.globalErrors) {
     <li>@error.message</li>
   }
   </ul>
@@ -46,61 +46,29 @@
       <div class="col-md-6">
         <h3 class="dark-grey">Please Update Your Profile</h3>
 
-  @helper.form(action = routes.UserUpdateController.updateuser()) {
+  @helper.form(action = routes.CRMController.getOutboundMsgs()) {
         
         <div class="form-group col-lg-12">
-          <label>Username</label>
-            <input type="text" name="username" id="username" value="@filledForm.data.get("username")">
+          <label>Start Date</label>
+            <input type="text" name="startdate" id="startdate" value="@form.data.get("startdate")">
             <dd class="error">This field is required!</dd>
         </div>
         
         <div class="form-group col-lg-12">
-          <label>Phone Number</label>
-            <input type="text" name="phone" id="phone" value="@filledForm.data.get("phone")">
+          <label>End Date</label>
+            <input type="text" name="enddate" id="enddate" value="@form.data.get("enddate")">
             <dd class="error">Required format : 5553331111</dd>
         </div>
-        
-        <div class="form-group col-lg-12">
-          <label>Address</label>
-            <input type="text" name="address" id="address" value="@filledForm.data.get("address")">
-            <dd class="error">This field is optional!</dd>
-        </div>
-                
-        <div class="form-group col-lg-12">
-          <label>Full Name</label>
-            <input type="text" name="fullName" id="fullName" value="@filledForm.data.get("fullName")">
-            <dd class="error">Required format: Firstname Lastname</dd>
-        </div>  
-      
-      </div>
-    
-      <div class="col-md-6">
-        <h3 class="dark-grey">Terms and Conditions</h3>
-        <p>
-          By clicking on "Update Profile" you agree to The Company's' Terms and Conditions
-        </p>
-        <p>
-          Please review and save your information. Complete and accurate information will help us serve you better.
-        </p>
-        <p>
-          Please click on the EDIT PAYMENT link to enter your payment information. 
-        </p>
-        <p>
-          Failure to enter your payment information will make your request for our services incomplete.
-        </p>
-        
+
           <div class="form-group">
               <br/>
-              <input type="submit" class="submit" value="Update Profile" />
-          </div>
-          <div class="form-group">
-              <br/>
-                <a href='@routes.HomeController.index' class="btn btn-info">Cancel</a>
-          </div>
-      </div>      
+              <input type="submit" class="submit" value="Submit" />
+          </div>              
+      </div>    
     </div>
   </section>
 </div>
-}
+  }
 
 }
+

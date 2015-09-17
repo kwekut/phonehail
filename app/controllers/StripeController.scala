@@ -32,7 +32,7 @@ class StripeController @javax.inject.Inject() (
   def stripeForm = SecuredAction.async { implicit request =>
     env.identityService.retrieve(request.identity.id).flatMap {
       case Some(user) =>  Future.successful(Ok(views.html.stripe(user, UserForms.tokenForm)))
-      case None =>  Future.successful(Redirect(controllers.routes.HomeController.index()))
+      case None =>  Future.successful(Redirect(controllers.routes.HomeController.index()).flashing("error" -> "You are not sign in"))
     }
   }
 
@@ -43,7 +43,7 @@ class StripeController @javax.inject.Inject() (
         UserForms.tokenForm.bindFromRequest.fold(
           form => Future.successful(BadRequest(views.html.stripe(user, form))),
           data => Future.successful(stripeSer.createCustomer(request.identity.id, data.stripeToken)).flatMap {
-            case _ => Future.successful(Redirect(controllers.routes.ProfileController.userprofile))
+            case _ => Future.successful(Redirect(controllers.routes.ProfileController.userprofile).flashing("error" -> "You are now ready to start using our service"))
           }.recover {
             case e: CardException =>  Ok(views.html.stripe(user, UserForms.tokenForm)).flashing("error" -> "Incorrect card details")
             case e: InvalidRequestException =>  Ok(views.html.stripe(user, UserForms.tokenForm)).flashing("error" -> "Invalid details entered")
@@ -53,7 +53,7 @@ class StripeController @javax.inject.Inject() (
             //case e: Exception =>  Redirect(controllers.routes.HomeController.index())
           }
         )
-      case None =>  Future.successful(Redirect(controllers.routes.HomeController.index()))
+      case None =>  Future.successful(Redirect(controllers.routes.HomeController.index()).flashing("error" -> "Couldn't update payment information"))
     }
   }
 

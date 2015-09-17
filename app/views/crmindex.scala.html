@@ -1,4 +1,4 @@
-@(form: Form[models.user.ImageData])(
+@(user: Option[models.user.User] = None)(
   implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
 )@layout.bootstrap("Register") {
   <div class="sign-up">
@@ -25,26 +25,38 @@
           <div class="collapse navbar-collapse" id="navbar-collapse-4">
             <ul class="nav navbar-nav navbar-right">
               <li><a href='@routes.HomeController.index'>Home</a></li> 
-              <li><a href='@routes.ProfileController.userprofile'>Profile</a></li>
+              <li><a href='@routes.AdminController.adminIndex'>Admin</a></li>
             </ul>          
           </div><!-- /.navbar-collapse -->
       </div><!-- /.container -->
     </nav><!-- /.navbar -->
 </div><!-- /.container-fluid -->
 
+                    <li>
+                        <a class="page-scroll" href="@routes.CRMController.sendSmsMsgForm">Send Sms</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="@routes.CRMController.sendMmsMsgForm">Send Mms</a>
+                    </li>
 
-<div class="container">
-    <form action="@controllers.routes.ImageController.upload()" method="POST" id="image-form" class="form-horizontal" role="form">
-              <fieldset> 
-                    <div class="form-group">
-                      <input type="hidden" role="uploadcare-uploader" />
-                    </div>
-                    <div class="form-group">
-                      <button class="btn btn-success" style="display: none;" type="submit">Submit Picture</button>
-                    </div>
-              </fieldset>
-      </form>
-</div>
+                    <li>
+                        <a class="page-scroll" href="@routes.CRMController.optInCustomerForm">Opt In</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="@routes.CRMController.optOutCustomerForm">Opt Out</a>
+                    </li>
+
+                    <li>
+                        <a class="page-scroll" href="@routes.CRMController.createStoreAndUserForm">Create Store</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="@routes.CRMController.setCallBackForm">Set Callback</a>
+                    </li>
+
+                    <li>
+                        <a class="page-scroll" href="@routes.CRMController.getCustomerInfoForm">Customer Info</a>
+                    </li>
+                
 }
 
 

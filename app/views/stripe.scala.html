@@ -1,6 +1,13 @@
 @(user: models.user.User, form: Form[models.user.TokenData])(
   implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
 )@layout.bootstrap("Register") {
+@if(form.hasGlobalErrors) {
+  <ul>
+  @for(error <- form.globalErrors) {
+    <li>@error.message</li>
+  }
+  </ul>
+}
   <div class="sign-up">
     @flash.get("error").map { e =>
       <div class="error">@e</div>

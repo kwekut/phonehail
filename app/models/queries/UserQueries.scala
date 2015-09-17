@@ -11,7 +11,7 @@ import org.joda.time.LocalDateTime
 object UserQueries extends BaseQueries[User] {
   override protected val tableName = "users"
   override protected val columns = Seq("id", "username", "profiles", "roles", "full_name", "email", "phone", "address", "hasstripe", "preferences", "image", "created")
-  override protected val searchColumns = Seq("id::text", "username")
+  override protected val searchColumns = Seq("id::text", "username", "full_name", "email", "phone")
 
   val insert = Insert
   val getById = GetById
