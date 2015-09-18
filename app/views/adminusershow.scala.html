@@ -1,9 +1,10 @@
 @(user: models.user.User)(
   implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
 )@layout.bootstrap("Register") {
-    @flash.get("error").map { e =>
-      <div class="error">@e</div>
-    }
+
+@if(flash.get("error").isDefined) {
+<div class="alert alert-info">@flash.get("error").get</div>
+}
 <div class="container-fluid">
     <!-- Second navbar for categories -->
 

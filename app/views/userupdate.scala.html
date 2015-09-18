@@ -2,8 +2,9 @@
   implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
 )@layout.bootstrap("Register") {
 @if(flash.get("error").isDefined) {
-  <div class="flash-error">@flash("error")</div>
+<div class="alert alert-info">@flash.get("error").get</div>  
 }
+
 @if(filledForm.hasGlobalErrors) {
   <ul>
   @for(error <- filledForm.globalErrors) {

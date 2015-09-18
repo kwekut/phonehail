@@ -101,8 +101,12 @@ class WebSocketActor(user: UUID, twilioActor: ActorRef, crmActor: ActorRef, comm
 
              } else if (s.typ == "RETRIEVE") {
 
+              val time = new LocalDateTime()
+              val enddate = time.toString()
               //twilioActor ! GetSMSList(s.msg)
-              crmActor ! GetSMSList(s.msg)
+
+              crmActor ! GetInboundMsgs(s.msg, enddate)
+              crmActor ! GetOutboundMsgs(s.msg, enddate)
 
             } else if (s.typ == "BILLCUSTOMER") {
 

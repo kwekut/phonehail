@@ -61,7 +61,7 @@ class ErrorHandler @Inject() (
 
   override def onForbidden(request: RequestHeader, message: String) = {
     Future.successful(
-      Forbidden("You're not allowed to access this resource.")
+      Redirect(routes.HomeController.index()).flashing("error" -> "access.denied")
     )
   }
 

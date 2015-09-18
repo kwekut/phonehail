@@ -43,13 +43,13 @@ class InBoundActor @Inject() ( @Named("twilio-actor") twilioActor: ActorRef,
 	 crmActor ! SendSMSMsg(from, "please register for our service at www.getgatsby.com/home/")
 
 	case GenUser(from, date, msg, fullname, email, phone, address,  hasstripe, preferences) => 
-				if (hasstripe.nonEmpty) {
+				if (hasstripe.startsWith("cus_")) {
 					accActor ! Accounter(from, "INCOMMING", date, msg, fullname, "driverphone", false)
 					//twilioActor ! SendSMS("+16197237161", "GetGatsby service requested", "driverphone")
-					crmActor ! SendSMSMsg("6197237161", "GetGatsby service requested")
+					//crmActor ! SendSMSMsg("6197237161", "GetGatsby service requested")
 				} else {
 					//twilioActor ! SendSMS(from, "please complete your registration by updating your payment details at www.getgatsby.com/createstripe", "driverphone")
-					crmActor ! SendSMSMsg(from, "please complete your registration by updating your payment details at www.getgatsby.com/createstripe")
+					crmActor ! SendSMSMsg(from, "please complete your registration by entering your payment details at www.getgatsby.com/createstripe")
 				}
 
 	case GenNone(from, date, msg, fullname, email, phone, address,  hasstripe, preferences) =>

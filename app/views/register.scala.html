@@ -2,9 +2,9 @@
   implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
 )@layout.bootstrap("Register") {
   <div class="sign-up">
-    @flash.get("error").map { e =>
-      <div class="error">@e</div>
-    }
+@if(flash.get("error").isDefined) {
+<div class="alert alert-info">@flash.get("error").get</div>
+}
 
 <div class="middlePage">
 <div class="page-header">

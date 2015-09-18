@@ -125,7 +125,7 @@ class CRMController @javax.inject.Inject() (
 
 
 
-////////////////////////////////
+////////////////////////////////NOT USED////////////////////////////////////////
   def getCustMsgsByMobileForm = SecuredAction.async { implicit request =>
     env.identityService.retrieve(request.identity.id).flatMap {
       case Some(user) =>  Future.successful { Ok(views.html.crm.getCustMsgsByMobile(OtherForms.getcustmsgsbymobileForm)) }
@@ -147,7 +147,7 @@ class CRMController @javax.inject.Inject() (
       }
   }
 
-///////////////////////////////
+///////////////////////////////NOT USED//////////////////////////////////////////////
   def getInboundMsgsForm = SecuredAction.async { implicit request =>
     env.identityService.retrieve(request.identity.id).flatMap {
       case Some(user) =>  Future.successful { Ok(views.html.crm.getInboundMsgs(OtherForms.getinboundmsgsForm)) }
@@ -169,7 +169,7 @@ class CRMController @javax.inject.Inject() (
       }
   } 
 
-//////////////////////////////
+//////////////////////////////NOT USED////////////////////
   def getOutboundMsgsForm = SecuredAction.async { implicit request =>
     env.identityService.retrieve(request.identity.id).flatMap {
       case Some(user) =>  Future.successful { Ok(views.html.crm.getOutboundMsgs(OtherForms.getoutboundmsgsForm)) }

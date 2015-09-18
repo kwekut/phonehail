@@ -3,7 +3,7 @@
 )@layout.bootstrap("Sign In") {
   <div class="sign-in">
     @if(flash.get("error").isDefined) {
-      <div class="flash-error">@flash("error")</div>
+    <div class="alert alert-info">@flash.get("error").get</div>
     }
 <div class="middlePage">
 <div class="page-header">

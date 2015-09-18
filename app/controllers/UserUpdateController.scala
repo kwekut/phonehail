@@ -4,6 +4,7 @@ import com.mohiva.play.silhouette.api.{ LoginEvent, LoginInfo, SignUpEvent }
 import com.mohiva.play.silhouette.impl.providers.{ CommonSocialProfile, CredentialsProvider }
 import models.user.{ User, UserUpdateData, UserForms }
 import play.api.i18n.{ Messages, MessagesApi }
+import models.crm.{ CRMService, CRMImpl } 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.AnyContent
 import services.user.AuthenticationEnvironment
@@ -19,6 +20,7 @@ import scala.util.{Success, Failure}
 @javax.inject.Singleton
 class UserUpdateController @javax.inject.Inject() (
     val messagesApi: MessagesApi,
+    val crmSer: CRMService,
     val env: AuthenticationEnvironment
 ) extends Silhouette[User, CookieAuthenticator] {
 
@@ -51,11 +53,11 @@ class UserUpdateController @javax.inject.Inject() (
   }
 
   private[this] def updateUser(data: UserUpdateData, user: User)(implicit request: SecuredRequest[AnyContent]) = {
-
+    // twilio    phone =  if (data.phone == user.phone) { user.phone } else { Some("+1" + data.phone) },
     val updateduser = user.copy(
       username = Some(data.username),
       roles =  if (data.username == "administrator" && data.phone == "6465209229" && data.fullName == "puK@794%8654&4nfT45"){Set(Role.Admin)} else {Set(Role.User) ++ (user.roles)},
-      phone =  if (data.phone == user.phone) { user.phone } else { Some("+1" + data.phone) },
+      phone =  if (data.phone == user.phone) { user.phone } else { Some(data.phone) },
       address = Some(data.address),
       fullName =  Some(data.fullName)
     )
@@ -63,9 +65,10 @@ class UserUpdateController @javax.inject.Inject() (
       env.userService.save(updateduser, update = true).flatMap {
         usr =>
             if (usr.hasstripe.isDefined) {
-                Future.successful {  Redirect(controllers.routes.ProfileController.userprofile).flashing("error" -> "update successful") }
+                Future.successful {  Redirect(controllers.routes.ProfileController.userprofile).flashing("error" -> "Update successful") }
             } else {
-                Future.successful {  Redirect(controllers.routes.StripeController.stripeForm).flashing("error" -> "user information updated") }
+                crmSer.sendsmsmsg(usr.phone.getOrElse(""), "You profile has been updated")
+                Future.successful {  Redirect(controllers.routes.StripeController.stripeForm).flashing("error" -> "User information updated") }
             }
       }
   }

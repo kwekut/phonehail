@@ -45,7 +45,7 @@ class AuthenticationController @javax.inject.Inject() (
         }
       }.recover {
         case e: ProviderException =>
-          Redirect(controllers.routes.AuthenticationController.signInForm()).flashing(("error", "Invalid credentials."))
+          Redirect(controllers.routes.AuthenticationController.signInForm()).flashing(("error", "Invalid Credentials."))
       }
     )
   }

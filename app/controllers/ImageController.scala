@@ -37,7 +37,7 @@ class ImageController @javax.inject.Inject()
                 form => Future.successful( BadRequest(views.html.image(form)) ),
                 data =>     
           env.userService.save(currentUser.copy(image =  Some(data.imageUrl)), update = true).flatMap {
-              case user => Future.successful (  Redirect(controllers.routes.ProfileController.userprofile).flashing("error" -> "image uploaded") )
+              case user => Future.successful (  Redirect(controllers.routes.ProfileController.userprofile).flashing("error" -> "Image uploaded") )
           }
         )
       case None => Future.successful ( Redirect(controllers.routes.HomeController.index()).flashing("error" -> "You are not signed in") )

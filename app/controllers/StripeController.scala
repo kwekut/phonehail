@@ -32,7 +32,7 @@ class StripeController @javax.inject.Inject() (
   def stripeForm = SecuredAction.async { implicit request =>
     env.identityService.retrieve(request.identity.id).flatMap {
       case Some(user) =>  Future.successful(Ok(views.html.stripe(user, UserForms.tokenForm)))
-      case None =>  Future.successful(Redirect(controllers.routes.HomeController.index()).flashing("error" -> "You are not sign in"))
+      case None =>  Future.successful(Redirect(controllers.routes.HomeController.index()).flashing("error" -> "You are not signed in"))
     }
   }
 

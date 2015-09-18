@@ -50,7 +50,7 @@ class RegistrationController @javax.inject.Inject() (
                 loginInfo = loginInfo,
                 email = Some(data.email)
               )
-              val r = Redirect(controllers.routes.UserUpdateController.userUpdateForm()).flashing("error" -> "update your profile")
+              val r = Redirect(controllers.routes.UserUpdateController.userUpdateForm()).flashing("error" -> "Update your profile")
               for {
                 avatar <- env.avatarService.retrieveURL(data.email)
                 user <- env.userService.create(profile.copy(avatarURL = avatar.orElse(Some("default"))))
