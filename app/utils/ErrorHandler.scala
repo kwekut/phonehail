@@ -50,7 +50,7 @@ class ErrorHandler @Inject() (
    * @return The result to send to the client.
    */
   override def onNotAuthorized(request: RequestHeader, messages: Messages): Option[Future[Result]] = {
-    Some(Future.successful(Redirect(routes.HomeController.index()).flashing("error" -> Messages("access.denied")(messages))))
+    Some(Future.successful(Redirect(routes.HomeController.index()).flashing("error" -> Messages("Please Sign In First")(messages))))
   }
 
   override def onProdServerError(request: RequestHeader, exception: UsefulException) = {
@@ -61,7 +61,7 @@ class ErrorHandler @Inject() (
 
   override def onForbidden(request: RequestHeader, message: String) = {
     Future.successful(
-      Redirect(routes.HomeController.index()).flashing("error" -> "access.denied")
+      Redirect(routes.HomeController.index()).flashing("error" -> "Please Sign In First")
     )
   }
 

@@ -1,6 +1,10 @@
-@(user: Option[models.user.User] = None)
+@(user: Option[models.user.User] = None)(
+  implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+)
 @layout.bootstrap("GeTGatsby") {
-
+@if(flash.get("error").isDefined) {
+<div class="alert alert-info">@flash.get("error").get</div>  
+}
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">

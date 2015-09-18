@@ -34,15 +34,17 @@ class CRMInboundController @Inject() (@Named("postgresql-actor") pgActor: ActorR
 
   def messages = Action(parse.multipartFormData) { implicit request =>
 			Logger.info("crm parse called")
-  	  val mid = request.body.dataParts.get("msgID") map (x => x.toString)
-	  val from = request.body.dataParts.get("mobileNum") map (x => x.toString)
-	  val msg = request.body.dataParts.get("message") map (x => x.toString)
+  	  val mid = request.body.dataParts.get("msgID") map (x => x.mkString)
+	  val from = request.body.dataParts.get("mobileNum") map (x => x.mkString)
+	  val msg = request.body.dataParts.get("message") map (x => x.mkString)
 	  val time = LocalDateTime.now()
 	  val date = time.toString()
 
 	pgActor !  new Message(mid.getOrElse(""), from.getOrElse(""), date, msg.getOrElse(""))
 	
-	Logger.info(from.getOrElse("nothing"))
+	// Logger.info(from.getOrElse("nothing"))
+	// Logger.info(mid.getOrElse("nothing"))
+	// Logger.info(msg.getOrElse("nothing"))
 
 	Ok
   }

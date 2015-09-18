@@ -81,6 +81,7 @@ class AuthenticationController @javax.inject.Inject() (
     val result = Redirect(controllers.routes.HomeController.index())
     env.eventBus.publish(LogoutEvent(request.identity, request, request2Messages))
     env.authenticatorService.discard(request.authenticator, result).map(x => result)
+
   }
 
 
