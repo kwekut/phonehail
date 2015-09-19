@@ -6,6 +6,7 @@ import com.google.inject.name.Named
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.concurrent.Execution.Implicits._
+import services.user.AuthenticationEnvironment
 import scala.concurrent.Future
 import scala.util.{Success, Failure}
 import actors.AccountActor._
@@ -85,9 +86,14 @@ object CRMActor {
 
 }
 
+class CRMActor @Inject() ( 
+	val env: AuthenticationEnvironment, 
+	crmSer: CRMService, 
+	@Named("account-actor") accActor: ActorRef) extends Actor {
+  
 
-class CRMActor @Inject() ( @Named("account-actor") accActor: ActorRef, crmSer: CRMService) extends Actor {
   import CRMActor._
+  val icon = "http://www.ucarecdn.com/b275edaf-d627-499d-a827-a5a393bded0b/Ggicon.png"
 
   def receive = LoggingReceive {
 
@@ -103,11 +109,30 @@ class CRMActor @Inject() ( @Named("account-actor") accActor: ActorRef, crmSer: C
 //Sending an MMS:
 //https://restapi.crmtext.com/smapi/rest?method=sendsmsmsg&phone_number=&result=&mmsurl=
 	case SendMMSMsg(phone, message, driverphone) => 
-		val date = new LocalDateTime().toString() 
-		crmSer.sendmmsmsg(phone, message, driverphone)onComplete {		
-        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "no-name", driverphone, true)
-    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "no-name", "driverphone", true)
-    	}
+	val date = new LocalDateTime().toString() 
+	
+	if (driverphone == "driverphone") {
+			crmSer.sendsmsmsg(phone, message)onComplete {		
+	        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "no-name", "driverphone", true) 
+	    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "no-name", "driverphone", true)
+	    	}
+	} else {
+		env.identityService.retrievebyphone(driverphone) flatMap {
+			case Some(driver) => 		
+				val rt = crmSer.sendmmsmsg(phone, message, driver.image.getOrElse(icon)) 
+				rt onComplete {		
+		        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "no-name", driverphone, true)
+		    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "no-name", "driverphone", true)
+		    	}
+		    	rt
+		    case None => 
+				crmSer.sendsmsmsg(phone, message)onComplete {		
+		        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "no-name", "driverphone", true) 
+		    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "no-name", "driverphone", true)
+		    	}
+		    		Future.successful { driverphone }
+		}
+	}
 //Opt-in Customer
 //https://restapi.crmtext.com/smapi/rest?method=optincustomer&firstname=&lastname=&phone_number=
 	case OptInCustomer(firstname, lastname, phone) => 

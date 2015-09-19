@@ -56,8 +56,7 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 //Sending an MMS:
 //https://restapi.crmtext.com/smapi/rest?method=sendsmsmsg&phone_number=&message=&mmsurl=
 	def sendmmsmsg(phone: String, msg: String, mms: String) = {
-		//env.identityService.retrievebyphone(phone) flatMap {
-		//case Some(driver) => 
+
 		val complexRequest =
 		  	request.withAuth(user, password, WSAuthScheme.BASIC)
 		    .withRequestTimeout(10000)
@@ -71,7 +70,6 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 		    elem <- futureResult 
 		  } yield elem.text.toString
 		result
-		//case None => Future.successful { defaultPic }
 
 	}
 
