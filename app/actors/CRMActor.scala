@@ -91,7 +91,7 @@ class CRMActor @Inject() (
 	crmSer: CRMService, 
 	@Named("account-actor") accActor: ActorRef) extends Actor {
   
-
+  import context.dispatcher
   import CRMActor._
   val icon = "http://www.ucarecdn.com/b275edaf-d627-499d-a827-a5a393bded0b/Ggicon.png"
 
