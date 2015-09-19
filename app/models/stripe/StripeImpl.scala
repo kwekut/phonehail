@@ -17,7 +17,9 @@ import com.stripe.Stripe
 import com.stripe.model.Charge
 import com.stripe.model.Customer
 import com.stripe.net.RequestOptions._
-
+import scala.util.Try
+import scala.util.Success
+import scala.util.Failure
 import com.google.common.collect.ImmutableMap
 import com.stripe.exception.APIConnectionException
 import com.stripe.exception.APIException
@@ -73,7 +75,7 @@ class StripeImpl @Inject() (val env: AuthenticationEnvironment) extends StripeSe
 				
 			}
 	        case None => Future.successful { Logger.info("No User found from Database for stripe customer creation")
-	        			throw DBException("No User found from Database for stripe customer creation")
+	        	CustomerCreateResponse("no user", "no email", "no phone", "unknown bal", "unknown date", "unknown delinquency")
 	        }
 	        			
 	    }
@@ -89,13 +91,45 @@ class StripeImpl @Inject() (val env: AuthenticationEnvironment) extends StripeSe
 					chargeParams += ("currency" -> "usd")
 					chargeParams += ("customer" -> user.hasstripe.getOrElse("none"))
 				val chargeRaw = Charge.create(chargeParams, requestOptions)
-				val charge: Charge = chargeRaw.capture(requestOptions)
+				//val charge: Charge = chargeRaw.capture(requestOptions)
 
-				CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), charge.getAmount.toString, charge.getCreated.toString, charge.getStatus.toString)
+
+				// Try {chargeRaw.capture(requestOptions)} map {
+				//   case Success(charge) => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), charge.getAmount.toString, charge.getCreated.toString, charge.getStatus.toString)
+				//   case Failure(e) => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "exception", "error", e.getMessage.mkString)
+				// }
+
+
+				val charger = Try( chargeRaw.capture(requestOptions) ) map { charge =>
+					CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), charge.getAmount.toString, charge.getCreated.toString, charge.getStatus.toString)
+				} recover {
+					case e: CardException => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "card exception", "error", e.getMessage.mkString)					
+				    case e: InvalidRequestException =>  CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "invalid request", "error", e.getMessage.mkString)					
+				    case e: AuthenticationException => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "auth exception", "error", e.getMessage.mkString)					
+				    case e: APIConnectionException => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "api exception", "error", e.getMessage.mkString)					
+				    case e: StripeException => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "stripe exception", "error", e.getMessage.mkString)					
+				    case e: Exception => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "exception", "error", e.getMessage.mkString)							
+				}
+
+
+
+				// try {
+				// 	val charge: Charge = chargeRaw.capture(requestOptions)
+				// 		CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), charge.getAmount.toString, charge.getCreated.toString, charge.getStatus.toString)
+
+				// } catch {
+				// 	case CardException(e) => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "card exception", "error", e.getMessage.mkString)					
+				//     case InvalidRequestException(e) =>  CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "invalid request", "error", e.getMessage.mkString)					
+				//     case AuthenticationException(e) => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "auth exception", "error", e.getMessage.mkString)					
+				//     case APIConnectionException(e) => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "api exception", "error", e.getMessage.mkString)					
+				//     case StripeException(e) => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "stripe exception", "error", e.getMessage.mkString)					
+				//     case Exception(e) => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "exception", "error", e.getMessage.mkString)							
+				// }
+				charger
 			}
-			case None => Future.successful { Logger.info("No user from Database to hit stripe charge against") 
-						throw DBException("No user from Database to hit stripe charge against")
-			}		
+			case None => Future.successful { Try ( 
+				CustomerChargeResponse("unknown user", "unknown email", "unknown phone", "unknown amt", "unknown date", "unknown status")
+			)}		
 		}
 	} 
 
@@ -165,11 +199,22 @@ class StripeImpl @Inject() (val env: AuthenticationEnvironment) extends StripeSe
 
 
 
-	def listCharges(limit: java.lang.Integer) = Try {
+	def listCharges(limit: java.lang.Integer) = {
 			val chargeParams: HashMap[String, Object] = new HashMap()
 				chargeParams += ("limit" -> limit)
 				Charge.all(chargeParams, requestOptions)
-		//CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), charge.getAmount, charge.getCreated, charge.getStatus)
+
+			// 	val charger = Try( Charge.all(chargeParams, requestOptions) ) map { charge =>
+			// 		CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), charge.getAmount.toString, charge.getCreated.toString, charge.getStatus.toString)
+			// 	} recover {
+			// 		case e: CardException => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "card exception", "error", e.getMessage.mkString)					
+			// 	    case e: InvalidRequestException =>  CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "invalid request", "error", e.getMessage.mkString)					
+			// 	    case e: AuthenticationException => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "auth exception", "error", e.getMessage.mkString)					
+			// 	    case e: APIConnectionException => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "api exception", "error", e.getMessage.mkString)					
+			// 	    case e: StripeException => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "stripe exception", "error", e.getMessage.mkString)					
+			// 	    case e: Exception => CustomerChargeResponse(user.fullName.getOrElse("Na"), user.email.getOrElse("Na"), user.phone.getOrElse("Na"), "exception", "error", e.getMessage.mkString)							
+			// 	}
+			// charger
 	}
 }
 
@@ -178,33 +223,6 @@ class StripeImpl @Inject() (val env: AuthenticationEnvironment) extends StripeSe
 
 
 
-// catch {
-// 		case CardException(e) => { throw CardException
-// 	  		Logger.info("Status is: " + e.getCode())
-// 	  		Logger.info("Message is: " + e.getMessage())
-// 	  	}
-// 		case InvalidRequestException(e) => { throw InvalidRequestException
-// 	  		Logger.info("Status is: " + e.getCode())
-// 	  		Logger.info("Message is: " + e.getMessage())
-// 	  	}
-// 		case AuthenticationException(e) => {throw AuthenticationException
-// 	  // Authentication with Stripe's API failed
-// 	  		Logger.info("Status is: " + e.getCode())
-// 	  		Logger.info("Message is: " + e.getMessage())
-// 		}
-// 		case APIConnectionException(e) => { throw APIConnectionException
-// 	  		Logger.info("Status is: " + e.getCode())
-// 	  		Logger.info("Message is: " + e.getMessage())
-// 		}
-// 		case StripeException(e) => { throw StripeException
-// 	  // Display a very generic error to the user, and maybe send yourself an email
-// 	  		Logger.info("Status is: " + e.getCode())
-// 	  		Logger.info("Message is: " + e.getMessage())
-// 	  	}
-// 		case Exception(e) => { throw Exception
-// 	  		Logger.info("Status is: " + e.getCode())
-// 	  		Logger.info("Message is: " + e.getMessage())
-// 	  	}
-// 	}
+
 
 

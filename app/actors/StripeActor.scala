@@ -9,6 +9,8 @@ import play.api.libs.functional.syntax._
 import play.api.libs.concurrent.Execution.Implicits._
 import akka.event.LoggingReceive
 import java.util.UUID
+import org.joda.time.LocalDateTime
+import scala.util.{Success, Failure}
 import play.api.Configuration
 import actors.AccountActor._
 import models.stripe.{StripeService, StripeImpl}
@@ -34,10 +36,15 @@ class StripeActor @Inject() ( @Named("account-actor") accActor: ActorRef, stripe
 	case CreateCustomer(userId, token) =>  stripeSer.createCustomer(userId, token)
 
 	case ChargeCustomer(phone, amt) => 
-		val cCR = stripeSer.chargeCustomer(phone, amt) 
-		cCR.map { cCResponse =>
-			val msg = cCResponse.status + " : " + cCResponse.amount
-				accActor ! Notifier(cCResponse.phone, "Notification", cCResponse.created, msg, cCResponse.name, "driverphone", true)
+		val date = new LocalDateTime().toString() 
+		stripeSer.chargeCustomer(phone, amt) map { cCRes =>
+			cCRes match {
+				case Success(cCResponse) =>
+					val msg = cCResponse.status + " : " + cCResponse.amount
+					accActor ! Notifier(cCResponse.phone, "Notification", cCResponse.created, msg, cCResponse.name, "driverphone", true)
+				case Failure(ex) => 
+					accActor ! Notifier(phone, "Notification", date, ex.getMessage(), "error", "driverphone", true)
+			}
 		}
  	case RefundCustomer(chargeId, amt) => stripeSer.refundCustomer(chargeId, amt)
 

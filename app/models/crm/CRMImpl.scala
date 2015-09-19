@@ -40,13 +40,20 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 		    .withRequestTimeout(10000)
 		    .post(Map("method" -> Seq("sendsmsmsg"), "phone_number" -> Seq(phone), "message" -> Seq(msg)))
 
-		val futureResult: Future[scala.xml.NodeSeq] = complexResponse.map {
+		val futureStatus = complexResponse.map {
 		  response =>
-		    response.xml \ "message"
+		    response.status
+		}
+
+		val futureResult = complexResponse.map {
+		  response =>
+		    response.body
 		}
 		val result = for {
-		    elem <- futureResult 
-		  } yield elem.text.toString
+			//st <- futureStatus
+		    elem <- futureResult //if st != 200
+		  } yield elem.slice(21, 121)
+
 		result
 //only on failure
 	}
@@ -68,7 +75,7 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 		}
 		val result = for {
 		    elem <- futureResult 
-		  } yield elem.text.toString
+		  } yield elem.text.mkString
 		result
 
 	}
@@ -77,40 +84,38 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 //https://restapi.crmtext.com/smapi/rest?method=optincustomer&firstname=&lastname=&phone_number=
 	def optincustomer(firstname: String, lastname: String, phone: String) = {
 
-		val complexRequest =
+		val complexResponse =
 		  	request.withAuth(user, password, WSAuthScheme.BASIC)
 		    .withRequestTimeout(10000)
 		    .post(Map("method" -> Seq("optincustomer"), "firstname" -> Seq(firstname), "lastname" -> Seq(lastname), "phone_number" -> Seq(phone) ))
 
-		val futureResult: Future[scala.xml.NodeSeq] = complexRequest.map {
+		val futureResult = complexResponse.map {
 		  response =>
-		    response.xml \ "message"
+		    response.body
 		}
 		val result = for {
 		    elem <- futureResult 
-		  } yield elem.text.toString
+		  } yield elem.slice(21, 121)
 		result
-
 	}
 
 //Opt-out Customer
 //https://restapi.crmtext.com/smapi/rest?method=optoutcustomer&phone_number=
 	def optoutcustomer(phone: String) = {
 		
-		val complexRequest =
+		val complexResponse =
 	  	request.withAuth(user, password, WSAuthScheme.BASIC)
 	    .withRequestTimeout(10000)
 	    .post(Map("method" -> Seq("optoutcustomer"), "phone_number" -> Seq(phone)))
 
-		val futureResult: Future[scala.xml.NodeSeq] = complexRequest.map {
+		val futureResult = complexResponse.map {
 		  response =>
-		    response.xml \ "message"
+		    response.body
 		}
 		val result = for {
 		    elem <- futureResult 
-		  } yield elem.text.toString
+		  } yield elem.slice(21, 121)
 		result
-
 	}
 
 	// def optinStatus(usr: User): String = {
@@ -132,18 +137,18 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 															emailid: String, phone: String, password: String) =  {
 		 //Logger.info(s"Sending SMS to $to with text $msg")
 
-		val complexRequest =
+		val complexResponse =
 		  	request.withAuth(user, password, WSAuthScheme.BASIC)
 		    .withRequestTimeout(10000)
 		    .post(Map("method" -> Seq("createstoreanduser"), "storename" -> Seq(storename), "storeKeyword" -> Seq(keyword),  "firstname" -> Seq(firstname), "lastname" -> Seq(lastname), "email" -> Seq(lastname), "phone_number" -> Seq(phone), "password" -> Seq(password)))
 
-		val futureResult: Future[scala.xml.NodeSeq] = complexRequest.map {
-			  response =>
-			    response.xml \ "message"
+		val futureResult = complexResponse.map {
+		  response =>
+		    response.body
 		}
 		val result = for {
 		    elem <- futureResult 
-		  } yield elem.text.toString
+		  } yield elem.slice(21, 121)
 		result
 	}
 
@@ -152,18 +157,18 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 	def setcallback(url: String) =  {
 		 //Logger.info(s"Sending SMS to $to with text $msg")
 	
-		val complexRequest =
+		val complexResponse =
 		  	request.withAuth(user, password, WSAuthScheme.BASIC)
 		    .withRequestTimeout(10000)
 		    .post(Map("method" -> Seq("setcallback"), "callback" -> Seq(url)))
 
-		val futureResult: Future[scala.xml.NodeSeq] = complexRequest.map {
-			  response =>
-			    response.xml \ "message"
+		val futureResult = complexResponse.map {
+		  response =>
+		    response.body
 		}
 		val result = for {
 		    elem <- futureResult 
-		  } yield elem.text.toString
+		  } yield elem.slice(21, 121)
 		result
 	}
 

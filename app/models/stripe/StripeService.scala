@@ -17,7 +17,7 @@ trait StripeService {
    */
 	def createCustomer(userId: UUID, token: String): Future[CustomerCreateResponse]
 
-	def chargeCustomer(phone: String, amt: java.lang.Integer): Future[CustomerChargeResponse]
+	def chargeCustomer(phone: String, amt: java.lang.Integer): Future[Try[CustomerChargeResponse]]
 
 	def refundCustomer(chargeId: String, amt: java.lang.Integer)
 
@@ -27,5 +27,5 @@ trait StripeService {
 
    def updateCustomer(userId: UUID, token: String)
 
-   def listCharges(limit: java.lang.Integer)
+   def listCharges(limit: java.lang.Integer)//: Future[Try[CustomerChargeResponse]]
 }
