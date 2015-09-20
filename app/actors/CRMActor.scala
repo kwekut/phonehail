@@ -101,9 +101,9 @@ class CRMActor @Inject() (
 //https://restapi.crmtext.com/smapi/rest?method=sendsmsmsg&phone_number=&result= 
 	case SendSMSMsg(phone, message) => 
               val date = new LocalDateTime().toString() 
-		crmSer.sendsmsmsg(phone, message)onComplete {		
-        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "no-name", "driverphone", true) 
-    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "no-name", "driverphone", true)
+		crmSer.sendsmsmsg(phone, message).onComplete {		
+        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "sendsmsmsg", "driverphone", true) 
+    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "sendsmsmsg", "driverphone", true)
     	}
 
 //Sending an MMS:
@@ -112,23 +112,23 @@ class CRMActor @Inject() (
 	val date = new LocalDateTime().toString() 
 	
 	if (driverphone == "driverphone") {
-			crmSer.sendsmsmsg(phone, message)onComplete {		
-	        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "no-name", "driverphone", true) 
-	    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "no-name", "driverphone", true)
+			crmSer.sendsmsmsg(phone, message).onComplete {		
+	        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "sendmmsmsg", driverphone, true) 
+	    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "sendmmsmsg", driverphone, true)
 	    	}
 	} else {
 		env.identityService.retrievebyphone(driverphone) flatMap {
 			case Some(driver) => 		
 				val rt = crmSer.sendmmsmsg(phone, message, driver.image.getOrElse(icon)) 
-				rt onComplete {		
-		        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "no-name", driverphone, true)
-		    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "no-name", "driverphone", true)
+				rt.onComplete {		
+		        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "sendmmsmsg", driverphone, true)
+		    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "sendmmsmsg", driverphone, true)
 		    	}
 		    	rt
 		    case None => 
-				crmSer.sendsmsmsg(phone, message)onComplete {		
-		        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "no-name", "driverphone", true) 
-		    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "no-name", "driverphone", true)
+				crmSer.sendsmsmsg(phone, message).onComplete {		
+		        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "sendmmsmsg", driverphone, true) 
+		    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "sendmmsmsg", driverphone, true)
 		    	}
 		    		Future.successful { driverphone }
 		}
@@ -137,17 +137,17 @@ class CRMActor @Inject() (
 //https://restapi.crmtext.com/smapi/rest?method=optincustomer&firstname=&lastname=&phone_number=
 	case OptInCustomer(firstname, lastname, phone) => 
 		val date = new LocalDateTime().toString()
-		crmSer.optincustomer(firstname, lastname, phone)onComplete {		
-        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "no-name", "driverphone", true)
-    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "no-name", "driverphone", true)
+		crmSer.optincustomer(firstname, lastname, phone).onComplete {		
+        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "optincustomer", "driverphone", true)
+    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "optincustomer", "driverphone", true)
     	}
 //Opt-out Customer
 //https://restapi.crmtext.com/smapi/rest?method=optoutcustomer&phone_number=
 	case OptOutCustomer(phone) => 
 		val date = new LocalDateTime().toString() 
-		val msg = crmSer.optoutcustomer(phone) onComplete {		
-        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "no-name", "driverphone", true)
-    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "no-name", "driverphone", true)
+		val msg = crmSer.optoutcustomer(phone).onComplete {		
+        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "optoutcustomer", "driverphone", true)
+    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "optoutcustomer", "driverphone", true)
     	}
 	// def optinStatus(usr: User): String  
 
@@ -155,17 +155,17 @@ class CRMActor @Inject() (
 	//https://restapi.crmtext.com/smapi/rest?method=createstoreanduser&storename=&storeKeyword=&firstname&=lastname=&emailid= &phonenumber=&password= 
 	case CreateStoreandUser(storename, storeKeyword, firstname, lastname, emailid, phone, password) => 
     	val date = new LocalDateTime().toString()		
-		crmSer.createstoreanduser(storename, storeKeyword, firstname, lastname, emailid, phone, password) onComplete {		
-        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "no-name", "driverphone", true)
-    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "no-name", "driverphone", true)
+		crmSer.createstoreanduser(storename, storeKeyword, firstname, lastname, emailid, phone, password).onComplete {		
+        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "createstoreanduser", "driverphone", true)
+    		case Failure(ex) => accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "createstoreanduser", "driverphone", true)
     	}
 		//Set a Callback URL:
 		//https://restapi.crmtext.com/smapi/rest?method=setcallback&callback= 
 	case SetCallBack(url) => 
 		val date = new LocalDateTime().toString() 
-		crmSer.setcallback(url) onComplete {		
-        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "no-name", "driverphone", true)
-    		case Failure(ex) =>	accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "no-name", "driverphone", true)
+		crmSer.setcallback(url).onComplete {		
+        	case Success(msg) => accActor ! Notifier("crm", "NOTIFICATION", date, msg, "setcallback", "driverphone", true)
+    		case Failure(ex) =>	accActor ! Notifier("crm", "NOTIFICATION", date, ex.getMessage(), "setcallback", "driverphone", true)
     	}
 
 	//Get Opt-In Status for a Mobile Number:
@@ -175,7 +175,7 @@ class CRMActor @Inject() (
 		val results = crmSer.getcustmsgsbymobile(phone, startdate, enddate, startcount, endcount).map(xs => xs.map(_.msglist))
 		results map {
 			  case Some(results) =>  for ( result <- results) { accActor ! NoBuffer(result.mobileNum, "TWILIO", result.timeStamp, result.message, result.custName, "driverphone", true) }
-			  case None => accActor ! Notifier("crm", "NOTIFICATION", date, "error", "no-name", "driverphone", true)
+			  case None => accActor ! Notifier("crm", "NOTIFICATION", date, "error", "getcustmsgsbymobile", "driverphone", true)
 		}
 	//Get Inbound Messages By Date Range:
 	//https://restapi.crmtext.com/smapi/rest?method=getinboundmsgs&startdate=&enddate= 
@@ -184,7 +184,7 @@ class CRMActor @Inject() (
 		val results = crmSer.getinboundmsgs(startdate, enddate).map(xs => xs.map(_.msglist))
 		results map {
 			  case Some(results) =>  for ( result <- results) { accActor ! NoBuffer(result.mobileNum, "TWILIO", result.timeStamp, result.message, result.custName, "driverphone", true) }
-			  case None => accActor ! Notifier("crm", "NOTIFICATION", date, "error", "no-name", "driverphone", true)
+			  case None => accActor ! Notifier("crm", "NOTIFICATION", date, "error", "getinboundmsgs", "driverphone", true)
 		}
 	//Get Outbound Messages By Date Range:
 	//https://restapi.crmtext.com/smapi/rest?method=getoutboundmsgs&startdate=&enddate= 
@@ -193,7 +193,7 @@ class CRMActor @Inject() (
 		val results = crmSer.getoutboundmsgs(startdate, enddate).map(xs => xs.map(_.msglist))
 		results map {
 			  case Some(results) =>  for ( result <- results) { accActor ! NoBuffer(result.mobileNum, "TWILIO", result.timeStamp, result.message, result.custName, "driverphone", true) }
-			  case None => accActor ! Notifier("crm", "NOTIFICATION", date, "error", "no-name", "driverphone", true)
+			  case None => accActor ! Notifier("crm", "NOTIFICATION", date, "error", "getoutboundmsgs", "driverphone", true)
 		}												
 	//Get Opt-In Status for a Mobile Number:
 	//https://restapi.crmtext.com/smapi/rest?method=getcustomerinfo&phone_number= 
@@ -202,7 +202,7 @@ class CRMActor @Inject() (
 		val results = crmSer.getcustomerinfo(fieldval, value).map(xs => xs.map(_.msglist))
 		results map {
 			  case Some(results) =>  for ( result <- results) { accActor ! NoBuffer(result.mobileNum, "TWILIO", result.timeStamp, result.message, result.custName, "driverphone", true) }
-			  case None => accActor ! Notifier("crm", "NOTIFICATION", date, "error", "no-name", "driverphone", true)
+			  case None => accActor ! Notifier("crm", "NOTIFICATION", date, "error", "getcustomerinfo", "driverphone", true)
 		}			
 		
   }

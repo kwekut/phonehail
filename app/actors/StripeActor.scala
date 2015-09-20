@@ -43,7 +43,7 @@ class StripeActor @Inject() ( @Named("account-actor") accActor: ActorRef, stripe
 					val msg = cCResponse.status + " : " + cCResponse.amount
 					accActor ! Notifier(cCResponse.phone, "Notification", cCResponse.created, msg, cCResponse.name, "driverphone", true)
 				case Failure(ex) => 
-					accActor ! Notifier(phone, "Notification", date, ex.getMessage(), "error", "driverphone", true)
+					accActor ! Notifier(phone, "Notification", date, ex.getMessage(), "charge customer", "driverphone", true)
 			}
 		}
  	case RefundCustomer(chargeId, amt) => stripeSer.refundCustomer(chargeId, amt)
