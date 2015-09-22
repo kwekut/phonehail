@@ -2,32 +2,50 @@ package actors
 
 import akka.actor._
 import javax.inject._
+import com.google.inject.assistedinject.Assisted
+import play.api.libs.concurrent.InjectedActorSupport
 import com.google.inject.name.Named
 import play.api.libs.json._
 import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
 import play.api.libs.concurrent.Execution.Implicits._
+import scala.concurrent.duration._
+import akka.actor.OneForOneStrategy
+import akka.actor.SupervisorStrategy._
 import akka.event.LoggingReceive
+import play.api.Logger
 import java.util.UUID
 import org.joda.time.LocalDateTime
 import scala.util.{Success, Failure}
 import play.api.Configuration
 import actors.AccountActor._
 import models.stripe.{StripeService, StripeImpl}
-import models.stripe.StripeImpl.CustomerChargeResponse
+import com.stripe.exception.APIConnectionException
+import com.stripe.exception.APIException
+import com.stripe.exception.AuthenticationException
+import com.stripe.exception.CardException
+import com.stripe.exception.InvalidRequestException
+import com.stripe.exception.StripeException
+import models.stripe.StripeImpl.{ CustomerChargeResponse, CustomerRefundResponse }
 
 
 
 object StripeActor {
 	case class 	CreateCustomer(userId: UUID, token: String)
 	case class 	ChargeCustomer(phone: String, amt: Int) 
-	case class 	RefundCustomer(chargeId: String, amt: Int)
+	case class 	RefundCustomer(chargeId: String)
 	case class 	RetrieveCustomer(stripeId: String)
 	case class 	DeleteCustomer(userId: UUID)
 	case class 	UpdateCustomer(userId: UUID, token: String)
+
+	trait Factory {
+    	def apply(key: String): Actor
+  	}
 }
 
-class StripeActor @Inject() ( @Named("account-actor") accActor: ActorRef, stripeSer: StripeService) extends Actor {
+
+
+class StripeActor @Inject() (@Assisted key: String, @Named("account-actor") accActor: ActorRef, stripeSer: StripeService) extends Actor {
   import StripeActor._
 	import context.dispatcher
 
@@ -36,17 +54,31 @@ class StripeActor @Inject() ( @Named("account-actor") accActor: ActorRef, stripe
 	case CreateCustomer(userId, token) =>  stripeSer.createCustomer(userId, token)
 
 	case ChargeCustomer(phone, amt) => 
-		val date = new LocalDateTime().toString() 
-		stripeSer.chargeCustomer(phone, amt) map { cCRes =>
-			cCRes match {
+		val time = new LocalDateTime() 
+		val date = time.toString() 
+		stripeSer.chargeCustomer(phone, amt) onComplete { //map { cCRes =>
+			///cCRes match {
 				case Success(cCResponse) =>
 					val msg = cCResponse.status + " : " + cCResponse.amount
-					accActor ! Notifier(cCResponse.phone, "Notification", cCResponse.created, msg, cCResponse.name, "driverphone", true)
+					accActor ! Notifier(cCResponse.phone, "NOTIFICATION", cCResponse.created, msg, cCResponse.name, "driverphone", true)
 				case Failure(ex) => 
-					accActor ! Notifier(phone, "Notification", date, ex.getMessage(), "charge customer", "driverphone", true)
-			}
+					accActor ! Notifier(phone, "NOTIFICATION", date, ex.getMessage(), "charge customer", "driverphone", true)
+			//}
 		}
- 	case RefundCustomer(chargeId, amt) => stripeSer.refundCustomer(chargeId, amt)
+
+
+ 	case RefundCustomer(chargeId) => 
+ 		val time = new LocalDateTime() 
+		val date = time.toString() 
+		stripeSer.refundCustomer(chargeId) onComplete { // map { cCRef =>
+			//cCRef match {
+				case Success(cRResponse) =>
+					val msg = "Refunded" + " : " + cRResponse.amount + "-Bal" + ":" + cRResponse.balance_transaction
+					accActor ! Notifier("phone", "NOTIFICATION", cRResponse.created, msg, "refund customer", "driverphone", true)
+				case Failure(ex) => 
+					accActor ! Notifier("phone", "NOTIFICATION", date, ex.getMessage(), "refund customer", "driverphone", true)
+			//}
+		}
 
    	case RetrieveCustomer(stripeId) => stripeSer.retrieveCustomer(stripeId)
 
@@ -56,3 +88,37 @@ class StripeActor @Inject() ( @Named("account-actor") accActor: ActorRef, stripe
 				
   }
 }
+
+
+class StripeSupervisorActor @Inject() ( childFactory: StripeActor.Factory, @Named("account-actor") accActor: ActorRef ) extends Actor with InjectedActorSupport {
+  import StripeActor._
+  import context.dispatcher
+
+   		val time = new LocalDateTime() 
+		val date = time.toString() 
+    //The actor supervisor strategy attempts to send email up to 10 times if there is a EmailException
+    override val supervisorStrategy =
+      OneForOneStrategy(maxNrOfRetries = 3, withinTimeRange = 10 minutes) {
+		case e: CardException => accActor ! Notifier("phone", "NOTIFICATION", date, e.getMessage(), "refund error - card exception", "driverphone", true); Resume					
+	    case e: InvalidRequestException =>  accActor ! Notifier("phone", "NOTIFICATION", date, e.getMessage(), "refund error - invalid request", "driverphone", true); Resume					
+	    case e: AuthenticationException => accActor ! Notifier("phone", "NOTIFICATION", date, e.getMessage(), "refund error - auth exception", "driverphone", true); Restart					
+	    case e: APIConnectionException => accActor ! Notifier("phone", "NOTIFICATION", date, e.getMessage(), "refund error - api connection", "driverphone", true); Restart					
+	    case e: StripeException => accActor ! Notifier("phone", "NOTIFICATION", date, e.getMessage(), "refund error - stripe exception", "driverphone", true); Restart					
+	    case e: Exception => accActor ! Notifier("phone", "NOTIFICATION", date, e.getMessage(), "refund error - base exception", "driverphone", true); Restart	
+      }
+
+     //Forwards messages to child workers - EmailServiceWorker
+     val key = "stripeone"
+     val child: ActorRef = injectedChild(childFactory(key), key)
+
+    def receive = LoggingReceive {
+
+	    case CreateCustomer(a, b) => child ! CreateCustomer(a, b)
+		case ChargeCustomer(a, b) => child ! ChargeCustomer(a, b)
+		case RefundCustomer(a) => child ! RefundCustomer(a)
+		case RetrieveCustomer(a) => child ! RetrieveCustomer(a)
+		case DeleteCustomer(a) => child ! DeleteCustomer(a)
+		case UpdateCustomer(a, b) => child ! UpdateCustomer(a, b)
+		case _ => Logger.info("dead letter")
+    }
+  }

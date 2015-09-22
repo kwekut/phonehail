@@ -175,16 +175,17 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 
 //Get Opt-In Status for a Mobile Number:
 //https://restapi.crmtext.com/smapi/rest?method=getcustmsgsbymobile&phone_number=&startdate=&enddate=&startcount=&endcount= 
-	def getcustmsgsbymobile(phone: String, start: String, end: String, startcount: String, endcount: String) = {
+	def getcustmsgsbymobile(phone: String, startdate: String, enddate: String, startcount: String, messagecount: String) = {
 		val complexRequest =
 		  request.withAuth(user, password, WSAuthScheme.BASIC)
 		    .withRequestTimeout(10000)
-		    .withQueryString("method" -> "getcustmsgsbymobile", "phone_number" -> phone, "startdate" -> start, "enddate" -> end, "startcount" -> startcount, "endcount" -> endcount)
+		    .withQueryString("method" -> "getcustmsgsbymobile", "phone_number" -> phone, "startdate" -> startdate, "enddate" -> enddate, "startcount" -> startcount, "msgcount" -> messagecount)
 
 		val futureResponse = complexRequest.get().map {
 		  response =>
-		    (response.json).asOpt[Msgs] 
+		    (response.json).asOpt[MsgList] 
 		}
+
 		futureResponse
 	} 
 
@@ -198,7 +199,7 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 
 		val futureResponse = complexRequest.get().map {
 		  response =>
-		    (response.json).asOpt[Msgs] 
+		    (response.json).asOpt[MsgList] 
 		}
 		futureResponse
 	} 
@@ -213,7 +214,7 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 
 		val futureResult = complexRequest.get().map {
 		  response =>
-		    (response.json).asOpt[Msgs]
+		    (response.json).asOpt[MsgList]
 		}
 		futureResult 
 	} 
@@ -229,7 +230,7 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 
 		val futureResult = complexRequest.get().map {
 		  response =>
-		    (response.json).asOpt[Msgs]
+		    (response.json).asOpt[MsgList]
 		}
 		futureResult
 	}

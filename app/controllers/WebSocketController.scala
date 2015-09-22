@@ -52,13 +52,13 @@ import actors.StripeActor._
 class WebSocketController @Inject() (
   @Named("twilio-actor") twilioActor: ActorRef,
   @Named("crm-actor") crmActor: ActorRef,
-  @Named("stripe-actor") stripeActor: ActorRef,
+  @Named("stripesupervisor-actor") stripesupActor: ActorRef,
   @Named("account-actor") accActor: ActorRef,
   @Named("communicate-actor") commActor: ActorRef ) extends Controller {
 
 	def socket = WebSocket.acceptWithActor[JsValue, JsValue] { request => out =>
 		val userid = UUID.randomUUID()
-  		WebSocketActor.props(userid, twilioActor, crmActor, commActor, accActor, stripeActor, out)
+  		WebSocketActor.props(userid, twilioActor, crmActor, commActor, accActor, stripesupActor, out)
 	}
 
 }

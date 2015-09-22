@@ -9,7 +9,7 @@ import play.api.Play
 import play.api.Play.current
 import com.google.inject.name.Names
 import play.Logger
-import actors.{TwilioActor, InBoundActor, CommunicateActor, AccountActor, StripeActor, PGActor, CRMActor} 
+import actors.{TwilioActor, InBoundActor, CommunicateActor, AccountActor, StripeSupervisorActor, StripeActor, PGActor, CRMActor} 
 
 /**
  * The Guice module which wires all Silhouette dependencies.
@@ -29,7 +29,8 @@ class ActorModule extends AbstractModule with AkkaGuiceSupport {
     bindActor[AccountActor]("account-actor")
     bindActor[TwilioActor]("twilio-actor")
     bindActor[CRMActor]("crm-actor")
-    bindActor[StripeActor]("stripe-actor")
+    bindActor[StripeSupervisorActor]("stripesupervisor-actor")
+    bindActorFactory[StripeActor, StripeActor.Factory]
     bindActor[PGActor]("postgresql-actor")
   }
 

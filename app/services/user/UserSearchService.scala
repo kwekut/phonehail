@@ -21,6 +21,8 @@ object UserSearchService extends IdentityService[User] {
 
   def retrieve(email: String): Future[Option[User]] = Database.query(UserQueries.FindUserByEmail(email))
 
+  def retrievebyusername(username: String): Future[Option[User]] = Database.query(UserQueries.FindUserByUsername(username))
+
   def retrievebyphone(phone: String): Future[Option[User]] = Database.query(UserQueries.FindUserByPhone(phone))
 
   override def retrieve(loginInfo: LoginInfo) = if (loginInfo.providerID == "anonymous") {

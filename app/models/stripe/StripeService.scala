@@ -17,9 +17,9 @@ trait StripeService {
    */
 	def createCustomer(userId: UUID, token: String): Future[CustomerCreateResponse]
 
-	def chargeCustomer(phone: String, amt: java.lang.Integer): Future[Try[CustomerChargeResponse]]
+	def chargeCustomer(phone: String, amt: java.lang.Integer): Future[CustomerChargeResponse]
 
-	def refundCustomer(chargeId: String, amt: java.lang.Integer)
+	def refundCustomer(chargeId: String): Future[CustomerRefundResponse]
 
    def retrieveCustomer(phone: String)
 

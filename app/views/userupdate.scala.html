@@ -1,13 +1,13 @@
-@(user: models.user.User, filledForm: Form[models.user.UserUpdateData])(
+@(user: models.user.User, form: Form[models.user.UserUpdateData])(
   implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
 )@layout.bootstrap("Register") {
 @if(flash.get("error").isDefined) {
 <div class="alert alert-info">@flash.get("error").get</div>  
 }
 
-@if(filledForm.hasGlobalErrors) {
+@if(form.hasGlobalErrors) {
   <ul>
-  @for(error <- filledForm.globalErrors) {
+  @for(error <- form.globalErrors) {
     <li>@error.message</li>
   }
   </ul>
@@ -51,25 +51,25 @@
         
         <div class="form-group col-lg-12">
           <label>Username</label>
-            <input type="text" name="username" id="username" value="@filledForm.data.get("username")">
-            <dd class="error">This field is required!</dd>
+            <input type="text" name="username" id="username" value="@form.data.get("username")">
+            <dd class="error">The username must be unique!</dd>
         </div>
         
         <div class="form-group col-lg-12">
           <label>Phone Number</label>
-            <input type="text" name="phone" id="phone" value="@filledForm.data.get("phone")">
+            <input type="text" name="phone" id="phone" value="@form.data.get("phone")">
             <dd class="error">Required format : 5553331111</dd>
         </div>
         
         <div class="form-group col-lg-12">
           <label>Address</label>
-            <input type="text" name="address" id="address" value="@filledForm.data.get("address")">
+            <input type="text" name="address" id="address" value="@form.data.get("address")">
             <dd class="error">This field is optional!</dd>
         </div>
                 
         <div class="form-group col-lg-12">
           <label>Full Name</label>
-            <input type="text" name="fullName" id="fullName" value="@filledForm.data.get("fullName")">
+            <input type="text" name="fullName" id="fullName" value="@form.data.get("fullName")">
             <dd class="error">Required format: Firstname Lastname</dd>
         </div>  
       
