@@ -69,3 +69,7 @@ class RegistrationController @javax.inject.Inject() (
     )
   }
 }
+
+
+//sign in/up social
+//@controllers.routes.AuthenticationController.authenticateSocial(p._1)
