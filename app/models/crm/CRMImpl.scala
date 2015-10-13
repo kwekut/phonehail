@@ -135,7 +135,7 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 //https://restapi.crmtext.com/smapi/rest?method=createstoreanduser&storename=&storeKeyword=&firstname&=lastname=&emailid= &phonenumber=&password= 
 	def createstoreanduser(storename: String, storekeyword: String, firstname: String, lastname: String, 
 															email: String, storenumber: String, password: String) =  {
-		 Logger.info(s"CreateStore started: $storename, $storekeyword, $firstname, $lastname, $email, $storenumber, $password")
+		 //Logger.info(s"CreateStore started: $storename, $storekeyword, $firstname, $lastname, $email, $storenumber, $password")
 
 		val complexResponse =
 		  	request.withAuth(user, password, WSAuthScheme.BASIC)
