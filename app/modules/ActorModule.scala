@@ -5,6 +5,7 @@ import play.api.libs.concurrent.AkkaGuiceSupport
 import models.twilio.{ TwilioService, TwilioImpl } 
 import models.stripe.{ StripeService, StripeImpl } 
 import models.crm.{ CRMService, CRMImpl } 
+//import models.email.{EmailService, EmailImpl}
 import play.api.Play
 import play.api.Play.current
 import com.google.inject.name.Names
@@ -35,3 +36,7 @@ class ActorModule extends AbstractModule with AkkaGuiceSupport {
   }
 
 }
+
+//import actors.EmailServiceActor
+    // bind(classOf[EmailService]).to(classOf[EmailImpl])
+    // bindActor[EmailServiceActor]("emailservice-actor")

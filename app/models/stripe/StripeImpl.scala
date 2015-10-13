@@ -50,9 +50,13 @@ object StripeImpl{
 
 class StripeImpl @Inject() (val env: AuthenticationEnvironment) extends StripeService {
 	import StripeImpl._
+	//live secret key = sk_live_918m058qt0x9S8KZlD4whwp6
+	//test secret key = sk_test_6A1tTCBE9tbbQNZ1Es1wEVXV
+	//live publishable key = pk_live_iICaNwGZ68IJtn0qtnpZUypd
+	//test publishable key = pk_test_I6h5vqVx0FefH2CX0Su4Cie5
 	//Set secret key
 	//private val Stripe.apiKey = "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
-	private val requestOptions = (new RequestOptionsBuilder()).setApiKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2").build()
+	private val requestOptions = (new RequestOptionsBuilder()).setApiKey("sk_live_918m058qt0x9S8KZlD4whwp6").build()
 
 	def createCustomer(userId: UUID, token: String) = {
 		//Get customer - emmail, Get token from submit

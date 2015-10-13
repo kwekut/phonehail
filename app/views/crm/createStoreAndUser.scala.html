@@ -44,50 +44,50 @@
     <section class="container">
     <div class="container-page">        
       <div class="col-md-6">
-        <h3 class="dark-grey">Please Update Your Profile</h3>
+        <h3 class="dark-grey">Please Create A Store</h3>
 
   @helper.form(action = routes.CRMController.createStoreAndUser()) {
         
         <div class="form-group col-lg-12">
           <label>Storename</label>
             <input type="text" name="storename" id="storename" value="@form.data.get("storename")">
-            <dd class="error">This field is required!</dd>
+            <dd class="error">The Brand/store name must be unique platform wide!</dd>
         </div>
         
         <div class="form-group col-lg-12">
           <label>Store Keyword</label>
             <input type="text" name="storekeyword" id="storekeyword" value="@form.data.get("storekeyword")">
-            <dd class="error">Required format : 5553331111</dd>
+            <dd class="error">The keyword must be unique platform wide</dd>
         </div>
         
         <div class="form-group col-lg-12">
           <label>First Name</label>
             <input type="text" name="firstname" id="firstname" value="@form.data.get("firstname")">
-            <dd class="error">This field is optional!</dd>
+            <dd class="error">First name of the default user.!</dd>
         </div>
                 
         <div class="form-group col-lg-12">
           <label>Last Name</label>
             <input type="text" name="lastname" id="lastname" value="@form.data.get("lastname")">
-            <dd class="error">Required format: Firstname Lastname</dd>
+            <dd class="error">Last name of the default user.!</dd>
         </div> 
 
         <div class="form-group col-lg-12">
           <label>Email</label>
             <input type="text" name="email" id="email" value="@form.data.get("email")">
-            <dd class="error">Required format: Firstname Lastname</dd>
+            <dd class="error">Email of the default user.!</dd>
         </div> 
 
         <div class="form-group col-lg-12">
           <label>Store Number</label>
-            <input type="text" name="storekeywordnumber" id="storekeywordnumber" value="@form.data.get("storekeywordnumber")">
-            <dd class="error">Required format: Firstname Lastname</dd>
+            <input type="text" name="storenumber" id="storenumber" value="@form.data.get("storenumber")">
+            <dd class="error">Phone nember of the default user.!</dd>
         </div> 
 
         <div class="form-group col-lg-12">
           <label>Password</label>
-            <input type="text" name="password" id="password" value="@form.data.get("password")">
-            <dd class="error">Required format: Firstname Lastname</dd>
+            <input type="password" name="password" id="password" value="@form.data.get("password")">
+            <dd class="error">Password of the default user.!</dd>
         </div> 
 
           <div class="form-group">

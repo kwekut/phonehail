@@ -133,14 +133,16 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 
 //Creating a Store and User:
 //https://restapi.crmtext.com/smapi/rest?method=createstoreanduser&storename=&storeKeyword=&firstname&=lastname=&emailid= &phonenumber=&password= 
-	def createstoreanduser(storename: String, storeKeyword: String, firstname: String, lastname: String, 
-															emailid: String, phone: String, password: String) =  {
-		 //Logger.info(s"Sending SMS to $to with text $msg")
+	def createstoreanduser(storename: String, storekeyword: String, firstname: String, lastname: String, 
+															email: String, storenumber: String, password: String) =  {
+		 Logger.info(s"CreateStore started: $storename, $storekeyword, $firstname, $lastname, $email, $storenumber, $password")
 
 		val complexResponse =
 		  	request.withAuth(user, password, WSAuthScheme.BASIC)
 		    .withRequestTimeout(10000)
-		    .post(Map("method" -> Seq("createstoreanduser"), "storename" -> Seq(storename), "storeKeyword" -> Seq(keyword),  "firstname" -> Seq(firstname), "lastname" -> Seq(lastname), "email" -> Seq(lastname), "phone_number" -> Seq(phone), "password" -> Seq(password)))
+		    .post(Map("method" -> Seq("createstoreanduser"), "storename" -> Seq(storename), 
+		    "storeKeyword" -> Seq(storekeyword),  "firstname" -> Seq(firstname), "lastname" -> Seq(lastname),
+		    "emailid" -> Seq(email), "phonenumber" -> Seq(storenumber), "password" -> Seq(password)))
 
 		val futureResult = complexResponse.map {
 		  response =>
@@ -148,7 +150,7 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 		}
 		val result = for {
 		    elem <- futureResult 
-		  } yield elem.slice(21, 121)
+		  } yield elem//.slice(21, 121)
 		result
 	}
 

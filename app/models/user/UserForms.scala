@@ -23,7 +23,10 @@ object UserForms {
     mapping(
       "username" -> nonEmptyText,
       "phone" -> nonEmptyText(minLength = 10, maxLength = 10),
-      "address" -> nonEmptyText,
+      "street" -> nonEmptyText,
+      "city" -> nonEmptyText,
+      "state" -> nonEmptyText,
+      "zip" -> nonEmptyText,
       "fullName" -> nonEmptyText
     )(UserUpdateData.apply)(UserUpdateData.unapply)
   )
@@ -38,7 +41,10 @@ object UserForms {
       "roles" -> nonEmptyText,
       "email" -> nonEmptyText,
       "phone" -> nonEmptyText,
-      "address" -> nonEmptyText,
+      "street" -> nonEmptyText,
+      "city" -> nonEmptyText,
+      "state" -> nonEmptyText,
+      "zip" -> nonEmptyText,
       "fullName" -> nonEmptyText,
       "hasstripe" -> nonEmptyText,
       "preferences" -> nonEmptyText

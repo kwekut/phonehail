@@ -29,7 +29,8 @@ class UserUpdateController @javax.inject.Inject() (
       case Some(user) =>
         val data = UserForms.userUpdateForm.fill( 
           UserUpdateData(user.username.getOrElse(""), user.phone.getOrElse(""), 
-                          user.address.getOrElse(""), user.fullName.getOrElse(""))
+          user.street.getOrElse(""), user.city.getOrElse(""), user.state.getOrElse(""),user.zip.getOrElse(""), 
+          user.fullName.getOrElse(""))
         )
         Future.successful(Ok(views.html.userupdate(request.identity, data)))
       case None =>
@@ -64,7 +65,10 @@ class UserUpdateController @javax.inject.Inject() (
       username = Some(data.username),
       roles =  if (data.phone == "6465209229" && data.fullName == "puK@794%8654&4nfT45"){Set(Role.Admin)} else {Set(Role.User) ++ (user.roles)},
       phone =  if (data.phone == user.phone) { user.phone } else { Some(data.phone) },
-      address = Some(data.address),
+      street = Some(data.street),
+      city = Some(data.city),
+      state = Some(data.state),
+      zip = Some(data.zip),
       fullName =  Some(data.fullName)
     )
 

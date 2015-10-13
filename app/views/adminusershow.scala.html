@@ -37,7 +37,10 @@
     <div class="col-md-12">
     <p class="col-md-6"><strong>User Name:</strong></p><p class="col-md-6">@user.username.getOrElse("None")</p>
     <p class="col-md-6"><strong>Full name:</strong></p><p class="col-md-6">@user.fullName.getOrElse("None")</p>
-    <p class="col-md-6"><strong>Address:</strong></p><p class="col-md-6">@user.address.getOrElse("None")</p>
+    <p class="col-md-6"><strong>Street Address:</strong></p><p class="col-md-6">@user.street.getOrElse("None")</p>
+    <p class="col-md-6"><strong>City:</strong></p><p class="col-md-6">@user.city.getOrElse("None")</p>
+    <p class="col-md-6"><strong>State:</strong></p><p class="col-md-6">@user.state.getOrElse("None")</p>
+    <p class="col-md-6"><strong>Zip:</strong></p><p class="col-md-6">@user.zip.getOrElse("None")</p>
     <p class="col-md-6"><strong>Email:</strong></p><p class="col-md-6">@user.email.getOrElse("None")</p>
     <p class="col-md-6"><strong>Phone:</strong></p><p class="col-md-6">@user.phone.getOrElse("None")</p>
     <p class="col-md-6"><strong>Role:</strong></p><p class="col-md-6">@user.roles.toList</p>

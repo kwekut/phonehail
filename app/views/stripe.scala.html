@@ -63,10 +63,10 @@
     </div>
 </div>
   <form action="@controllers.routes.StripeController.createcustomer()" method="POST" id="payment-form" class="form-horizontal" role="form">
-  <span class="payment-errors"></span>
+  <span style="color:blue" class="payment-errors"></span>
 
     <fieldset>
-      <legend>Payment</legend>
+      <legend>Payment Information</legend>
       <div class="form-group">
         <label class="col-sm-3 control-label" for="card-holder-name">Name on Card</label>
         <div class="col-sm-9">

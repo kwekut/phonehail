@@ -44,39 +44,39 @@
     <section class="container">
     <div class="container-page">        
       <div class="col-md-6">
-        <h3 class="dark-grey">Please Update Your Profile</h3>
+        <h3 class="dark-grey">Get customer messages by mobile</h3>
 
   @helper.form(action = routes.CRMController.getCustMsgsByMobile()) {
         
         <div class="form-group col-lg-12">
           <label>Phone Number</label>
             <input type="text" name="phone" id="phone" value="@form.data.get("phone")">
-            <dd class="error">Required format : 5553331111</dd>
+            <dd class="error">10 digit mobile number. (Example: 9995551234)</dd>
         </div>
 
         <div class="form-group col-lg-12">
           <label>Start Date</label>
             <input type="text" name="startdate" id="startdate" value="@form.data.get("startdate")">
-            <dd class="error">This field is required!</dd>
+            <dd class="error">Format: "YYYY-MM-DD"</dd>
         </div>
         
 
         <div class="form-group col-lg-12">
           <label>End Date</label>
             <input type="text" name="enddate" id="enddate" value="@form.data.get("enddate")">
-            <dd class="error">This field is optional!</dd>
+            <dd class="error">Format: "YYYY-MM-DD"</dd>
         </div>
                 
         <div class="form-group col-lg-12">
           <label>Start Count</label>
             <input type="text" name="startcount" id="startcount" value="@form.data.get("startcount")">
-            <dd class="error">Required format: Firstname Lastname</dd>
+            <dd class="error">The start count of the number of messages.</dd>
         </div>  
 
         <div class="form-group col-lg-12">
           <label>End Count</label>
             <input type="text" name="endcount" id="endcount" value="@form.data.get("endcount")">
-            <dd class="error">Required format: Firstname Lastname</dd>
+            <dd class="error">The number of messages that you want us to return in one transaction.</dd>
         </div>  
 
           <div class="form-group">

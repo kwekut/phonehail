@@ -227,12 +227,13 @@ class CRMController @javax.inject.Inject() (
     }
   }
   def createStoreAndUser = SecuredAction.async { implicit request =>
+    Logger.info("createStoreAndUser called")
       env.identityService.retrieve(request.identity.id).flatMap {
         case Some(admin) => if (admin.roles.contains(Role.Admin)) {
           OtherForms.createstoreanduserForm.bindFromRequest.fold(
             form => Future.successful(BadRequest(views.html.crm.createStoreAndUser(form))),
-            data => crmSer.createstoreanduser(data.storename, data.storeKeyword, data.firstname, data.lastname, 
-              data.email, data.storekeywordnumber, data.password) map { result =>
+            data => crmSer.createstoreanduser(data.storename, data.storekeyword, data.firstname, data.lastname, 
+              data.email, data.storenumber, data.password) map { result =>
                 Redirect(controllers.routes.CRMController.createStoreAndUserForm).flashing("error" -> result)            
             }
           )

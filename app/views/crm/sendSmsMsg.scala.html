@@ -44,14 +44,14 @@
     <section class="container">
     <div class="container-page">        
       <div class="col-md-6">
-        <h3 class="dark-grey">Please Update Your Profile</h3>
+        <h3 class="dark-grey">Send Sms</h3>
 
   @helper.form(action = routes.CRMController.sendSmsMsg()) {
         
         <div class="form-group col-lg-12">
           <label>Message</label>
             <input type="text" name="message" id="message" value="">
-            <dd class="error">This field is required!</dd>
+            <dd class="error">We advise under 160 characters!!</dd>
         </div>
         
         <div class="form-group col-lg-12">

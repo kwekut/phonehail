@@ -3,6 +3,9 @@ package models.user
 case class UserUpdateData(
   username: String,
   phone: String,
-  address: String,
+  street: String,
+  city: String,
+  state: String,
+  zip: String,
   fullName: String
 )

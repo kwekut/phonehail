@@ -61,7 +61,7 @@ class AdminController @javax.inject.Inject() (
       case Some(admin) => if (admin.roles.contains(Role.Admin)) {
           env.identityService.retrieve(userId).flatMap {
             case Some(user) => 
-        val info = AdminUserUpdateData(user.username.getOrElse(""), user.roles.mkString, user.email.getOrElse(""), user.phone.getOrElse(""), user.address.getOrElse(""), user.fullName.getOrElse(""), user.hasstripe.getOrElse(""), user.preferences.getOrElse(""))
+        val info = AdminUserUpdateData(user.username.getOrElse(""), user.roles.mkString, user.email.getOrElse(""), user.phone.getOrElse(""), user.street.getOrElse(""), user.city.getOrElse(""), user.state.getOrElse(""), user.zip.getOrElse(""), user.fullName.getOrElse(""), user.hasstripe.getOrElse(""), user.preferences.getOrElse(""))
         val filledForm = UserForms.adminUserUpdateForm.fill(info)
         Future.successful(Ok(views.html.adminuserupdate(request.identity, filledForm))) 
             case None =>
@@ -100,7 +100,10 @@ class AdminController @javax.inject.Inject() (
       roles =  Set(position),
       email =  Some(data.email),
       phone =  Some(data.phone),
-      address = Some(data.address),
+      street = Some(data.street),
+      city = Some(data.city),
+      state = Some(data.state),
+      zip = Some(data.zip),
       fullName =  Some(data.fullName),
       hasstripe =  Some(data.hasstripe),
       preferences =  Some(data.preferences)

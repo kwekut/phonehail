@@ -10,7 +10,7 @@ import org.joda.time.LocalDateTime
 
 object UserQueries extends BaseQueries[User] {
   override protected val tableName = "users"
-  override protected val columns = Seq("id", "username", "profiles", "roles", "full_name", "email", "phone", "address", "hasstripe", "preferences", "image", "created")
+  override protected val columns = Seq("id", "username", "profiles", "roles", "full_name", "email", "phone", "street", "city", "state","zip", "hasstripe", "preferences", "image", "created")
   override protected val searchColumns = Seq("id::text", "username", "full_name", "email", "phone")
 
   val insert = Insert
@@ -20,11 +20,11 @@ object UserQueries extends BaseQueries[User] {
   val removeById = RemoveById
 
   case class UpdateUser(u: User) extends Statement {
-    override val sql = updateSql(Seq("username", "profiles", "roles", "full_name", "email", "phone", "address", "hasstripe", "preferences", "image"))
+    override val sql = updateSql(Seq("username", "profiles", "roles", "full_name", "email", "phone", "street", "city", "state", "zip", "hasstripe", "preferences", "image"))
     override val values = {
       val profiles = u.profiles.map(l => s"${l.providerID}:${l.providerKey}").toArray
       val roles = u.roles.map(_.name).toArray
-      Seq(u.username, profiles, roles, u.fullName, u.email, u.phone, u.address, u.hasstripe, u.preferences, u.image, u.id)
+      Seq(u.username, profiles, roles, u.fullName, u.email, u.phone, u.street, u.city, u.state, u.zip, u.hasstripe, u.preferences, u.image, u.id)
     }
   }
 
@@ -76,18 +76,21 @@ object UserQueries extends BaseQueries[User] {
     val fullName = row.asOpt[String]("full_name")
     val email = row.asOpt[String]("email")
     val phone = row.asOpt[String]("phone")
-    val address = row.asOpt[String]("address")
+    val street = row.asOpt[String]("street")
+    val city = row.asOpt[String]("city")
+    val state = row.asOpt[String]("state")
+    val zip = row.asOpt[String]("zip")
     val hasstripe = row.asOpt[String]("hasstripe")
     val preferences = row.asOpt[String]("preferences")
     val image = row.asOpt[String]("image")
     val roles = row.as[collection.mutable.ArrayBuffer[_]]("roles").map(x => Role(x.toString)).toSet
     val created = row.as[LocalDateTime]("created")
-    User(id, username, profiles, roles, fullName, email, phone, address, hasstripe, preferences, image, created)
+    User(id, username, profiles, roles, fullName, email, phone, street, city, state, zip, hasstripe, preferences, image, created)
   }
 
   override protected def toDataSeq(u: User) = {
     val profiles = u.profiles.map(l => s"${l.providerID}:${l.providerKey}").toArray
     val roles = u.roles.map(_.name).toArray
-    Seq(u.id, u.username, profiles, roles, u.fullName, u.email, u.phone, u.address, u.hasstripe, u.preferences, u.image, u.created)
+    Seq(u.id, u.username, profiles, roles, u.fullName, u.email, u.phone, u.street, u.city, u.state, u.zip, u.hasstripe, u.preferences, u.image, u.created)
   }
 }

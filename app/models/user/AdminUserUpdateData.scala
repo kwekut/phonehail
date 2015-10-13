@@ -5,7 +5,10 @@ case class AdminUserUpdateData(
   roles: String,
   email: String,
   phone: String,
-  address: String,
+  street: String,
+  city: String,
+  state: String,
+  zip: String,
   fullName: String,
   hasstripe: String,
   preferences: String

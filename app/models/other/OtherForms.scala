@@ -46,11 +46,11 @@ object OtherForms {
   val createstoreanduserForm = Form(
     mapping(
       "storename" -> nonEmptyText,
-      "storeKeyword" -> nonEmptyText,
+      "storekeyword" -> nonEmptyText,
       "firstname" -> nonEmptyText,
       "lastname" -> nonEmptyText,
       "email" -> nonEmptyText,
-      "storekeywordnumber" -> nonEmptyText,
+      "storenumber" -> nonEmptyText,
       "password" -> nonEmptyText
     )(CreatestoreanduserData.apply)(CreatestoreanduserData.unapply)
   )

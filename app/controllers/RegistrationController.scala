@@ -24,7 +24,7 @@ class RegistrationController @javax.inject.Inject() (
   def registrationForm = UserAwareAction.async { implicit request =>
     request.identity match {
       case Some(user) => //Future.successful {Redirect(controllers.routes.UserUpdateController.userUpdateForm())}
-      val info = UserUpdateData(user.username.getOrElse(""), user.phone.getOrElse(""), user.address.getOrElse(""), user.fullName.getOrElse(""))
+      val info = UserUpdateData(user.username.getOrElse(""), user.phone.getOrElse(""), user.street.getOrElse(""), user.city.getOrElse(""), user.state.getOrElse(""), user.zip.getOrElse(""), user.fullName.getOrElse(""))
       Future.successful { Ok(views.html.userupdate(user, UserForms.userUpdateForm.fill(info))) }
       case None => Future.successful(Ok(views.html.register(UserForms.registrationForm)))
     }
@@ -36,7 +36,7 @@ class RegistrationController @javax.inject.Inject() (
       data => {
         env.identityService.retrieve(LoginInfo(CredentialsProvider.ID, data.email)).flatMap {
           case Some(user) => Future.successful {
-            Ok(views.html.register(UserForms.registrationForm.fill(data))).flashing("error" -> "That email address is already taken.")
+            Ok(views.html.register(UserForms.registrationForm.fill(data))).flashing("error" -> "That email is already taken.")
           }
           case None => env.identityService.retrieve(data.email) flatMap {
             case Some(user) => Future.successful {

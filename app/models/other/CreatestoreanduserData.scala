@@ -2,11 +2,11 @@ package models.other
 
 case class CreatestoreanduserData(
   storename: String,
-  storeKeyword: String,
+  storekeyword: String,
   firstname: String,
   lastname: String,
   email: String,
-  storekeywordnumber: String,
+  storenumber: String,
   password: String
 )
 

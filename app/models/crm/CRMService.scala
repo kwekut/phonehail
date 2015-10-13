@@ -30,8 +30,8 @@ trait CRMService {
 
 //Creating a Store and User:
 //https://restapi.crmtext.com/smapi/rest?method=createstoreanduser&storename=&storeKeyword=&firstname&=lastname=&emailid= &phonenumber=&password= 
-	def createstoreanduser(storename: String, storeKeyword: String, firstname: String, lastname: String, 
-													emailid: String, phone: String, password: String): Future[String]
+	def createstoreanduser(storename: String, storekeyword: String, firstname: String, lastname: String, 
+															email: String, storenumber: String, password: String): Future[String]
 
 //Set a Callback URL:
 	def setcallback(url: String): Future[String] 

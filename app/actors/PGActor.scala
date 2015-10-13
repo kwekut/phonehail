@@ -60,7 +60,8 @@ class PGActor @Inject() (val env: AuthenticationEnvironment,
       	env.identityService.retrievebyphone(from) onComplete {		
         	case Success(user) =>  if(user.isDefined) {
 
-        		inboundActor ! StartUser(from, date, "start", user.get.fullName.getOrElse("Empty"), user.get.email.getOrElse("Empty"), user.get.phone.getOrElse("Empty"), user.get.address.getOrElse("Empty"),  user.get.hasstripe.getOrElse("Empty"), user.get.preferences.getOrElse("Empty"))
+        		inboundActor ! StartUser(from, date, "start", user.get.fullName.getOrElse(""), user.get.email.getOrElse(""), user.get.phone.getOrElse(""), 
+        			user.get.street.getOrElse("") + ":" + user.get.city.getOrElse("") + ":" + user.get.state.getOrElse("") + ":" + user.get.zip.getOrElse(""),  user.get.hasstripe.getOrElse(""), user.get.preferences.getOrElse("") )
         		} else {
         	 	inboundActor ! StartNone(from, date, "start", "no-fullname", "no-email", "no-phone", "no-address",  "Empty", "no-preferences")
         		}
@@ -78,7 +79,8 @@ class PGActor @Inject() (val env: AuthenticationEnvironment,
         	case Success(user) =>  Logger.info(s"user retrieve by phone ${user}")
         	if(user.isDefined) {
 
-        			inboundActor ! GenUser(from, date, msg, user.get.fullName.getOrElse("Empty"), user.get.email.getOrElse("Empty"), user.get.phone.getOrElse("Empty"), user.get.address.getOrElse("Empty"),  user.get.hasstripe.getOrElse("Empty"), user.get.preferences.getOrElse("Empty"))
+        			inboundActor ! GenUser(from, date, msg, user.get.fullName.getOrElse(""), user.get.email.getOrElse(""), user.get.phone.getOrElse(""), 
+        				user.get.street.getOrElse("") + ":" + user.get.city.getOrElse("") + ":" + user.get.state.getOrElse("") + ":" + user.get.zip.getOrElse(""),  user.get.hasstripe.getOrElse(""), user.get.preferences.getOrElse(""))
         		} else {
         	 		inboundActor ! GenNone(from, date, msg, "no-fullname", "no-email", "no-phone", "no-address",  "Empty", "no-preferences")
         		}
