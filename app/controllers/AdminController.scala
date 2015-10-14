@@ -32,7 +32,7 @@ class AdminController @javax.inject.Inject() (
 
   def adminSearch = SecuredAction { implicit req =>
     UserForms.adminSearchForm.bindFromRequest.fold(
-      form => Redirect(routes.AdminController.adminUserList("")),
+      form => Redirect(routes.AdminController.adminUserList("1")),
       filter => Redirect(routes.AdminController.adminUserList(filter))
     )
   }
@@ -48,7 +48,7 @@ class AdminController @javax.inject.Inject() (
         case Some(admin) => if (admin.roles.contains(Role.Admin)) {
             env.identityService.retrieve(userId).flatMap {
               case Some(user) => Future.successful(Ok(views.html.adminusershow(user))) 
-              case None => Future.successful(Redirect(controllers.routes.AdminController.adminUserList(""))) 
+              case None => Future.successful(Redirect(controllers.routes.AdminController.adminUserList("1"))) 
           }} else {Future.successful(Redirect(controllers.routes.HomeController.index()))}
         
         case None => Future.successful(Redirect(controllers.routes.HomeController.index()))
@@ -61,28 +61,31 @@ class AdminController @javax.inject.Inject() (
       case Some(admin) => if (admin.roles.contains(Role.Admin)) {
           env.identityService.retrieve(userId).flatMap {
             case Some(user) => 
-        val info = AdminUserUpdateData(user.username.getOrElse(""), user.roles.mkString, user.email.getOrElse(""), user.phone.getOrElse(""), user.street.getOrElse(""), user.city.getOrElse(""), user.state.getOrElse(""), user.zip.getOrElse(""), user.fullName.getOrElse(""), user.hasstripe.getOrElse(""), user.preferences.getOrElse(""))
+        val info = AdminUserUpdateData(user.username.getOrElse(""), user.roles.mkString, user.email.getOrElse(""), 
+          user.phone.getOrElse(""), user.street.getOrElse(""), user.city.getOrElse(""), user.state.getOrElse(""), 
+          user.zip.getOrElse(""), user.fullName.getOrElse(""), user.hasstripe.getOrElse(""), 
+          user.preferences.getOrElse(""))
         val filledForm = UserForms.adminUserUpdateForm.fill(info)
         Future.successful(Ok(views.html.adminuserupdate(request.identity, filledForm))) 
             case None =>
-        Future.successful{Redirect(controllers.routes.AdminController.adminUserList(""))} 
+        Future.successful{Redirect(controllers.routes.AdminController.adminUserList("1"))} 
         }} else {Future.successful(Redirect(controllers.routes.HomeController.index()))}
       case None =>
         Future.successful(Redirect(controllers.routes.HomeController.index()))
     }
   }
 
-  def adminUserUpdate(userId: UUID) = SecuredAction.async { implicit request =>
+  def adminUserUpdate = SecuredAction.async { implicit request =>
     UserForms.adminUserUpdateForm.bindFromRequest.fold(
       form => Future.successful(BadRequest(views.html.adminuserupdate(request.identity, form))),
       data => {
         env.identityService.retrieve(request.identity.id).flatMap {
           case Some(admin) => if (admin.roles.contains(Role.Admin)) {
-          env.identityService.retrieve(userId).flatMap {
+          env.identityService.retrieve(data.email).flatMap {
             case Some(user) =>  updateUser(data, user)
 
             case None =>
-              Future.successful{Redirect(controllers.routes.AdminController.adminUserList(""))}
+              Future.successful{Redirect(controllers.routes.AdminController.adminUserList("1"))}
           }} else {Future.successful(Redirect(controllers.routes.HomeController.index()))}
           case None =>  Future.successful {  Ok(views.html.index())  }
         }
@@ -111,7 +114,7 @@ class AdminController @javax.inject.Inject() (
     for {
       u <- env.userService.save(updateduser, update = true)
     } yield {
-      Redirect(controllers.routes.AdminController.adminUserList(""))
+      Redirect(controllers.routes.AdminController.adminUserList("1"))
     }
   }
 

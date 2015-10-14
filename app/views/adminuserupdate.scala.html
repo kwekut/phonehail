@@ -42,67 +42,69 @@
             <hr class="col-md-12" />
         </div>
 
-  @helper.form(action = routes.UserUpdateController.updateuser()) {
+  @helper.form(action = routes.AdminController.adminUserUpdate()) {
 
 
 <dl class="error" id="username_field">
     <dt><label for="username"><label>Username:</label></dt>
-    <dd><input type="text" name="username" id="username" value= "@filledForm.get.username"></dd>
-    <dd class="error">Dont Edit!</dd>
-</dl>
-
-<dl class="error" id="roles_field">
-    <dt><label for="roles"><label>User Roles:</label></dt>
-    <dd><input type="text" name="roles" id="roles" value= "@filledForm.get.roles"></dd>
+    <dd><input type="text" name="username" id="username" value= "@filledForm.data.get("username")"></dd>
     <dd class="error">Dont Edit!</dd>
 </dl>
 
 <dl class="error" id="phone_field">
     <dt><label for="phone"><label>Phone Number:</label></dt>
-    <dd><input type="text" name="phone" id="phone" value= "@filledForm.get.phone"></dd>
+    <dd><input type="text" name="phone" id="phone" value= "@filledForm.data.get("phone")"></dd>
     <dd class="error">Editable!</dd>
 </dl>
 
 <dl class="error" id="address_field">
     <dt><label for="streetaddress"><label>Street Address:</label></dt>
-    <dd><input type="text" name="street" id="street" value= "@filledForm.get.street"></dd>
+    <dd><input type="text" name="street" id="street" value= "@filledForm.data.get("street")"></dd>
     <dd class="error">Editable!</dd>
 </dl>
 
 <dl class="error" id="address_field">
     <dt><label for="city"><label>City:</label></dt>
-    <dd><input type="text" name="city" id="city" value= "@filledForm.get.city"></dd>
+    <dd><input type="text" name="city" id="city" value= "@filledForm.data.get("city")"></dd>
     <dd class="error">Editable!</dd>
 </dl>
 
 <dl class="error" id="address_field">
     <dt><label for="state"><label>State:</label></dt>
-    <dd><input type="text" name="state" id="state" value= "@filledForm.get.state"></dd>
+    <dd><input type="text" name="state" id="state" value= "@filledForm.data.get("state")"></dd>
     <dd class="error">Editable!</dd>
 </dl>
 
 <dl class="error" id="address_field">
     <dt><label for="zip"><label>Zip Code:</label></dt>
-    <dd><input type="text" name="zip" id="zip" value= "@filledForm.get.zip"></dd>
+    <dd><input type="text" name="zip" id="zip" value= "@filledForm.data.get("zip")"></dd>
     <dd class="error">Editable!</dd>
 </dl>
 
 <dl class="error" id="fullName_field">
     <dt><label for="fullName"><label>Full Name:</label></dt>
-    <dd><input type="text" name="fullName" id="fullName" value= "@filledForm.get.fullName"></dd>
+    <dd><input type="text" name="fullName" id="fullName" value= "@filledForm.data.get("fullName")"></dd>
     <dd class="error">Editable!</dd>
 </dl>
 
 <dl class="error" id="hasstripe_field">
     <dt><label for="hasstripe"><label>Stripe Token:</label></dt>
-    <dd><input type="text" name="hasstripe" id="hasstripe" value= "@filledForm.get.hasstripe"></dd>
+    <dd><input type="text" name="hasstripe" id="hasstripe" value= "@filledForm.data.get("hasstripe")"></dd>
     <dd class="error">Dont Edit!</dd>
 </dl>
 
 <dl class="error" id="preferences_field">
     <dt><label for="preferences"><label>User Preferences:</label></dt>
-    <dd><input type="text" name="preferences" id="preferences" value= "@filledForm.get.preferences"></dd>
+    <dd><input type="text" name="preferences" id="preferences" value= "@filledForm.data.get("preferences")"></dd>
     <dd class="error">Editable!</dd>
+</dl>
+
+<dl class="error" id="roles_field">
+    <dd><input type="hidden" name="roles" id="roles" value= "@filledForm.data.get("roles")"></dd>
+</dl>
+
+<dl class="error" id="email_field">
+    <dd><input type="hidden" name="email" id="email" value= "@filledForm.data.get("email")"></dd>
 </dl>
 
   <div class="form-group">
