@@ -34,13 +34,13 @@ class InBoundActor @Inject() ( @Named("twilio-actor") twilioActor: ActorRef,
 										crmActor ! SendSMSMsg(from, "We will get to you in a moment")
 
 	case StartNone(from, date, msg, fullname, email, phone, address,  hasstripe, preferences) =>
-		//twilioActor ! SendSMS(from, "please register for our service at www.getgatsby.com/home/", "driverphone")
-		crmActor ! SendSMSMsg(from, "Please register for our service at www.home.getgatsby.com/")
+		//twilioActor ! SendSMS(from, "please register for our service at home.getgatsby.com/", "driverphone")
+		crmActor ! SendSMSMsg(from, "Please register for our service at home.getgatsby.com/")
 
 	case StartError(from, date, msg, fullname, email, phone, address,  hasstripe, preferences) =>
-	 accActor ! Notifier(from, "NOTIFICATION", date, "initiated start request", "NoName", "driverphone", true)
-	 //twilioActor ! SendSMS(from, "please register for our service at www.getgatsby.com/home/", "driverphone")
-	 crmActor ! SendSMSMsg(from, "Please register for our service at www.home.getgatsby.com/")
+	 //accActor ! Notifier(from, "NOTIFICATION", date, "initiated start request", "NoName", "driverphone", true)
+	 //twilioActor ! SendSMS(from, "please register for our service at home.getgatsby.com/", "driverphone")
+	 crmActor ! SendSMSMsg(from, "Please register for our service at home.getgatsby.com/")
 
 	case GenUser(from, date, msg, fullname, email, phone, address,  hasstripe, preferences) => 
 				if (hasstripe.startsWith("cus_")) {
@@ -48,20 +48,20 @@ class InBoundActor @Inject() ( @Named("twilio-actor") twilioActor: ActorRef,
 					//twilioActor ! SendSMS("+16197237161", "GetGatsby service requested", "driverphone")
 					//crmActor ! SendSMSMsg("6197237161", "GetGatsby service requested")
 				} else {
-					//twilioActor ! SendSMS(from, "please complete your registration by updating your payment details at www.getgatsby.com/createstripe", "driverphone")
-					crmActor ! SendSMSMsg(from, "Please complete your registration by entering your payment details at www.home.getgatsby.com/")
+					//twilioActor ! SendSMS(from, "please complete your registration by updating your payment details at home.getgatsby.com/", "driverphone")
+					crmActor ! SendSMSMsg(from, "Please complete your registration by entering your payment details at home.getgatsby.com/")
 				}
 
 	case GenNone(from, date, msg, fullname, email, phone, address,  hasstripe, preferences) =>
-	 //twilioActor ! SendSMS(from, "please register for our service at www.getgatsby.com/home/", "driverphone")
-	 crmActor ! SendSMSMsg(from, "Please register for our service at www.home.getgatsby.com/")
+	 //twilioActor ! SendSMS(from, "please register for our service at home.getgatsby.com/", "driverphone")
+	 crmActor ! SendSMSMsg(from, "Please register for our service at home.getgatsby.com/")
 
 	case GenError(from, date, msg, fullname, email, phone, address,  hasstripe, preferences) => 
 	 accActor ! Accounter(from, "INCOMMING", date, msg, "NoName", "driverphone", false)
 
 	case OutOfOffice(from, date, msg, fullname, email, phone, address,  hasstripe, preferences) =>
-	 //twilioActor ! SendSMS(from, "We provide services between the the hrs of 7pm - 8am , please see our service website at www.getgatsby.com/" , "driverphone")
-	 crmActor ! SendSMSMsg(from, "We provide services between the the hrs of 7pm - 8am , please see our service website at www.getgatsby.com/")
+	 //twilioActor ! SendSMS(from, "We provide services between the the hrs of 7pm - 8am , please see our service website at home.getgatsby.com/" , "driverphone")
+	 crmActor ! SendSMSMsg(from, "We provide services between the the hrs of 8pm - 8am pacific time, please see our service website at www.getgatsby.com/")
 
   }
 }

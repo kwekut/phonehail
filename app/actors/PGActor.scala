@@ -54,8 +54,7 @@ class PGActor @Inject() (val env: AuthenticationEnvironment,
 
   def receive = LoggingReceive {
 
-		//case Message(mid, from, date, "start" | " start" | "  start" | "Start" | " Start" | "  Start" | "START" | " START") => 	
-		case Message(mid, from, date, "getgatsby" | " getgatsby" | "  getgatsby" | "Getgatsby" | " Getgatsby" | "  Getgatsby" | "GETGATSBY" | " GETGATSBY" | "GetGatsBy") => 
+		case Message(mid, from, date, "gatsby" | " gatsby" | "  gatsby" | "Gatsby" | " Gatsby" | "  Gatsby" | "GATSBY" | " GATSBY" | "GatsBy") => 
 
       	env.identityService.retrievebyphone(from) onComplete {		
         	case Success(user) =>  if(user.isDefined) {
