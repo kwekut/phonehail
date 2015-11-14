@@ -5,6 +5,10 @@ import com.google.inject.name.Named
 import akka.actor.{ ActorRef, ActorSystem, Props, Actor }
 import java.util.UUID
 import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
+import org.joda.time.DateTimeZone
+import org.joda.time.DateTime
 import play.api.Play.current
 import play.api.libs.json._
 import play.api.libs.json.Reads._
@@ -48,6 +52,9 @@ object WebSocketActor {
     )(unlift(Ins.unapply))
   }
 
+  val LA: DateTimeZone = DateTimeZone.forID("America/Los_Angeles")
+  val dtf: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-mm-dd HH:MM:SS Z")
+
 }
 
 class WebSocketActor(user: UUID, twilioActor: ActorRef, crmActor: ActorRef, commActor: ActorRef, accActor: ActorRef, stripesupActor: ActorRef, out: ActorRef) extends Actor {
@@ -72,24 +79,19 @@ class WebSocketActor(user: UUID, twilioActor: ActorRef, crmActor: ActorRef, comm
 
             if (s.typ == "REPLY") { 
 
-              val time = new LocalDateTime()
-              val created = time.toString()  
+            val created = dtf.withZone(LA).parseDateTime(DateTime.now.toString("yyyy-mm-dd HH:MM:SS Z")).toString("yyyy-mm-dd HH:MM:SS Z")  
               //twilioActor ! SendSMS(s.from, s.msg, s.driverphone)
               crmActor ! SendMMSMsg(s.from, s.msg, s.driverphone)
               accActor !  Accounter(s.from, "REPLY", created, s.msg, s.name, s.driverphone, true)
 
            } else if (s.typ == "MARKATTENDED") {
 
-              val time = new LocalDateTime()
-              val created = time.toString()  
+            val created = dtf.withZone(LA).parseDateTime(DateTime.now.toString("yyyy-mm-dd HH:MM:SS Z")).toString("yyyy-mm-dd HH:MM:SS Z") 
               accActor !  MarkCompleted(s.from, "MARKATTENDED", created, s.msg, s.name, s.driverphone, true)
 
             } else if (s.typ == "MARKTAKEN") {
 
-              val time = new LocalDateTime()
-              val created = time.toString()
-              accActor !  MarkTaken(s.from, "MARKTAKEN", created, s.msg, s.name, s.driverphone, true)
-
+              accActor !  MarkTaken(s.from, "MARKTAKEN", s.date, s.msg, s.name, s.driverphone, true)
 
              } else if (s.typ == "REFRESH") {
 
@@ -108,12 +110,18 @@ class WebSocketActor(user: UUID, twilioActor: ActorRef, crmActor: ActorRef, comm
 
             } else if (s.typ == "BILLCUSTOMER") {
 
-            val amt = java.lang.Integer.parseInt(s.msg)
-              stripesupActor ! ChargeCustomer(s.from, amt.toInt) 
+            //val amt = java.lang.Integer.parseInt(s.msg)
+              //stripesupActor ! ChargeCustomer(s.from, amt.toInt) 
+
+          val created = dtf.withZone(LA).parseDateTime(DateTime.now.toString("yyyy-mm-dd HH:MM:SS Z")).toString("yyyy-mm-dd HH:MM:SS Z")
+      //from socket- msg: Ins(from=>from, typ=>typ, date=>location, msg=>amt, name=>attendname, driver>=driverphone, isDone)
+              stripesupActor ! ChargeCustomer(s.from, s.typ, s.date, s.msg, s.name, s.driverphone, created)
 
             } else if (s.typ == "REFUNDCUSTOMER") {
 
-              stripesupActor ! RefundCustomer(s.msg)
+          val created = dtf.withZone(LA).parseDateTime(DateTime.now.toString("yyyy-mm-dd HH:MM:SS Z")).toString("yyyy-mm-dd HH:MM:SS Z")
+              //stripesupActor ! RefundCustomer(s.msg)
+              stripesupActor ! RefundCustomer(s.from, s.typ, s.date, s.msg, s.name, s.driverphone, created)
 
             } else {
               Logger.info("unknown websocket message type")

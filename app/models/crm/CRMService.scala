@@ -18,6 +18,10 @@ trait CRMService {
 //https://restapi.crmtext.com/smapi/rest?method=sendsmsmsg&phone_number=&message=&mmsurl=
 	def sendmmsmsg(phone: String, msg: String, driverphone: String): Future[String]
 
+//Sending an Campaign:
+//https://restapi.crmtext.com/smapi/rest?method=sendcampaign&name=&message= 
+	def sendcampaign(msg: String): Future[String]
+
 //Opt-in Customer
 //https://restapi.crmtext.com/smapi/rest?method=optincustomer&firstname=&lastname=&phone_number=
 	def optincustomer(firstname: String, lastname: String, phone: String): Future[String]

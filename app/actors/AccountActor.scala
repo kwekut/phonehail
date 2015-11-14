@@ -8,6 +8,10 @@ import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
 import java.util.UUID
 import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
+import org.joda.time.DateTimeZone
+import org.joda.time.DateTime
 import scala.util.Random
 import play.api.Logger
 import actors.PGActor._
@@ -23,6 +27,9 @@ import scala.collection.mutable.ListBuffer
 import scala.concurrent.Future
 
 object AccountActor {
+
+	val LA: DateTimeZone = DateTimeZone.forID("America/Los_Angeles")
+	val dtf: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-mm-dd HH:MM:SS Z")
 
 	case class MarkTaken(from: String, typ: String, date: String, msg: String, name: String, driverphone: String, isDone: Boolean)
 	case class MarkCompleted(from: String, typ: String, date: String, msg: String, name: String, driverphone: String, isDone: Boolean)
@@ -65,6 +72,7 @@ object AccountActor {
 class AccountActor @Inject() ( @Named("communicate-actor") commActor: ActorRef)  extends Actor {
 
 	import AccountActor._
+
 	val msgHold = new ListBuffer[Outs]()
 	val notHold = new ListBuffer[Outs]()
 	var accHold = new ListBuffer[Outs]()
@@ -75,18 +83,22 @@ class AccountActor @Inject() ( @Named("communicate-actor") commActor: ActorRef) 
 
 	case Refresh => refresh
 
-	case MarkTaken(from, typ, date, msg, name, driverphone, isDone) => Logger.info("MarkTaken called")
-		val time = new LocalDateTime()
-		val created = time.toString()
+//This affects the accumulation term frequency object created by accrecal
+//Obj.name carries the clients name-gotten previously, thus I used the driverphone for attendant form driverphone
+//Keep the old object values- Only update the date, driverphone -> attendant's name, and isDone to true 
+	case MarkTaken(from, typ, date, msg, name, attendant, isDone) => Logger.info("MarkTaken called")
+		//val created = DateTime.now.toString("yyyy-mm-dd HH:MM:SS")
+		val created = dtf.withZone(LA).parseDateTime(DateTime.now.toString("yyyy-mm-dd HH:MM:SS Z")).toString("yyyy-mm-dd HH:MM:SS Z")
 
 		accHold.find(_.from == from) match {
 			case Some(obj) => Logger.info(accHold.indexWhere(_.from == obj.from).toString)
-			accHold.update(accHold.indexOf(obj), (Outs(obj.id, obj.from, obj.typ, created, obj.msg, obj.name, obj.driverphone, true)))
+			accHold.update(accHold.indexOf(obj), (Outs(obj.id, obj.from, obj.typ, created, obj.msg, obj.name, attendant, true)))
 			recall
 			case None =>
 		}
 		recall
 
+// This affects the messaging objects
 	case MarkCompleted(from, typ, date, msg, name, driverphone, isDone) => Logger.info("MarkCompleted Called")
 		val group = msgHold.filter(_.from == from)
 		group.foreach{obj => 
@@ -141,7 +153,7 @@ class AccountActor @Inject() ( @Named("communicate-actor") commActor: ActorRef) 
 	    accHold.clear
 	    notHold.clear
 	  } 
-
+	  //Create acounts object as a map tally. Phone num-from is id. Msg is freq. Driverphone will be attendant name.
 	  def accRecal = {
 	  	Logger.info("Recalculate called")
 		msgHold.foreach(item => 
@@ -149,16 +161,16 @@ class AccountActor @Inject() ( @Named("communicate-actor") commActor: ActorRef) 
 				val grp = msgHold.filter(_.from == item.from)
 				val msg = grp.filter(_.isDone == false).length
 
-				val time = new LocalDateTime()
-				val created = time.toString()
+				//val created = DateTime.now.toString("yyyy-mm-dd HH:MM:SS")
+				val created = dtf.withZone(LA).parseDateTime(DateTime.now.toString("yyyy-mm-dd HH:MM:SS Z")).toString("yyyy-mm-dd HH:MM:SS Z")
 				Logger.info("new ac created")
-			accHold += Outs(item.from, item.from, "ACCOUNTS", created, msg.toString, item.name, "driverphone", false)
+			accHold += Outs(item.from, item.from, "ACCOUNTS", created, msg.toString, item.name, "No-Attendant", false)
 
 			}else{
 				val grp = msgHold.filter(_.from == item.from)
 				val msg = grp.filter(_.isDone == false).length
-				val time = new LocalDateTime()
-				val created = time.toString()
+				//val created = DateTime.now.toString("yyyy-mm-dd HH:MM:SS")
+				val created = dtf.withZone(LA).parseDateTime(DateTime.now.toString("yyyy-mm-dd HH:MM:SS Z")).toString("yyyy-mm-dd HH:MM:SS Z")
 
 				accHold.find(_.from == item.from) match {
 					case Some(obj) =>	Logger.info(accHold.indexWhere(_.from == obj.from).toString)

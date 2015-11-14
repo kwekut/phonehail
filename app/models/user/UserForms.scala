@@ -35,6 +35,19 @@ object UserForms {
   "filter" -> text
   )
 
+  val dashDateSearchForm = Form(
+    mapping(
+      "startmonth" -> nonEmptyText,
+      "startyear" -> nonEmptyText,
+      "endmonth" -> nonEmptyText,
+      "endyear" -> nonEmptyText
+    )(DashDateData.apply)(DashDateData.unapply)
+  )
+
+  val dashSearchForm = Form[String] (
+  "filter" -> text
+  )
+
   val adminUserUpdateForm = Form(
     mapping(
       "username" -> nonEmptyText,
@@ -51,6 +64,25 @@ object UserForms {
     )(AdminUserUpdateData.apply)(AdminUserUpdateData.unapply)
   )
 
+  val adminDashUpdateForm = Form(
+    mapping(
+      "id" -> nonEmptyText,
+      "clientname" -> nonEmptyText,
+      "clientemail" -> nonEmptyText,
+      "clientphone" -> nonEmptyText,
+      "clientzip" -> nonEmptyText,
+      "clientcity" -> nonEmptyText,
+      "clientstate" -> nonEmptyText,
+      "driverphone" -> nonEmptyText,
+      "drivername" -> nonEmptyText,
+      "drivercompany" -> nonEmptyText,
+      "pickuplocation" -> nonEmptyText,
+      "attendantnamecomment" -> nonEmptyText,
+      "chargedamount" -> nonEmptyText,
+      "chargecomment" -> nonEmptyText,
+      "other" -> nonEmptyText
+    )(AdminDashUpdateData.apply)(AdminDashUpdateData.unapply)
+  )
 
   val tokenForm = Form(
     mapping(

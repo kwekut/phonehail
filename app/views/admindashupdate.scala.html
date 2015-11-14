@@ -1,0 +1,137 @@
+@(user: models.user.User, filledForm: Form[models.user.AdminDashUpdateData])(
+  implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+)@layout.bootstrap("Register") {
+
+@if(flash.get("error").isDefined) {
+<div class="alert alert-info">@flash.get("error").get</div>
+}
+
+<div class="container-fluid">
+    <!-- Second navbar for categories -->
+
+    <!-- Second navbar for profile settings -->
+    <nav class="navbar navbar-inverse">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-4">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">ADMIN</a>
+        </div>
+    
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-4">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href='@routes.HomeController.index'>Home</a></li>
+            <li><a href='@routes.AdminController.adminIndex'>Admin</a></li>
+          </ul>            
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container -->
+    </nav><!-- /.navbar -->
+</div><!-- /.container-fluid -->
+
+
+  <div class="container">
+          <div class="row">
+            <hr class="col-md-12" />
+            <h4 class="col-md-8">Update Dash Transaction</h4>
+            <hr class="col-md-12" />
+        </div>
+
+  @helper.form(action = routes.AdminController.adminDashUpdate()) {
+
+<dl class="error" id="client_name">
+    <dt><label for="clientname"><label>Client Name:</label></dt>
+    <dd><input type="text" name="clientname" id="clientname" value= "@filledForm.data.get("clientname")"></dd>
+    <dd class="error">Dont Edit!</dd>
+</dl>
+
+<dl class="error" id="client_email">
+    <dt><label for="clientemail"><label>Client Email:</label></dt>
+    <dd><input type="text" name="clientemail" id="clientemail" value= "@filledForm.data.get("clientemail")"></dd>
+    <dd class="error">Dont Edit!</dd>
+</dl>
+
+<dl class="error" id="client_phone">
+    <dt><label for="clientphone"><label>Clent Phone:</label></dt>
+    <dd><input type="text" name="clientphone" id="clientphone" value= "@filledForm.data.get("clientphone")"></dd>
+    <dd class="error">Dont Edit!</dd>
+</dl>
+
+<dl class="error" id="client_zip">
+    <dt><label for="clientzip"><label>Client Zip:</label></dt>
+    <dd><input type="text" name="clientzip" id="clientzip" value= "@filledForm.data.get("clientzip")"></dd>
+    <dd class="error">Editable!</dd>
+</dl>
+
+<dl class="error" id="client_city">
+    <dt><label for="clientcity"><label>State:</label></dt>
+    <dd><input type="text" name="clientcity" id="clientcity" value= "@filledForm.data.get("clientcity")"></dd>
+    <dd class="error">Editable!</dd>
+</dl>
+
+<dl class="error" id="client_state">
+    <dt><label for="clientstate"><label>Client State:</label></dt>
+    <dd><input type="text" name="clientstate" id="clientstate" value= "@filledForm.data.get("clientstate")"></dd>
+    <dd class="error">Editable!</dd>
+</dl>
+
+<dl class="error" id="driver_phone">
+    <dt><label for="driverphone"><label>Driver Phone:</label></dt>
+    <dd><input type="text" name="driverphone" id="driverphone" value= "@filledForm.data.get("driverphone")"></dd>
+    <dd class="error">Dont Edit!</dd>
+</dl>
+
+<dl class="error" id="driver_name">
+    <dt><label for="drivername"><label>Driver Name:</label></dt>
+    <dd><input type="text" name="drivername" id="drivername" value= "@filledForm.data.get("drivername")"></dd>
+    <dd class="error">Editable!</dd>
+</dl>
+
+<dl class="error" id="driver_company">
+    <dt><label for="drivercompany"><label>Driver Company:</label></dt>
+    <dd><input type="text" name="drivercompany" id="drivercompany" value= "@filledForm.data.get("drivercompany")"></dd>
+    <dd class="error">Editable!</dd>
+</dl>
+
+<dl class="error" id="attendant_name_comment">
+    <dt><label for="attendantnamecomment"><label>Attendant Name and Comments:</label></dt>
+    <dd><input type="text" name="attendantnamecomment" id="attendantnamecomment" value= "@filledForm.data.get("attendantnamecomment")"></dd>
+    <dd class="error">Editable!</dd>
+</dl>
+
+<dl class="error" id="pickup_location">
+    <dt><label for="pickuplocation"><label>PickUp Location:</label></dt>
+    <dd><input type="text" name="pickuplocation" id="pickuplocation" value= "@filledForm.data.get("pickuplocation")"></dd>
+    <dd class="error">Dont Edit!</dd>
+</dl>
+
+<dl class="error" id="charge_amount">
+    <dt><label for="chargedamount"><label>Charged Amount:</label></dt>
+    <dd><input type="text" name="chargedamount" id="chargedamount" value= "@filledForm.data.get("chargedamount")"></dd>
+    <dd class="error">Dont Edit!</dd>
+</dl>
+<dl class="error" id="charge_comment">
+    <dt><label for="chargecomment"><label>Charge Comment:</label></dt>
+    <dd><input type="text" name="chargecomment" id="chargecomment" value= "@filledForm.data.get("chargecomment")"></dd>
+    <dd class="error">Dont Edit!</dd>
+</dl>
+
+<dl class="error" id="created">
+    <dt><label for="datetime"><label>Date Time:</label></dt>
+    <dd><input type="text" name="created" id="created" value= "@filledForm.data.get("created")"></dd>
+    <dd class="error">Dont Edit!</dd>
+</dl>
+
+  <div class="form-group">
+      <br/>
+      <input type="submit" class="submit" value="Update Profile" />
+  </div>
+</div>
+}
+
+}

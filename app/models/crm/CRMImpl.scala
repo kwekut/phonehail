@@ -79,6 +79,33 @@ class CRMImpl @Inject() (val ws: WSClient, val env: AuthenticationEnvironment) e
 		result
 
 	}
+//Sending an Campaign:
+//https://restapi.crmtext.com/smapi/rest?method=sendcampaign&name=&message= 
+	def sendcampaign(msg: String) = {
+
+		val complexResponse =
+		  	request.withAuth(user, password, WSAuthScheme.BASIC)
+		    .withRequestTimeout(10000)
+		    .post(Map("method" -> Seq("sendcampaign"), "message" -> Seq(msg)))
+
+		val futureStatus = complexResponse.map {
+		  response =>
+		    response.status
+		}
+
+		val futureResult = complexResponse.map {
+		  response =>
+		    response.body
+		}
+		val result = for {
+			//st <- futureStatus
+		    elem <- futureResult //if st != 200
+		  } yield elem.slice(21, 121)
+
+		result
+//only on failure
+	}
+
 
 //Opt-in Customer
 //https://restapi.crmtext.com/smapi/rest?method=optincustomer&firstname=&lastname=&phone_number=

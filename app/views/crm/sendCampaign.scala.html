@@ -1,0 +1,67 @@
+@(form: Form[models.other.SendcampaignData])(
+  implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages
+)@layout.bootstrap("Register") {
+@if(flash.get("error").isDefined) {
+<div class="alert alert-info">@flash.get("error").get</div>
+}
+@if(form.hasGlobalErrors) {
+  <ul>
+  @for(error <- form.globalErrors) {
+    <li>@error.message</li>
+  }
+  </ul>
+}
+<div class="container-fluid">
+    <!-- Second navbar for categories -->
+
+    <!-- Second navbar for profile settings -->
+    <nav class="navbar navbar-inverse">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-4">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">GetGatsby</a>
+        </div>
+    
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-4">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href='@routes.HomeController.index'>Home</a></li>
+            <li><a href='@routes.ProfileController.userprofile'>Your Profile</a></li>
+            <li><a href="@controllers.routes.CRMController.crmIndex">CRM Admin</a></li>
+          </ul>          
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container -->
+    </nav><!-- /.navbar -->
+</div><!-- /.container-fluid -->
+
+<div class="container-fluid">
+    <section class="container">
+    <div class="container-page">        
+      <div class="col-md-6">
+        <h3 class="dark-grey">Send Message to ALL Clients</h3>
+
+  @helper.form(action = routes.CRMController.sendCampaign()) {
+        
+        <div class="form-group col-lg-12">
+          <label>Message</label>
+            <input type="text" name="message" id="message" value="@form.data.get("message")">
+            <dd class="error">BEWARE: You are sending this message to all customers</dd>
+        </div>
+
+          <div class="form-group">
+              <br/>
+              <input type="submit" class="submit" value="Submit" />
+          </div>   
+      </div>    
+    </div>
+  </section>
+</div>
+  }
+
+}

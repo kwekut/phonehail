@@ -16,7 +16,8 @@ object Schema {
     "oauth1_info" -> CreateOAuth1InfoTable,
     "oauth2_info" -> CreateOAuth2InfoTable,
     "openid_info" -> CreateOpenIdInfoTable,
-    "session_info" -> CreateSessionInfoTable
+    "session_info" -> CreateSessionInfoTable,
+    "dashes" -> CreateDashesTable
   )
 
   def update() = {

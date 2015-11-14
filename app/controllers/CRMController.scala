@@ -85,6 +85,31 @@ class CRMController @javax.inject.Inject() (
   }
 
 ///////////////////////////
+////////////////////////////////////////
+  def sendCampaignForm = SecuredAction.async { implicit request =>
+    env.identityService.retrieve(request.identity.id).flatMap {
+      case Some(user) =>  if (user.roles.contains(Role.Admin)) {
+            Future.successful { Ok(views.html.crm.sendCampaign(OtherForms.sendcampaignForm)) }
+          } else {
+            Future.successful(Redirect(controllers.routes.CRMController.crmIndex()))
+          }
+
+      case None => Future.successful(Redirect(controllers.routes.HomeController.index()))
+    }
+  }
+  def sendCampaign = SecuredAction.async { implicit request =>
+    Logger.info("sendCampaign called")
+    OtherForms.sendcampaignForm.bindFromRequest.fold(
+      form => Future.successful(BadRequest(views.html.crm.sendCampaign(form))),
+      data => crmSer.sendcampaign(data.message) map { 
+        result => Logger.info(result)
+      Redirect(controllers.routes.CRMController.sendCampaignForm).flashing("error" -> result) 
+      }                    
+    )
+  }
+
+
+//////////////////////////////////
   def optInCustomerForm = SecuredAction.async { implicit request =>
     env.identityService.retrieve(request.identity.id).flatMap {
       case Some(user) =>  if (user.roles.contains(Role.Admin)) {

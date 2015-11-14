@@ -9,14 +9,20 @@ POST        /signin               controllers.AuthenticationController.authentic
 GET         /signin/:provider     controllers.AuthenticationController.authenticateSocial(provider)
 GET         /signout              controllers.AuthenticationController.signOut
 
+
 # Admin
 GET         /adminindex            controllers.AdminController.adminIndex
+GET         /admindashupdate/:dash      controllers.AdminController.adminDashUpdateForm(dash: java.util.UUID)
+POST        /admindashupdate      controllers.AdminController.adminDashUpdate
 GET         /adminuserupdate/:user      controllers.AdminController.adminUserUpdateForm(user: java.util.UUID)
 POST        /adminuserupdate      controllers.AdminController.adminUserUpdate
 GET         /adminsearch          controllers.AdminController.adminSearch
 GET         /adminuserlist/:filter       controllers.AdminController.adminUserList(filter: String)
 GET         /adminusershow/:user          controllers.AdminController.adminUserShow(user: java.util.UUID)
-
+GET         /dashsearch          controllers.AdminController.dashSearch
+GET        /admindashlist/:filter       controllers.AdminController.adminDashList(filter: String)
+POST       	/admindashdatelist   controllers.AdminController.adminDashDateList
+ 
 
 # Profile
 GET         /profile              controllers.ProfileController.profile
@@ -45,6 +51,8 @@ GET         /sendSmsMsg               controllers.CRMController.sendSmsMsgForm
 POST        /sendSmsMsg               controllers.CRMController.sendSmsMsg
 GET         /sendMmsMsg              controllers.CRMController.sendMmsMsgForm
 POST        /sendMmsMsg              controllers.CRMController.sendMmsMsg
+GET         /sendCampaign               controllers.CRMController.sendCampaignForm
+POST        /sendCampaign               controllers.CRMController.sendCampaign
 GET         /optInCustomer             controllers.CRMController.optInCustomerForm 
 POST        /optInCustomer               controllers.CRMController.optInCustomer
 GET         /optOutCustomer              controllers.CRMController.optOutCustomerForm 

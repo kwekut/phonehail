@@ -21,6 +21,12 @@ object OtherForms {
     )(SendmmsmsgData.apply)(SendmmsmsgData.unapply)
   )
 
+  val sendcampaignForm = Form(
+    mapping(
+      "message" -> nonEmptyText
+    )(SendcampaignData.apply)(SendcampaignData.unapply)
+  )
+
   val optincustomerForm = Form(
     mapping(
       "phone" -> nonEmptyText(minLength = 10, maxLength = 10),

@@ -20,8 +20,10 @@ class AuthenticationEnvironment @javax.inject.Inject() (val wsClient: WSClient) 
   private[this] val fingerprintGenerator = new DefaultFingerprintGenerator(false)
 
   override val identityService = UserSearchService
-
   val userService = UserService
+
+  val dashSearchService = DashSearchService
+  val dashService = DashService
 
   val profileSearchService = ProfileSearchService
 

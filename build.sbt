@@ -20,6 +20,8 @@ libraryDependencies ++= Seq(
   "com.kyleu" %% "jdub-async" % "1.0",
   "com.twilio.sdk" % "twilio-java-sdk" % "3.4.5",
   "com.stripe" % "stripe-java" % "1.33.0",
+  "org.apache.poi" % "poi" % "3.8",
+  "org.apache.poi" % "poi-ooxml" % "3.9",
   "org.webjars" % "bootstrap" % "3.3.5"
 )
 

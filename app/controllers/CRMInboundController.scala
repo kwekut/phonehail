@@ -14,7 +14,10 @@ import play.api.mvc._
 import play.api.Play.current
 import scala.language.postfixOps
 import org.joda.time.LocalDateTime
-import org.joda.time.LocalTime
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
+import org.joda.time.DateTimeZone
+import org.joda.time.DateTime
 import actors.PGActor._
 import com.google.inject.name.Named
 
@@ -33,14 +36,16 @@ class CRMInboundController @Inject() (@Named("postgresql-actor") pgActor: ActorR
 //	timeStamp: String, subacct: String, custName: String, msgID: String, subacct_name: String, mms: String)
 
   def messages = Action(parse.multipartFormData) { implicit request =>
-			Logger.info("crm parse called")
+		Logger.info("crm parse called")
   	  val mid = request.body.dataParts.get("msgID") map (x => x.mkString)
 	  val from = request.body.dataParts.get("mobileNum") map (x => x.mkString)
 	  val msg = request.body.dataParts.get("message") map (x => x.mkString)
-	  val time = LocalDateTime.now()
-	  val date = time.toString()
 
-	pgActor !  new Message(mid.getOrElse(""), from.getOrElse(""), date, msg.getOrElse(""))
+	  val LA: DateTimeZone = DateTimeZone.forID("America/Los_Angeles")
+  	  val dtf: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-mm-dd HH:MM:SS Z")
+	  val created = dtf.withZone(LA).parseDateTime(DateTime.now.toString("yyyy-mm-dd HH:MM:SS Z")).toString("yyyy-mm-dd HH:MM:SS Z")
+
+	pgActor !  new Message(mid.getOrElse(""), from.getOrElse(""), created, msg.getOrElse(""))
 	
 	// Logger.info(from.getOrElse("nothing"))
 	// Logger.info(mid.getOrElse("nothing"))

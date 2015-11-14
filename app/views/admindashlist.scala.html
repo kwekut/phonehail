@@ -1,0 +1,176 @@
+@(dashes: List[models.user.Dash], volume: String, revenue: String, uniqueCustomers: String, averepeatRateCustomers: String, averageSpendCustomer: String, pickuplocations: String, uniqueDrivers: String, uniqueCompanies: String, maxDay: String, maxHour: String, maxMonth: String, maxLocation: String, dashSearchForm: Form[String], filter: String, form: Form[models.user.DashDateData])
+@layout.bootstrap("Register") {
+
+
+<div class="container-fluid">
+    <!-- Second navbar for categories -->
+
+    <!-- Second navbar for profile settings -->
+    <nav class="navbar navbar-inverse">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-4">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">DashBoard</a>
+        </div>
+    
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-4">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href='@routes.HomeController.index'>Home</a></li> 
+            <li><a href='@routes.AdminController.adminIndex'>Admin</a></li>
+          </ul>            
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container -->
+    </nav><!-- /.navbar -->
+</div><!-- /.container-fluid -->
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+      </div>
+    </div> 
+<div>
+        <h3>Search by filter</h3>
+            <p>
+                <form action="@routes.AdminController.dashSearch" method="GET">
+                    <input name="filter" type="text"/>
+                    <input type="submit" value="Finder"/>
+                </form>
+            </p>
+        <h3>Search buy date range</h3>
+<p>
+<form class="form-horizontal" method="POST" action="@routes.AdminController.adminDashDateList()">
+<fieldset>
+<div class="form-group">
+        <label class="col-sm-3 control-label" for="start-date">Start Date</label>
+        <div class="col-sm-9">
+          <div class="row">
+            <div class="col-xs-3">
+              <select class="form-control col-sm-2" name="startmonth" id="startdate">
+                <option>Month</option>
+                <option value="01">Jan (01)</option>
+                <option value="02">Feb (02)</option>
+                <option value="03">Mar (03)</option>
+                <option value="04">Apr (04)</option>
+                <option value="05">May (05)</option>
+                <option value="06">June (06)</option>
+                <option value="07">July (07)</option>
+                <option value="08">Aug (08)</option>
+                <option value="09">Sep (09)</option>
+                <option value="10">Oct (10)</option>
+                <option value="11">Nov (11)</option>
+                <option value="12">Dec (12)</option>
+              </select>
+            </div>
+            <div class="col-xs-3">
+              <select class="form-control" name="startyear">
+                <option>Year</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+<div class="form-group">
+        <label class="col-sm-3 control-label" for="endmonth">End Date</label>
+        <div class="col-sm-9">
+          <div class="row">
+            <div class="col-xs-3">
+              <select class="form-control col-sm-2" name="endmonth" id="endmonth">
+                <option>Month</option>
+                <option value="01">Jan (01)</option>
+                <option value="02">Feb (02)</option>
+                <option value="03">Mar (03)</option>
+                <option value="04">Apr (04)</option>
+                <option value="05">May (05)</option>
+                <option value="06">June (06)</option>
+                <option value="07">July (07)</option>
+                <option value="08">Aug (08)</option>
+                <option value="09">Sep (09)</option>
+                <option value="10">Oct (10)</option>
+                <option value="11">Nov (11)</option>
+                <option value="12">Dec (12)</option>
+              </select>
+            </div>
+            <div class="col-xs-3">
+              <select class="form-control" name="endyear">
+                <option>Year</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+        <br/>
+            <input type="submit" class="btn btn-info btn-sm pull-right" name="action" value="Export" />
+            <input type="submit" class="btn btn-info btn-sm pull-right" name="action" value="Search" />      
+        </fieldset>
+    </form>
+</p>
+</div>
+
+
+<h1>Welcome </h1>
+<h10>
+<b>Volume</b>: @volume , <b>Revenue</b>: @revenue, <b>Num-Customers</b>: @uniqueCustomers, <b>Repeat-Customer-Rate</b>: @averepeatRateCustomers, <b>Average-Customer-Spend$</b>: @averageSpendCustomer, <b>Num of PickUpLocations</b>: @pickuplocations, <b>Num-Drivers</b>: @uniqueDrivers, <b>Num-Suppliers</b>: @uniqueCompanies 
+<span><b>BestDay</b>: @maxDay </span>
+<span><b>BestHour</b>: @maxHour </span>
+<span><b>BestMonth</b>: @maxMonth </span>
+<span><b>BestLocation</b>: @maxLocation </span>
+</h10>
+ 
+<div class="dash col-md-12 col-md-offset-2">
+<h4>List of Transactions</h4>
+
+@dashes.map { dash =>
+
+<div class="row data">
+    <div class="col-md-10">
+        <span class="name"><b>Date</b>: <i>@dash.created</i></span>
+        <span class="name"><b>Client's Name</b>: <i>@dash.clientname.getOrElse("None")</i></span> 
+        <span class="name"><b>Client's Phone</b>: <i>@dash.clientphone.getOrElse("None")</i></span>
+        <span class="name"><b>Client's Zip</b>: <i>@dash.clientzip.getOrElse("None")</i></span>
+        <span class="name"><b>Client's City</b>: <i>@dash.clientcity.getOrElse("None")</i></span>
+        <span class="name"><b>Client's Email</b>: <i>@dash.clientemail.getOrElse("None")</i></span>
+        <span class="name"><b>Driver's Name</b>: <i>@dash.drivername.getOrElse("None")</i></span>
+        <span class="name"><b>Driver's Phone</b>: <i>@dash.driverphone.getOrElse("None")</i></span>
+        <span class="name"><b>Driver's Company</b>: <i>@dash.drivercompany.getOrElse("None")</i></span>
+        <span class="name"><b>Pick Up Location</b>: <i>@dash.pickuplocation.getOrElse("None")</i></span>
+        <span class="name"><b>Attendant: comment</b>: <i>@dash.attendantnamecomment.getOrElse("None")</i></span>
+        <span class="name"><b>Charged Amount</b>: <i>@dash.chargedamount.getOrElse("None")</i></span>
+        <span class="name"><b>Charge Comments</b>: <i>@dash.chargecomment.getOrElse("None")</i></span>
+        <a href='@routes.AdminController.adminDashUpdateForm(dash.id)'><b> Edit Details</b></a>
+    </div>
+        }
+</div>
+</div>
+</div>
+}
+

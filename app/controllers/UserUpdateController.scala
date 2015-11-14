@@ -48,7 +48,7 @@ class UserUpdateController @javax.inject.Inject() (
               case Some(user) => 
                 if (user.id == currentUser.id) { updateUser(data, currentUser) }
                 else { Future.successful {
-                Ok(views.html.userupdate(request.identity, UserForms.userUpdateForm.fill(data))).flashing("error" -> "That username is already taken.")
+                Ok(views.html.userupdate(request.identity, UserForms.userUpdateForm.fill(data))).flashing("error" -> "This username is already taken.")
                       }                   }
               case None => updateUser(data, currentUser)
             }
@@ -75,10 +75,10 @@ class UserUpdateController @javax.inject.Inject() (
       env.userService.save(updateduser, update = true).flatMap {
         usr =>
             if (usr.hasstripe.isDefined) {
-                Future.successful {  Redirect(controllers.routes.ProfileController.userprofile).flashing("error" -> "Update successful") }
+                Future.successful {  Redirect(controllers.routes.ProfileController.userprofile).flashing("error" -> "Your profile has been updated") }
             } else {
                 crmSer.sendsmsmsg(usr.phone.getOrElse(""), "You profile has been updated")
-                Future.successful {  Redirect(controllers.routes.StripeController.stripeForm).flashing("error" -> "User information updated") }
+                Future.successful {  Redirect(controllers.routes.StripeController.stripeForm).flashing("error" -> "Your profile information has been saved") }
             }
       }
   }
