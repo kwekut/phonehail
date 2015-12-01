@@ -34,7 +34,7 @@ class DashActor @Inject() (val env: AuthenticationEnvironment) extends Actor {
  	import DashActor._
 
   def receive = LoggingReceive {
-
+  		// I dont expect a case with No user found, since this message is triggered by a stripe charge which requires a user.
 		case UpdateDash(phone, striperesponse, pickuplocation, amt, name, driverphone, date) => 
               			Logger.info("DashActor: Client and Driver available-Top")
       	env.identityService.retrievebyphone(phone) onComplete {		
@@ -74,10 +74,10 @@ class DashActor @Inject() (val env: AuthenticationEnvironment) extends Actor {
 						      clientcity = Some(user.get.city.getOrElse("")),
 						      clientstate = Some(user.get.state.getOrElse("")),
 						      clientemail = Some(user.get.email.getOrElse("")),
-						      driverphone = Some(driverphone),
-						      drivername = Some("NA"),
-						      drivercompany = Some("NA"),
-						      pickuplocation = Some(pickuplocation),
+						      driverphone = if (driverphone == "driverphone"){Some("")} else Some(driverphone),
+						      drivername = Some(""),
+						      drivercompany = Some(""),
+						      pickuplocation = if (pickuplocation == "date"){Some("")} else  Some(pickuplocation),
 						      attendantnamecomment = Some(name),
 						      chargedamount = Some(amt),
 						      chargecomment = Some(striperesponse)

@@ -13,6 +13,7 @@ import play.api.Play.current
 import play.api.libs.json._
 import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
+import models.user.User
 import actors.PGActor._
 import actors.StripeActor._
 import actors.TwilioActor._
@@ -56,13 +57,16 @@ object WebSocketActor {
   val dtf: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-mm-dd HH:MM:SS Z")
 
 }
-
+//user: User
 class WebSocketActor(user: UUID, twilioActor: ActorRef, crmActor: ActorRef, commActor: ActorRef, accActor: ActorRef, stripesupActor: ActorRef, out: ActorRef) extends Actor {
 
   import WebSocketActor._
 
   override def preStart() {
     commActor ! Join(user, out)
+// Send user identity
+  //val obj = Outs(user.id.toString, user.phone, "SETUSER", "date", "msg", user.username, "driverphone", true)
+   //out ! BroadCast(Json.toJson(obj)) 
   }
   override def postStop() {
     commActor ! UnJoin(user, out)

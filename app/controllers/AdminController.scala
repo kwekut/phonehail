@@ -94,7 +94,7 @@ class AdminController @javax.inject.Inject() (
         case Some("Export") => {
             val startday = "01"
             val f = filters.endmonth
-            val g = filters.endyear.toInt
+            val g = filters.endyear.toInt//_.toInt
             val endday = if (f=="04"){"30"} else if (f=="09"){"30"} else if (f=="11"){"30"} else if (f=="06"){"30"} else if ( (f=="02") && (g%4==0) ){"29"} else if (f=="02"){"28"} else {"31"}
             val time = "00:00:00"
             val startdate = filters.startyear + "-" + filters.startmonth + "-" + startday //+ " " + time

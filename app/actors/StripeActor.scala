@@ -72,20 +72,20 @@ class StripeActor @Inject() (@Assisted key: String,
 				case Failure(ex) => 
 					accActor ! Notifier(phone, "NOTIFICATION", date, ex.getMessage(), "charge customer", "driverphone", true)
 					//only for testing since all stripe tests are failure responses.
-					dashActor ! UpdateDash(phone, ex.getMessage(), dateAsPickLoc, amt.toString, attendantname, driverphone, date)
+					//dashActor ! UpdateDash(phone, ex.getMessage(), dateAsPickLoc, amt.toString, attendantname, driverphone, date)
 					Logger.info("Stripe Failure track: UpdateDash Line Treated")
 			//}
 		}
 
-	case RefundCustomer(phone, typ, dateAsPickLoc, chargeId, attendantname, driverphone, date) =>
+	case RefundCustomer(phone, typ, pickLoc, chargeId, attendantname, driverphone, date) =>
  	//case RefundCustomer(chargeId) => 
 		stripeSer.refundCustomer(chargeId) onComplete { // map { cCRef =>
 			//cCRef match {
 				case Success(cRResponse) =>
 					val msg = "Refunded" + " : " + cRResponse.amount + "-Bal" + ":" + cRResponse.balance_transaction
-					val amt = "-" + s"$cRResponse.amount.toString"
+					val amt = "-" + cRResponse.amount.toString
 					accActor ! Notifier("phone", "NOTIFICATION", cRResponse.created, msg, "refund customer", "driverphone", true)
-					dashActor ! UpdateDash(phone, msg, dateAsPickLoc, amt, attendantname, driverphone, date)
+					dashActor ! UpdateDash(phone, msg, pickLoc, amt, "Admin Refunded:" + chargeId, driverphone, date)
 				case Failure(ex) => 
 					accActor ! Notifier("phone", "NOTIFICATION", date, ex.getMessage(), "refund customer", "driverphone", true)
 			//}

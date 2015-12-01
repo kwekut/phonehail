@@ -14,34 +14,42 @@ import actors.CRMActor._
 import actors.CommunicateActor._
 import actors.AccountActor._
 import actors.StripeActor._
-// import play.api.libs.concurrent.Execution.Implicits._
-// import akka.util.Timeout
-// import scala.concurrent.duration._
-// import scala.concurrent.Future
-// import com.mohiva.play.silhouette.api.{ Environment, LogoutEvent, Silhouette }
-// import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticator
-// import com.mohiva.play.silhouette.api.services.AuthInfoService
-// import models.services.UserService
-// import models.User
+
+import play.api.libs.concurrent.Execution.Implicits._
+import akka.util.Timeout
+import scala.concurrent.duration._
+import scala.concurrent.Future
+import com.mohiva.play.silhouette.api.{ Environment, LogoutEvent, Silhouette }
+import services.user.AuthenticationEnvironment
+import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
+import play.api.i18n.I18nSupport
+import com.mohiva.play.silhouette.api._
+import play.api.i18n.MessagesApi
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import models.user.User
+import play.api.Logger
 
 // class WebSocketController @Inject() (
-//   val env: Environment[User, SessionAuthenticator],
-//   val userService: UserService,
-//   val authInfoService: AuthInfoService)
-//   (@Named("twilio-actor") twilioActor: ActorRef)
-//   (@Named("communicate-actor") commActor: ActorRef)
-//   (implicit ec: ExecutionContext)
-//   extends Silhouette[User, SessionAuthenticator] {
+//     val messagesApi: MessagesApi,
+//     val env: AuthenticationEnvironment,
+//   @Named("twilio-actor") twilioActor: ActorRef,
+//   @Named("crm-actor") crmActor: ActorRef,
+//   @Named("stripesupervisor-actor") stripesupActor: ActorRef,
+//   @Named("account-actor") accActor: ActorRef,
+//   @Named("communicate-actor") commActor: ActorRef)
+//   extends Silhouette[User, CookieAuthenticator] {
 
-// implicit val timeout: Timeout = 5.seconds
 
 // 	def socket = WebSocket.tryAcceptWithActor[JsValue, JsValue] { request =>
 // 	implicit val req = Request(request, AnyContentAsEmpty)
 // 	SecuredRequestHandler { securedRequest =>
 // 	  Future.successful(HandlerResult(Ok, Some(securedRequest.identity)))
 // 		}.map {
-// 		  case HandlerResult(r, Some(user)) => Right(WebSocketActor.props(user.lastName.toString, twilioActor, commActor) _)
-// 		  case HandlerResult(r, None) => Left(r)
+// 		  case HandlerResult(r, Some(user)) => Logger.info(s"socket controller recieved ${user.email}")
+// 		  	Right(WebSocketActor.props(user.id, twilioActor, crmActor, commActor, accActor, stripesupActor) _)
+
+// 		  case HandlerResult(r, None) => Logger.info("None user in socket controller")
+// 		  	Left(r) 
 // 		}
 // 	}
 // }
