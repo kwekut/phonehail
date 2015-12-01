@@ -72,7 +72,7 @@ class StripeActor @Inject() (@Assisted key: String,
 				case Failure(ex) => 
 					accActor ! Notifier(phone, "NOTIFICATION", date, ex.getMessage(), "charge customer", "driverphone", true)
 					//only for testing since all stripe tests are failure responses.
-					//dashActor ! UpdateDash(phone, ex.getMessage(), dateAsPickLoc, amt.toString, attendantname, driverphone, date)
+					dashActor ! UpdateDash(phone, ex.getMessage(), dateAsPickLoc, amt.toString, attendantname, driverphone, date)
 					Logger.info("Stripe Failure track: UpdateDash Line Treated")
 			//}
 		}
